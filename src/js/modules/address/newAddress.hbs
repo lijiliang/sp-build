@@ -1,0 +1,92 @@
+<div class="order-info__form">
+    <div class="user-info__hd u-mb_10 u-color_black">使用新地址</div>
+    <form action="#" class="form form-horizontal j-validator j-validator_success">
+        <div class="form-item">
+            <label class="form-label" for="name">
+                <span class="form-required">* </span>收&nbsp;&nbsp;件&nbsp;&nbsp;人：
+            </label>
+            <div class="form-field">
+                <input type="text" placeholder="" class="form-text _required" name="name" {{#if consignee}}value="{{consignee}}"{{/if}}>
+            </div>
+        </div>
+        <div class="form-item">
+            <label class="form-label" for="">
+                <span class="form-required">* </span>配送区域：
+            </label>
+            <div class="form-field">
+                <div id="j-place-selector" class="u-inline-block stock-btn_wrap u-clearfix">
+                    <div class="_place_box stock-btn u-inline-block u-mr_10">
+                        <a class="btn _place_click" href="javascript:;">
+                            {{#if province_id}}
+                            <i class="_place_province" data-type="province" data-id="{{province_id}}">{{province_name}}</i>
+                            {{else}}
+                            <i class="_place_province" data-type="province" data-id="-1">请选择</i>
+                            {{/if}}
+                            <span class="iconfont">&#xf0122;</span>
+                        </a>
+                    </div>
+                    <div class="_place_box stock-btn u-inline-block u-mr_10" style="display: none;">
+                        <a class="btn _place_click" href="javascript:;">
+                            {{#if city_id}}
+                            <i class="_place_city" data-type="city" data-id="{{city_id}}">{{city_name}}</i>
+                            {{else}}
+                            <i class="_place_city" data-type="city" data-id="-1">请选择</i>
+                            {{/if}}
+                            <span class="iconfont">&#xf0122;</span>
+                        </a>
+                    </div>
+                    <div class="_place_box stock-btn u-inline-block u-mr_10" style="display: none;">
+                        <a class="btn _place_click" href="javascript:;">
+                            {{#if district_name}}
+                            <i class="_place_district" data-type="district" data-id="{{district_id}}">{{district_name}}</i>
+                            {{else}}
+                            <i class="_place_district" data-type="district" data-id="-1">请选择</i>
+                            {{/if}}
+                            <span class="iconfont">&#xf0122;</span>
+                        </a>
+                    </div>
+                </div>
+                <input type="hidden" class="form-text _required" name="region" value="{{province_id}}">
+            </div>
+        </div>
+        <div class="form-item">
+            <label class="form-label" for="address">
+                <span class="form-required">* </span>详细地址：
+            </label>
+            <div class="form-field">
+                <input type="text" placeholder="" class="form-text _required" name="address" {{#if address}}value="{{address}}"{{/if}}>
+            </div>
+        </div>
+        <div class="form-item">
+            <label class="form-label" for="mobile">
+                <span class="form-required">* </span>手机号码：
+            </label>
+            <div class="form-field">
+                <input type="text" placeholder="11位手机号码" class="form-text _required" name="mobile" {{#if mobile}}value="{{mobile}}"{{/if}}>
+            </div>
+        </div>
+        <div class="form-item">
+            <label class="form-label" for="mobile2">
+                备用号码：
+            </label>
+            <div class="form-field">
+                <input type="text" placeholder="" class="form-text" name="second_mobile" {{#if second_mobile}}value="{{second_mobile}}"{{/if}}>
+            </div>
+        </div>
+        <div class="form-item">
+            <label class="form-label" for="email">
+                邮&nbsp;&nbsp;&nbsp;&nbsp;箱&nbsp;&nbsp;&nbsp;：
+            </label>
+            <div class="form-field">
+                <input type="text" placeholder="用来接受订单提醒邮件，便于您及时了解订单状态" class="form-text" name="email" {{#if email}}value="{{email}}"{{/if}}>
+            </div>
+        </div>
+        <div class="form-item form-address-btns">
+            <div class="form-field">
+                <!--<input type="submit" class="btn btn-big" value="保存我的收货地址"/>-->
+                <a href="javascript:;" class="btn btn-big j-address-save">保存我的收货地址</a>
+                <a href="javascript:;" class="btn btn-big j-address-cancel u-ml_20">取消</a>
+            </div>
+        </div>
+    </form>
+</div>

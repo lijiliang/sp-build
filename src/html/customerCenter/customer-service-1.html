@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <title>SY-WEB</title>
+    @@include('../common/header/_head.html')
+</head>
+<body>
+<div class="page page-customer layout-fixed" data-module="customer">
+    <!--header-->
+    @@include('../common/header/_header.html')
+    <!--/header end-->
+
+    <div class="container container-border-bottom">
+        <div class="container__wrap">
+            <div class="layout-fixed-inner">
+                <div class="container__main">
+                    <div class="container__main-inner u-clearfix">
+                        <!--nav-->
+                        @@include('../common/nav/_nav.html', { "navName":"卧室" } )
+                        <!--/nav end-->
+                        <div class="main-layout u-wrap u-clearfix">
+                            <div class="main-layout-sidebar _side_border_right">
+                                <div class="center-menu-v2">
+                                    <dl>
+                                        <dt>新手指南</dt>
+                                        <dd class="_active">
+                                            <a href="#">新用户注册</a>
+                                        </dd>
+                                        <dd>
+                                            <a href="#">购物流程</a>
+                                        </dd>
+                                        <dd>
+                                            <a href="#">常见问题</a>
+                                        </dd>
+                                    </dl>
+                                    <dl>
+                                        <dt>配送安装</dt>
+                                        <dd>
+                                            <a href="#">送装费用</a>
+                                        </dd>
+                                        <dd>
+                                            <a href="#">送装服务</a>
+                                        </dd>
+                                        <dd>
+                                            <a href="#">收货指南</a>
+                                        </dd>
+                                    </dl>
+                                    <dl>
+                                        <dt>售后服务</dt>
+                                        <dd>
+                                            <a href="#">60天无理由退换货</a>
+                                        </dd>
+                                        <dd>
+                                            <a href="#">如何申请退款</a>
+                                        </dd>
+                                        <dd>
+                                            <a href="#">发票制度</a>
+                                        </dd>
+                                    </dl>
+                                    <dl>
+                                        <dt>购物保障</dt>
+                                        <dd>
+                                            <a href="#">正品保证</a>
+                                        </dd>
+                                        <dd>
+                                            <a href="#">隐私保护</a>
+                                        </dd>
+                                        <dd>
+                                            <a href="#">发票制度</a>
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+                            <div class="main-layout-container _container_visable">
+                                <div class="help_article">
+                                    <div class="help_article__inner">
+                                        <img src="/images/img/customer-img1.jpg" alt=""/>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/main-layout-container end-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @@include('../common/footer/_footer.html')
+</div>
+@@include('../common/footer/_foot.html')
+</body>
+</html>

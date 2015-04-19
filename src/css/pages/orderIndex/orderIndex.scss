@@ -1,0 +1,50 @@
+@import "../../modules/settings/_setting_pages";
+.pay-list-box {
+  border-bottom: 1*$px solid $color_gray_border;
+  &__inner {
+    padding: 20*$px;
+  }
+  &__item-inner {
+    position: relative;
+    border: 1*$px solid $color_gray_border;
+    display: inline-block;
+    cursor: pointer;
+  }
+  &__item._active {
+    .pay-list-box__item-inner {
+      border: 1*$px solid $color_gold;
+      &:before {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 1.25rem;
+        height: 1.25rem;
+        background: url("../images/slice/type_selected.png") no-repeat 0 0;
+      }
+    }
+
+  }
+}
+
+.order-info-compete {
+  margin: 20*$px;
+  padding: 0 20*$px;
+  &__title {
+    font-size: 18*$px;
+  }
+  &__description {
+    font-size: 14*$px;
+  }
+  &__address-item {
+    margin-top: 15*$px;
+    line-height: 24*$px;
+    .order-piece {
+      font-size: 16*$px;
+      color: $color_gold;
+    }
+    label {
+      color: $color_gray_text;
+    }
+  }
+}

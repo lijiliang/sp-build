@@ -1,0 +1,75 @@
+/* 左菜单栏 */
+.main-layout {
+  overflow-y: hidden;
+}
+
+.main-layout-left {
+  border-right: 1px solid $color_gray2;
+  margin-right: -1*$px;
+  padding-bottom: 10000*$px;
+  margin-bottom: -10000*$px;
+  &__menu {
+    padding-top: 30*$px;
+    padding-bottom: 15*$px;
+  }
+  &__menu._parentMenu {
+    padding-top: 0;
+    ._active {
+      .h3 {
+        background: #fff;
+        margin-right: -1*$px;
+      }
+    }
+  }
+  &__menu-item {
+    border-bottom: 1px solid $color_gray2;
+    .h3 {
+      font-size: 16*$px;
+      padding-top: 10*$px;
+      padding-bottom: 10*$px;
+      color: $color_black;
+      cursor: pointer;
+      display: block;
+    }
+
+  }
+  &__menu-item._active {
+    .h3 {
+      color: $color_gold;
+    }
+  }
+  &__menu-item._active &__menu-item-content {
+    display: block;
+  }
+  &__menu-item-content {
+    line-height: 36*$px;
+    display: none;
+    a {
+      font-size: 14*$px;
+      color: $color_gray;
+    }
+  }
+  &__menu-item-more {
+    padding-top: 10*$px;
+    a {
+      color: $color_gold;
+      font-size: 14*$px;
+    }
+  }
+}
+
+.main-layout-right {
+  &__inner {
+    margin-left: 20*$px;
+  }
+}
+
+// fixed 个人中心内容框
+._container_visable {
+  overflow: visible;
+}
+
+// fixed leftside
+._side_border_right {
+  border-right: 1px solid $color_gray_border;
+}

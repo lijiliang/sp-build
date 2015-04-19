@@ -1,0 +1,339 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>IconFont</title>
+    <style type="text/css">
+        *{margin: 0;padding: 0;list-style: none;}
+        /*
+        KISSY CSS Reset
+        理念：1. reset 的目的不是清除浏览器的默认样式，这仅是部分工作。清除和重置是紧密不可分的。
+        2. reset 的目的不是让默认样式在所有浏览器下一致，而是减少默认样式有可能带来的问题。
+        3. reset 期望提供一套普适通用的基础样式。但没有银弹，推荐根据具体需求，裁剪和修改后再使用。
+        特色：1. 适应中文；2. 基于最新主流浏览器。
+        维护：玉伯<lifesinger@gmail.com>, 正淳<ragecarrier@gmail.com>
+         */
+
+        /** 清除内外边距 **/
+        body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, /* structural elements 结构元素 */
+        dl, dt, dd, ul, ol, li, /* list elements 列表元素 */
+        pre, /* text formatting elements 文本格式元素 */
+        form, fieldset, legend, button, input, textarea, /* form elements 表单元素 */
+        th, td /* table elements 表格元素 */ {
+          margin: 0;
+          padding: 0;
+        }
+
+        /** 设置默认字体 **/
+        body,
+        button, input, select, textarea /* for ie */ {
+          font: 12px/1.5 tahoma, arial, \5b8b\4f53, sans-serif;
+        }
+        h1, h2, h3, h4, h5, h6 { font-size: 100%; }
+        address, cite, dfn, em, var { font-style: normal; } /* 将斜体扶正 */
+        code, kbd, pre, samp { font-family: courier new, courier, monospace; } /* 统一等宽字体 */
+        small { font-size: 12px; } /* 小于 12px 的中文很难阅读，让 small 正常化 */
+
+        /** 重置列表元素 **/
+        ul, ol { list-style: none; }
+
+        /** 重置文本格式元素 **/
+        a { text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+
+        /** 重置表单元素 **/
+        legend { color: #000; } /* for ie6 */
+        fieldset, img { border: 0; } /* img 搭车：让链接里的 img 无边框 */
+        button, input, select, textarea { font-size: 100%; } /* 使得表单元素在 ie 下能继承字体大小 */
+        /* 注：optgroup 无法扶正 */
+
+        /** 重置表格元素 **/
+        table { border-collapse: collapse; border-spacing: 0; }
+
+        /* 清除浮动 */
+        .ks-clear:after, .clear:after {
+          content: '\20';
+          display: block;
+          height: 0;
+          clear: both;
+        }
+        .ks-clear, .clear {
+          *zoom: 1;
+        }
+
+        .main {padding: 30px 100px;}
+        .main h1{font-size:36px; color:#333; text-align:left;margin-bottom:30px; border-bottom: 1px solid #eee;}
+
+        .helps{margin-top:40px;}
+        .helps pre{
+          padding:20px;
+          margin:10px 0;
+          border:solid 1px #e7e1cd;
+          background-color: #fffdef;
+          overflow: auto;
+        }
+
+        .icon_lists li{
+          float:left;
+          width: 100px;
+          height:180px;
+          text-align: center;
+        }
+        .icon_lists .icon{
+          font-size: 42px;
+          line-height: 100px;
+          margin: 10px 0;
+          color:#333;
+          -webkit-transition: font-size 0.25s ease-out 0s;
+          -moz-transition: font-size 0.25s ease-out 0s;
+          transition: font-size 0.25s ease-out 0s;
+
+        }
+        .icon_lists .icon:hover{
+          font-size: 100px;
+        }
+
+    </style>
+    <!-- <link rel="stylesheet" href="iconfont.css"> -->
+    <link rel="stylesheet" href="/css/common.css">
+</head>
+<body>
+    <div class="main">
+        <h1>IconFont 图标</h1>
+        <ul class="icon_lists clear">
+            
+                <li>
+                <i class="icon iconfont">&#xf000a;</i>
+                    <div class="name">weibo</div>
+                    <div class="code">&amp;#xf000a;</div>
+                    <div class="fontclass">.weibo</div>
+                </li>
+            
+                <li>
+                <i class="icon iconfont">&#xe662;</i>
+                    <div class="name">cart</div>
+                    <div class="code">&amp;#xe662;</div>
+                    <div class="fontclass">.cart</div>
+                </li>
+            
+                <li>
+                <i class="icon iconfont">&#xe621;</i>
+                    <div class="name">search</div>
+                    <div class="code">&amp;#xe621;</div>
+                    <div class="fontclass">.search</div>
+                </li>
+            
+                <li>
+                <i class="icon iconfont">&#xf0052;</i>
+                    <div class="name">已关注</div>
+                    <div class="code">&amp;#xf0052;</div>
+                    <div class="fontclass">.yiguanzhu</div>
+                </li>
+            
+                <li>
+                <i class="icon iconfont">&#xf0054;</i>
+                    <div class="name">未关注</div>
+                    <div class="code">&amp;#xf0054;</div>
+                    <div class="fontclass">.weiguanzhu</div>
+                </li>
+            
+                <li>
+                <i class="icon iconfont">&#xf0105;</i>
+                    <div class="name">新浪</div>
+                    <div class="code">&amp;#xf0105;</div>
+                    <div class="fontclass">.xinlang</div>
+                </li>
+            
+                <li>
+                <i class="icon iconfont">&#xf0106;</i>
+                    <div class="name">微信</div>
+                    <div class="code">&amp;#xf0106;</div>
+                    <div class="fontclass">.weixin</div>
+                </li>
+            
+                <li>
+                <i class="icon iconfont">&#xf0121;</i>
+                    <div class="name">三角2</div>
+                    <div class="code">&amp;#xf0121;</div>
+                    <div class="fontclass">.sanjiao2</div>
+                </li>
+            
+                <li>
+                <i class="icon iconfont">&#xf0122;</i>
+                    <div class="name">三角1</div>
+                    <div class="code">&amp;#xf0122;</div>
+                    <div class="fontclass">.sanjiao1</div>
+                </li>
+            
+                <li>
+                <i class="icon iconfont">&#xf0123;</i>
+                    <div class="name">三角4</div>
+                    <div class="code">&amp;#xf0123;</div>
+                    <div class="fontclass">.sanjiao4</div>
+                </li>
+            
+                <li>
+                <i class="icon iconfont">&#xf0124;</i>
+                    <div class="name">三角3</div>
+                    <div class="code">&amp;#xf0124;</div>
+                    <div class="fontclass">.sanjiao3</div>
+                </li>
+            
+                <li>
+                <i class="icon iconfont">&#xf0115;</i>
+                    <div class="name">返回1</div>
+                    <div class="code">&amp;#xf0115;</div>
+                    <div class="fontclass">.fanhui1</div>
+                </li>
+            
+                <li>
+                <i class="icon iconfont">&#xf0116;</i>
+                    <div class="name">返回2</div>
+                    <div class="code">&amp;#xf0116;</div>
+                    <div class="fontclass">.fanhui2</div>
+                </li>
+            
+                <li>
+                <i class="icon iconfont">&#xf0117;</i>
+                    <div class="name">返回3</div>
+                    <div class="code">&amp;#xf0117;</div>
+                    <div class="fontclass">.fanhui3</div>
+                </li>
+            
+                <li>
+                <i class="icon iconfont">&#xf0118;</i>
+                    <div class="name">返回4</div>
+                    <div class="code">&amp;#xf0118;</div>
+                    <div class="fontclass">.fanhui4</div>
+                </li>
+            
+                <li>
+                <i class="icon iconfont">&#xf012c;</i>
+                    <div class="name">回到顶部</div>
+                    <div class="code">&amp;#xf012c;</div>
+                    <div class="fontclass">.huidaodingbu</div>
+                </li>
+            
+                <li>
+                <i class="icon iconfont">&#xf0113;</i>
+                    <div class="name">收藏-选中</div>
+                    <div class="code">&amp;#xf0113;</div>
+                    <div class="fontclass">.shoucangxuanzhong</div>
+                </li>
+            
+                <li>
+                <i class="icon iconfont">&#xf0114;</i>
+                    <div class="name">收藏</div>
+                    <div class="code">&amp;#xf0114;</div>
+                    <div class="fontclass">.shoucang</div>
+                </li>
+            
+                <li>
+                <i class="icon iconfont">&#xe63f;</i>
+                    <div class="name">分享</div>
+                    <div class="code">&amp;#xe63f;</div>
+                    <div class="fontclass">.share</div>
+                </li>
+            
+                <li>
+                <i class="icon iconfont">&#xe628;</i>
+                    <div class="name">加</div>
+                    <div class="code">&amp;#xe628;</div>
+                    <div class="fontclass">.jia</div>
+                </li>
+            
+                <li>
+                <i class="icon iconfont">&#xe629;</i>
+                    <div class="name">减</div>
+                    <div class="code">&amp;#xe629;</div>
+                    <div class="fontclass">.jian</div>
+                </li>
+            
+                <li>
+                <i class="icon iconfont">&#xe63b;</i>
+                    <div class="name">勾</div>
+                    <div class="code">&amp;#xe63b;</div>
+                    <div class="fontclass">.gou</div>
+                </li>
+            
+                <li>
+                <i class="icon iconfont">&#xe617;</i>
+                    <div class="name">叉</div>
+                    <div class="code">&amp;#xe617;</div>
+                    <div class="fontclass">.cha</div>
+                </li>
+            
+                <li>
+                <i class="icon iconfont">&#x344f;</i>
+                    <div class="name">help-vector</div>
+                    <div class="code">&amp;#x344f;</div>
+                    <div class="fontclass">.helpvector</div>
+                </li>
+            
+                <li>
+                <i class="icon iconfont">&#xe604;</i>
+                    <div class="name">QQ</div>
+                    <div class="code">&amp;#xe604;</div>
+                    <div class="fontclass">.QQ</div>
+                </li>
+            
+                <li>
+                <i class="icon iconfont">&#xe606;</i>
+                    <div class="name">支付宝</div>
+                    <div class="code">&amp;#xe606;</div>
+                    <div class="fontclass">.zhifubao</div>
+                </li>
+            
+                <li>
+                <i class="icon iconfont">&#xe615;</i>
+                    <div class="name">对圈</div>
+                    <div class="code">&amp;#xe615;</div>
+                    <div class="fontclass">.duiquan</div>
+                </li>
+            
+                <li>
+                <i class="icon iconfont">&#xe699;</i>
+                    <div class="name">叹号提示</div>
+                    <div class="code">&amp;#xe699;</div>
+                    <div class="fontclass">.tanhaotishi</div>
+                </li>
+            
+                <li>
+                <i class="icon iconfont">&#xe680;</i>
+                    <div class="name">刷新</div>
+                    <div class="code">&amp;#xe680;</div>
+                    <div class="fontclass">.shuaxin</div>
+                </li>
+            
+        </ul>
+
+
+        <div class="helps">
+            第一步：使用font-face声明字体
+            <pre>
+@font-face {font-family: 'iconfont';
+    src: url('iconfont.eot'); /* IE9*/
+    src: url('iconfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('iconfont.woff') format('woff'), /* chrome、firefox */
+    url('iconfont.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+    url('iconfont.svg#uxiconfont') format('svg'); /* iOS 4.1- */
+}
+</pre>
+第二步：定义使用iconfont的样式
+            <pre>
+.iconfont{
+    font-family:"iconfont" !important;
+    font-size:16px;font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;}
+</pre>
+第三步：挑选相应图标并获取字体编码，应用于页面
+<pre>
+&lt;i class="iconfont"&gt;&amp;#x33;&lt;/i&gt;
+</pre>
+        </div>
+
+    </div>
+</body>
+</html>

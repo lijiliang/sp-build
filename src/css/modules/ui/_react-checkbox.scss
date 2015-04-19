@@ -1,0 +1,32 @@
+.react-checkbox {
+  position: relative;
+  padding: .3em 0 0 1.8em;
+  cursor: pointer;
+  user-select: none;
+  font-style: normal;
+}
+
+.react-checkbox::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: .2em;
+  width: 1em;
+  height: 1em;
+  line-height: 1em;
+  border: 1px solid #E0E4EB;
+  text-align: center;
+  font-family: "iconfont" !important;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.react-checkbox.is-checked::before {
+  color: #fff;
+  font-size: 0.75rem;
+  content: '\e63b';
+  background: #d3af94;
+  border-color: #d3af94;
+}

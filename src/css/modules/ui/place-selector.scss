@@ -1,0 +1,67 @@
+@import "../../../css/modules/settings/_setting_pages";
+
+.select-stock-place {
+  width: 600*$px;
+  min-height: 250*$px;
+  border: 1*$px solid #DCDCDC;
+  position: relative;
+  background: #fff;
+  padding-bottom: 40*$px;
+  &__hd {
+    border-bottom: 1px solid $color_gray_border;
+    position: relative;
+    height: 40*$px;
+    line-height: 40*$px;
+  }
+  &__hd-txt {
+    margin-left: 35*$px;
+    cursor: pointer;
+  }
+  &__hd-txt._active {
+    font-weight: 700;
+  }
+  &__arrow-top {
+    position: absolute;
+    bottom: 7*$px;
+    left: 40*$px;
+  }
+  &__bd {
+    li {
+      float: left;
+      min-width: 65*$px;
+      margin-left: 20*$px;
+      margin-top: 8*$px;
+      margin-bottom: 8*$px;
+      a {
+        color: $color_black;
+        display: inline-block;
+        padding: 2*$px 5*$px;
+        &:hover {
+          background: $color_gold_hover;
+          color: #fff;
+        }
+      }
+    }
+    li._active {
+      a {
+        background: $color_gold;
+        color: #fff;
+
+      }
+    }
+  }
+  &__foot {
+    border-top: 1*$px solid $color_gray_border;
+    height: 40*$px;
+    line-height: 40*$px;
+    position: absolute;
+    width: 100%;
+    left: 0;
+    bottom: 0;
+    .close {
+      float: right;
+      margin-right: 15*$px;
+      color: $color_black;
+    }
+  }
+}

@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <title>购物车</title>
+    @@include('../common/header/_head.html')
+</head>
+<body>
+<div class="page page-cart layout-fixed" data-module="cart">
+    <!--header-->
+    <div class="header">
+        <div class="header__wrap">
+            <div class="header__nav">
+                <div class="header__nav-inner layout-fixed-inner u-clearfix">
+                    <ul>
+                        <li class="header__loginbar">
+                            <a href="#">登录</a><span>|</span><a href="#">注册</a>
+                        </li>
+                        <li>
+                            <a href="#">我的订单</a>
+                        </li>
+                        <li>
+                            <a href="#">个人中心</a>
+                        </li>
+                        <li>
+                            <a href="#">帮助中心</a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+            <div class="header-logo">
+                <div class="header-logo__wrap">
+                    <div class="layout-fixed-inner u-clearfix">
+                        <div class="header-logo__title u-fl">
+                            <a href="index.html"><img src="/images/logo.png" alt=""/></a>
+                        </div>
+                        <div class="header-cart-progress ui-progress _with-3-step u-fr">
+                            <div class="ui-progress__bar _step-1">
+                                <div class="ui-progress__No _step-1">
+                                    1
+                                    <div class="ui-progress__No-desc">我的购物车</div>
+                                </div>
+                                <div class="ui-progress__No _step-2">
+                                    2
+                                    <div class="ui-progress__No-desc">确认订单信息</div>
+                                </div>
+                                <div class="ui-progress__No _step-last">
+                                    3
+                                    <div class="ui-progress__No-desc">成功提交订单</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/header end-->
+
+    <div class="container container-border-bottom">
+        <div class="container__wrap">
+            <div class="layout-fixed-inner">
+                <div class="container__main">
+                <div class="container__main-inner u-clearfix">
+                    <div class="main-layout u-wrap u-clearfix">
+                        <div class="main-title u-clearfix">
+                            <!--未登录-->
+                            <div class="u-fr">
+                                <span class="u-mr_10">登录即可永久保存购物车商品</span>
+                                <a class="btn btn-primary" href="#">现在登录</a>
+                            </div>
+                            <!--/未登录 end-->
+                            <h2 class="u-f18">我的购物车</h2>
+                        </div>
+                        <div class="cart-table">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+    @@include('../common/footer/_footer.html')
+</div>
+@@include('../common/footer/_foot.html')
+</body>
+</html>

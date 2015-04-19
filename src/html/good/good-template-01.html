@@ -1,0 +1,796 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <title>商品模板一</title>
+    @@include('../common/header/_head.html')
+</head>
+<body>
+<div class="page page-good-detail" data-module="goodDetail">
+    @@include('../common/header/_header.html')
+    <div class="container container-border-bottom">
+        <div class="container__wrap">
+            <div class="layout-fixed-inner">
+                <div class="container__main">
+                <div class="container__main-inner">
+                    @@include('../common/nav/_nav.html', { "navName":"床" } )
+                    <!-- good-detail-box -->
+                    <div class="good-detail-box u-mt_20">
+                        <div class="good-detail-box__inner u-clearfix">
+                            <div class="good-detail-box__photos span6">
+                                <div class="ui-good-photos">
+                                    <div class="ui-good-photos__content">
+                                        <img src="/images/img/img760_760.jpg" alt=""/>
+                                    </div>
+                                    <div class="ui-good-photos__lists u-mt_20">
+                                        <a href="#" class="ui-good-photos__prev iconfont btn-page-small _disable">&#xf0115;</a>
+                                        <div class="ui-good-photos__list-wrap">
+                                            <div class="ui-good-photos__list-inner">
+                                                <ul class="u-clearfix">
+                                                    <li class="_active">
+                                                        <img data-src="/images/img/img760_760.jpg" src="/images/img/img760_760.jpg" alt=""/>
+                                                    </li>
+                                                    <li>
+                                                        <img data-src="/images/img/img760_760.jpg" src="/images/img/img760_760.jpg" alt=""/>
+                                                    </li>
+                                                    <li>
+                                                        <img data-src="/images/img/img760_760.jpg" src="/images/img/img760_760.jpg" alt=""/>
+                                                    </li>
+                                                    <li>
+                                                        <img data-src="/images/img/img760_760.jpg" src="/images/img/img760_760.jpg" alt=""/>
+                                                    </li>
+                                                    <li>
+                                                        <img data-src="/images/img/img760_760.jpg" src="/images/img/img760_760.jpg" alt=""/>
+                                                    </li>
+                                                    <li>
+                                                        <img data-src="/images/img/img760_760.jpg" src="/images/img/img760_760.jpg" alt=""/>
+                                                    </li>
+                                                    <li>
+                                                        <img data-src="/images/img/img760_760.jpg" src="/images/img/img760_760.jpg" alt=""/>
+                                                    </li>
+                                                    <li>
+                                                        <img data-src="/images/img/img760_760.jpg" src="/images/img/img760_760.jpg" alt=""/>
+                                                    </li>
+                                                    <li>
+                                                        <img data-src="/images/img/img760_760.jpg" src="/images/img/img760_760.jpg" alt=""/>
+                                                    </li>
+                                                    <li>
+                                                        <img data-src="/images/img/img760_760.jpg" src="/images/img/img760_760.jpg" alt=""/>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <a href="#" class="ui-good-photos__next iconfont btn-page-small">&#xf0116;</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="good-detail-box__main span6">
+                                <h3 class="good-detail-box__main-title">KUKA顾家真皮沙发头层牛皮大小户型客厅皮艺沙发组合</h3>
+                                <div class="good-detail-box__main-description">
+                                    实木框架+胡桃木饰面+茶镜 1200*500*1800mm
+                                </div>
+                                <div class="good-detail-summary u-clearfix">
+                                    <ul>
+                                        <li class="good-detail-summary__price u-clearfix">
+                                            <div class="dt">
+                                                价格：
+                                            </div>
+                                            <div class="dd">
+                                                ¥ 3,999
+                                            </div>
+                                        </li>
+                                        <li class="good-detail-summary__stock u-clearfix">
+                                            <div class="dt">
+                                                配送至：
+                                            </div>
+                                            <div class="dd">
+                                                <div class="stock-btn" id="stock-btn">
+                                                    <a class="btn" href="#">
+                                                        <i class="_place_province" data-index="1">广东</i>
+                                                        <i class="_place_city" data-index="0">广州</i>
+                                                        <i class="_place_area" data-index="6">番禺区</i>
+                                                        <i class="_place_town" data-index=""></i>
+                                                        <span>&#xf0122;</span>
+                                                    </a>
+                                                </div>
+                                                <!--<div class="drop-down-box">
+                                                    <div class="drop-down-box__inner">
+                                                        <div class="select-stock-place" style="display: block">
+                                                            <div class="select-stock-place__hd u-clearfix">
+                                                                <div class="select-stock-place__hd-txt u-fl">
+                                                                    请选择
+                                                                </div>
+                                                                <div class="select-stock-place__hd-txt u-fl">
+                                                                    请选择
+                                                                </div>
+                                                                <div class="select-stock-place__hd-txt u-fl">
+                                                                    请选择
+                                                                </div>
+                                                                <span class="place-arrow-top select-stock-place__arrow-top">
+                                                                    <span class="place-arrow-top__wrap">
+                                                                        <i class="place-arrow-top__inner"></i>
+                                                                        <i class="place-arrow-top__outer"></i>
+                                                                    </span>
+                                                                </span>
+                                                            </div>
+                                                            <div class="select-stock-place__bd u-clearfix">
+                                                                <ul>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li class="_active">
+                                                                        <a href="#">黑龙江</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li class="_active">
+                                                                        <a href="#">黑龙江</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li class="_active">
+                                                                        <a href="#">黑龙江</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li class="_active">
+                                                                        <a href="#">黑龙江</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li class="_active">
+                                                                        <a href="#">黑龙江</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">北京</a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                            <div class="select-stock-place__foot">
+                                                                <a class="close" href="#">关闭</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>-->
+                                            </div>
+                                        </li>
+                                        <li class="good-detail-summary__logistic u-clearfix">
+                                            <div class="dt">
+                                                物流费：
+                                            </div>
+                                            <div class="dd u-mr_20">
+                                                ¥ 150 <a class="u-ml_5 help-link" href="#"></a>
+                                            </div>
+                                            <div class="dt">
+                                                安装费：
+                                            </div>
+                                            <div class="dd">
+                                                ¥ 200 <a class="u-ml_5 help-link" href="#"></a>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="quality-box u-mt_15">
+                                    <img src="/images/quality_icon1.png" alt=""/>
+                                    <img src="/images/quality_icon2.png" alt=""/>
+                                    <img src="/images/quality_icon3.png" alt=""/>
+                                </div>
+                                <div class="good-detail-summary u-clearfix u-mt_15">
+                                    <ul>
+                                        <li class="good-detail-summary__type u-clearfix">
+                                            <div class="dt">
+                                                类型：
+                                            </div>
+                                            <div class="dd">
+                                                <div class="good-detail-summary__type-item">左转角沙发</div>
+                                                <div class="good-detail-summary__type-item">右转角沙发</div>
+                                                <div class="good-detail-summary__type-item">两人沙发</div>
+                                                <div class="good-detail-summary__type-item _active">三人沙发</div>
+                                            </div>
+                                        </li>
+                                        <li class="good-detail-summary__color u-clearfix">
+                                            <div class="dt">
+                                                颜色：
+                                            </div>
+                                            <div class="dd">
+                                                <div class="good-detail-summary__color-item">
+                                                    <img src="/images/img/img36_36.jpg" alt=""/>
+                                                </div>
+                                                <div class="good-detail-summary__color-item">
+                                                    <img src="/images/img/img36_36.jpg" alt=""/>
+                                                </div>
+                                                <div class="good-detail-summary__color-item _active">
+                                                    <img src="/images/img/img36_36.jpg" alt=""/>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="good-detail-summary__size u-clearfix">
+                                            <div class="dt">
+                                                尺寸：
+                                            </div>
+                                            <div class="dd u-mr_20">
+                                                <div class="good-detail-summary__size-item">w1200*d500*h1800mm</div>
+                                                <div class="good-detail-summary__size-item">w1500*d400*h1600mm</div>
+                                                <div class="good-detail-summary__size-item _active">w1600*d300*h1500mm</div>
+                                            </div>
+                                        </li>
+                                        <li class="good-detail-summary__choose-amount u-clearfix">
+                                            <div class="dt">
+                                                数量：
+                                            </div>
+                                            <div class="dd u-mr_20">
+                                                <div class="amount-box u-clearfix">
+                                                    <div class="amount-box__input">
+                                                        <input data-max="10" type="text" name="" value="1"/>
+                                                    </div>
+                                                    <div class="amount-box__btns">
+                                                        <a href="#" class="amount-box__btn amount-box__btns-up">&#xe628;</a>
+                                                        <a href="#" class="amount-box__btn amount-box__btns-down">&#xe629;</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="choose-btns u-mt_15">
+                                    <a href="#" class="btn btn-larger-big btn-color-orange u-mr_10">&#xe662;&nbsp;加入购物车</a>
+                                    <a href="#" class="btn btn-primary-larger-big u-mr_10">立即购买</a>
+                                    <a href="#" class="btn btn-simple">&#xf0054;&nbsp;收藏</a> |
+                                    <a href="#" class="btn btn-simple"><span class="u-f18">&#xe63f;</span>&nbsp;分享到&nbsp;<span class="u-f10">&#xf0122;</span></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /good-detail-box -->
+
+                    <div class="good-detail-extend u-mt_20">
+                        <div class="good-detail-extend__wrap">
+                            <div class="good-detail-extend__inner">
+                                <!-- good-detail-extend__inner-hd -->
+                                <div class="good-detail-extend__inner-hd u-clearfix">
+                                    <div class="good-detail-extend__content">
+                                        <div class="ui-tab u-clearfix">
+                                            <div class="ui-tab__item">
+                                                <div class="good-detail-tab__text _active">
+                                                    <div class="good-detail-tab__text-cn">商品详情</div>
+                                                </div>
+                                            </div>
+                                            <div class="ui-tab__item">
+                                                <div class="good-detail-tab__text">
+                                                    <div class="good-detail-tab__text-cn">规格说明</div>
+                                                </div>
+                                            </div>
+                                            <div class="ui-tab__item">
+                                                <div class="good-detail-tab__text">
+                                                    <div class="good-detail-tab__text-cn">用户评价</div>
+                                                </div>
+                                            </div>
+                                            <div class="ui-tab__item">
+                                                <div class="good-detail-tab__text">
+                                                    <div class="good-detail-tab__text-cn">售前售后</div>
+                                                </div>
+                                            </div>
+                                            <div class="ui-tab__item">
+                                                <div class="good-detail-tab__text">
+                                                    <div class="good-detail-tab__text-cn">常见问题</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="good-detail-extend__recommend">
+                                        <div class="good-detail-extend__recommend-hd">
+                                            �����者你还对这些商品有兴趣
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /good-detail-extend__inner-hd -->
+                                <!-- good-detail-extend__inner-bd -->
+                                <div class="good-detail-extend__inner-bd u-clearfix">
+                                    <div class="good-detail-extend__content">
+                                        <div class="ui-tab-container">
+                                            <div class="ui-tab-container__item">
+                                                <!--/tpl 01 -->
+                                                <div class="goods-tpl goods-tpl-01">
+                                                    <!--/box 01 -->
+                                                    <div class="goods-tpl-box goods-tpl-box-01 u-mb_80">
+                                                        <img src="/images/goodsTemplate/tpl_01.jpg" alt=""/>
+                                                        <div class="goods-tpl-box__info">
+                                                            <div class="goods-tpl-box__info-inner">
+                                                                <div class="goods-tpl-box__title">BESLORD 宝仕蓝</div>
+                                                                <div class="goods-tpl-box__desc">欧洲环保板材 顶级进口五金配件</div>
+                                                                <div class="goods-tpl-box__content">采用上等松木内架，优质的木架是一张沙发的造型
+                                                                    和舒适性以及牢固性的关键构造，从选料到内架的制作，
+                                                                    都严格按照专业设计技术和行业标准要求进行。</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!--/box 01 end-->
+                                                    <div class="goods-tpl-title">
+                                                        <div class="goods-tpl-title__cn">商品细节</div>
+                                                        <div class="goods-tpl-title__en">
+                                                            <span>PRODUCT DETAILS</span>
+                                                        </div>
+                                                    </div>
+                                                    <!--/box 02-->
+                                                    <div class="goods-tpl-box goods-tpl-box-02">
+                                                        <img src="/images/goodsTemplate/tpl_02.jpg" alt=""/>
+                                                        <div class="goods-tpl-box__info">
+                                                            <div class="goods-tpl-box__info-inner">
+                                                                <div class="goods-tpl-box__title">完美细节 舒适体验</div>
+                                                                <div class="goods-tpl-box__desc">为您缔造梦想中的床</div>
+                                                                <div class="goods-tpl-box__content">
+                                                                    <div class="goods-tpl-box__content-item">
+                                                                        <div class="goods-tpl-box__content-item-index">1</div>
+                                                                        <div class="goods-tpl-box__content-item-title">进口小黄皮</div>
+                                                                        <div class="goods-tpl-box__content-item-desc">坚韧且耐用，给您舒适触感</div>
+                                                                    </div>
+                                                                    <div class="goods-tpl-box__content-item">
+                                                                        <div class="goods-tpl-box__content-item-index">2</div>
+                                                                        <div class="goods-tpl-box__content-item-title">进口小黄皮</div>
+                                                                        <div class="goods-tpl-box__content-item-desc">坚韧且耐用，给您舒适触感</div>
+                                                                    </div>
+                                                                    <div class="goods-tpl-box__content-item">
+                                                                        <div class="goods-tpl-box__content-item-index">3</div>
+                                                                        <div class="goods-tpl-box__content-item-title">进口小黄皮</div>
+                                                                        <div class="goods-tpl-box__content-item-desc">坚韧且耐用，给您舒适触感</div>
+                                                                    </div>
+                                                                    <div class="goods-tpl-box__content-item">
+                                                                        <div class="goods-tpl-box__content-item-index">4</div>
+                                                                        <div class="goods-tpl-box__content-item-title">进口小黄皮</div>
+                                                                        <div class="goods-tpl-box__content-item-desc">坚韧且耐用，给您舒适触感</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!--/box 02 end-->
+                                                    <!--/box 03-->
+                                                    <div class="goods-tpl-box goods-tpl-box-03">
+                                                        <img src="/images/goodsTemplate/tpl_03.jpg" alt=""/>
+                                                        <div class="goods-tpl-box__img">
+                                                            <img src="/images/goodsTemplate/tpl_04.jpg" alt=""/>
+                                                        </div>
+                                                        <div class="goods-tpl-box__info">
+                                                            <div class="goods-tpl-box__info-inner">
+                                                                <div class="goods-tpl-box__title">进口小黄皮</div>
+                                                                <div class="goods-tpl-box__desc">精选进口加厚小黄皮精心制作而成，给您舒适触感，坚韧且耐用，色泽饱满，手感温润，纹理清晰自然如婴儿皮肤般光滑细嫩，与您肌肤相亲共呼吸。</div>
+                                                                <div class="goods-tpl-box__content">
+                                                                    <div class="goods-tpl-features-icon__box">
+                                                                        <div class="goods-tpl-features-icon__img-box">
+                                                                            <img src="/images/goodsTemplate/tpl_icon_01.jpg" alt="">
+                                                                        </div>
+                                                                        <div class="goods-tpl-features-icon__title">耐磨</div>
+                                                                    </div>
+                                                                    <div class="goods-tpl-features-icon__box">
+                                                                        <div class="goods-tpl-features-icon__img-box">
+                                                                            <img src="/images/goodsTemplate/tpl_icon_02.jpg" alt="">
+                                                                        </div>
+                                                                        <div class="goods-tpl-features-icon__title">防晒</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!--/box 03 end-->
+                                                    <!--/box 04-->
+                                                    <div class="goods-tpl-box goods-tpl-box-04">
+                                                        <img src="/images/goodsTemplate/tpl_03.jpg" alt=""/>
+                                                        <div class="goods-tpl-box__img">
+                                                            <img src="/images/goodsTemplate/tpl_04.jpg" alt=""/>
+                                                        </div>
+                                                        <div class="goods-tpl-box__info">
+                                                            <div class="goods-tpl-box__info-inner">
+                                                                <div class="goods-tpl-box__title">进口小黄皮</div>
+                                                                <div class="goods-tpl-box__desc">精选进口加厚小黄皮精心制作而成，给您舒适触感，坚韧且耐用，色泽饱�����，手感温润，纹理清晰自然如婴儿皮肤般光滑细嫩，与您肌肤相亲共呼吸。</div>
+                                                                <div class="goods-tpl-box__content">
+                                                                    <div class="goods-tpl-features-icon__box">
+                                                                        <div class="goods-tpl-features-icon__img-box">
+                                                                            <img src="/images/goodsTemplate/tpl_icon_01.jpg" alt="">
+                                                                        </div>
+                                                                        <div class="goods-tpl-features-icon__title">耐磨</div>
+                                                                    </div>
+                                                                    <div class="goods-tpl-features-icon__box">
+                                                                        <div class="goods-tpl-features-icon__img-box">
+                                                                            <img src="/images/goodsTemplate/tpl_icon_02.jpg" alt="">
+                                                                        </div>
+                                                                        <div class="goods-tpl-features-icon__title">防晒</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!--/box 04 end-->
+                                                    <!--/box 05-->
+                                                    <div class="goods-tpl-box goods-tpl-box-05">
+                                                        <img src="/images/goodsTemplate/tpl_03.jpg" alt=""/>
+                                                        <div class="goods-tpl-box__img">
+                                                            <img src="/images/goodsTemplate/tpl_04.jpg" alt=""/>
+                                                        </div>
+                                                        <div class="goods-tpl-box__info">
+                                                            <div class="goods-tpl-box__info-inner">
+                                                                <div class="goods-tpl-box__title">进口小黄皮</div>
+                                                                <div class="goods-tpl-box__desc">精选进口加厚小黄皮精心制作而成，给您舒适触感，坚韧且耐用，色泽饱满，手感温润，纹理清晰自然如婴儿皮肤般光滑细嫩，与您肌肤相亲共呼吸。</div>
+                                                                <div class="goods-tpl-box__content">
+                                                                    <div class="goods-tpl-features-icon__box">
+                                                                        <div class="goods-tpl-features-icon__img-box">
+                                                                            <img src="/images/goodsTemplate/tpl_icon_01.jpg" alt="">
+                                                                        </div>
+                                                                        <div class="goods-tpl-features-icon__title">耐磨</div>
+                                                                    </div>
+                                                                    <div class="goods-tpl-features-icon__box">
+                                                                        <div class="goods-tpl-features-icon__img-box">
+                                                                            <img src="/images/goodsTemplate/tpl_icon_02.jpg" alt="">
+                                                                        </div>
+                                                                        <div class="goods-tpl-features-icon__title">防晒</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!--/box 05 end-->
+                                                    <!--/box 06-->
+                                                    <div class="goods-tpl-box goods-tpl-box-06 u-mb_80">
+                                                        <img src="/images/goodsTemplate/tpl_03.jpg" alt=""/>
+                                                        <div class="goods-tpl-box__img">
+                                                            <img src="/images/goodsTemplate/tpl_04.jpg" alt=""/>
+                                                        </div>
+                                                        <div class="goods-tpl-box__info">
+                                                            <div class="goods-tpl-box__info-inner">
+                                                                <div class="goods-tpl-box__title">进口小黄皮</div>
+                                                                <div class="goods-tpl-box__desc">精选进口加厚小黄皮精心制作而成，给您舒适触感，坚韧且耐用，色泽饱满，手感温润，纹理清晰自然如婴儿皮肤般光滑细嫩，与您肌肤相亲共呼吸。</div>
+                                                                <div class="goods-tpl-box__content">
+                                                                    <div class="goods-tpl-features-icon__box">
+                                                                        <div class="goods-tpl-features-icon__img-box">
+                                                                            <img src="/images/goodsTemplate/tpl_icon_01.jpg" alt="">
+                                                                        </div>
+                                                                        <div class="goods-tpl-features-icon__title">耐磨</div>
+                                                                    </div>
+                                                                    <div class="goods-tpl-features-icon__box">
+                                                                        <div class="goods-tpl-features-icon__img-box">
+                                                                            <img src="/images/goodsTemplate/tpl_icon_02.jpg" alt="">
+                                                                        </div>
+                                                                        <div class="goods-tpl-features-icon__title">防晒</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!--/box 06 end-->
+                                                    <div class="goods-tpl-title">
+                                                        <div class="goods-tpl-title__cn">商品尺寸</div>
+                                                        <div class="goods-tpl-title__en">
+                                                            <span>PRODUCT SIZE</span>
+                                                        </div>
+                                                    </div>
+                                                    <!--/box 07-->
+                                                    <div class="goods-tpl-box goods-tpl-box-size u-mb_80">
+                                                        <img src="/images/goodsTemplate/tpl_06.jpg" alt=""/>
+                                                        <div class="goods-tpl-box__info">
+                                                            <div class="goods-tpl-box__info-inner">
+                                                                <div class="goods-tpl-box__title">尺寸：215（长）X238(宽)X112CM（高）</div>
+                                                                <div class="goods-tpl-box__desc">温馨提示:因人工测量，尺寸有少些误差，敬请谅解。</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!--/box 07 end-->
+                                                    <div class="goods-tpl-title">
+                                                        <div class="goods-tpl-title__cn">全景展示</div>
+                                                        <div class="goods-tpl-title__en">
+                                                            <span>PRODUCT SHOWCASE</span>
+                                                        </div>
+                                                    </div>
+                                                    <!--/box 08-->
+                                                    <div class="goods-tpl-box goods-tpl-box-swipe u-mb_80">
+                                                        <div class="swipe" id="j-tpl-swipe">
+                                                            <div class='swipe-wrap'>
+                                                                <div class="swipe-item">
+                                                                    <img src="/images/goodsTemplate/tpl_05.jpg" alt=""/>
+                                                                    <img src="/images/goodsTemplate/tpl_05.jpg" alt=""/>
+                                                                </div>
+                                                                <div class="swipe-item">
+                                                                    <img src="/images/goodsTemplate/tpl_05.jpg" alt=""/>
+                                                                    <img src="/images/goodsTemplate/tpl_05.jpg" alt=""/>
+                                                                </div>
+                                                                <div class="swipe-item">
+                                                                    <img src="/images/goodsTemplate/tpl_05.jpg" alt=""/>
+                                                                    <img src="/images/goodsTemplate/tpl_05.jpg" alt=""/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="swipe-actions">
+                                                                <a class="swipe-actions__prev iconfont" href="#">&#xf0115;</a>
+                                                                <a class="swipe-actions__next iconfont" href="#">&#xf0116;</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!--/box 08 end-->
+                                                    <!--/box 09-->
+                                                    <div class="goods-tpl-box goods-tpl-box-links u-mb_80">
+                                                        <div class="goods-tpl-link-icon u-clearfix">
+                                                            <div class="goods-tpl-link-icon__box">
+                                                                <div class="goods-tpl-link-icon__img-box _01">
+                                                                    <img src="/images/goodsTemplate/tpl_link_icon_01.png" alt="">
+                                                                </div>
+                                                                <div class="goods-tpl-link-icon__title">购买流程</div>
+                                                                <div>
+                                                                    <a href="#" class="btn btn-primary">查看详情</a>
+                                                                </div>
+                                                            </div>
+                                                            <div class="goods-tpl-link-icon__box">
+                                                                <div class="goods-tpl-link-icon__img-box _02">
+                                                                    <img src="/images/goodsTemplate/tpl_link_icon_02.png" alt="">
+                                                                </div>
+                                                                <div class="goods-tpl-link-icon__title">配送说明</div>
+                                                                <div>
+                                                                    <a href="#" class="btn btn-primary">查看详情</a>
+                                                                </div>
+                                                            </div>
+                                                            <div class="goods-tpl-link-icon__box">
+                                                                <div class="goods-tpl-link-icon__img-box _03">
+                                                                    <img src="/images/goodsTemplate/tpl_link_icon_03.png" alt="">
+                                                                </div>
+                                                                <div class="goods-tpl-link-icon__title">安装说明</div>
+                                                                <div>
+                                                                    <a href="#" class="btn btn-primary">查看详情</a>
+                                                                </div>
+                                                            </div>
+                                                            <div class="goods-tpl-link-icon__box">
+                                                                <div class="goods-tpl-link-icon__img-box _04">
+                                                                    <img src="/images/goodsTemplate/tpl_link_icon_04.png" alt="">
+                                                                </div>
+                                                                <div class="goods-tpl-link-icon__title">保养说明</div>
+                                                                <div>
+                                                                    <a href="#" class="btn btn-primary">查看详情</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!--/box 09 end-->
+                                                </div>
+                                                <!--/tpl 01 end-->
+                                            </div>
+                                            <div class="ui-tab-container__item" style="display: none;">
+                                                tab2
+                                            </div>
+                                            <div class="ui-tab-container__item" style="display: none;">
+                                                tab3
+                                            </div>
+                                            <div class="ui-tab-container__item" style="display: none;">
+                                                tab4
+                                            </div>
+                                            <div class="ui-tab-container__item" style="display: none;">
+                                                tab5
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="good-detail-extend__recommend">
+                                        <div class="good-detail-extend__recommend-item">
+                                            <div class="good-list-item">
+                                                <div class="good-list-item__img">
+                                                    <a href="#"><img src="/images/img/img760_760.jpg" alt=""/></a>
+                                                </div>
+                                                <h3 class="good-list-item__title"><span>销量：<em>350</em></span><a href="#">MANDA L曼德尔床架</a></h3>
+                                                <div class="good-list-item__description">
+                                                    胡桃木饰面+茶镜 1200*500*1800
+                                                    胡桃木饰面+茶镜 1200*500*1800
+                                                    胡桃木饰面+茶镜 1200*500*1800
+                                                    胡桃木饰面+茶镜 1200*500*1800
+                                                    胡桃木饰面+茶镜 1200*500*1800
+                                                </div>
+                                                <div class="good-list-item__price">
+                                                    ¥ 3,999
+                                                </div>
+                                                <div class="good-list-item__btn-box">
+                                                    <a href="#" class="btn btn-big">&#xe662;&nbsp;加入购物车</a>
+                                                    <a href="#" class="btn btn-primary-big">&#xf0054;&nbsp;收藏</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="good-detail-extend__recommend-item">
+                                            <div class="good-list-item">
+                                                <div class="good-list-item__img">
+                                                    <a href="#"><img src="/images/img/img760_760.jpg" alt=""/></a>
+                                                </div>
+                                                <h3 class="good-list-item__title"><span>销量：<em>350</em></span><a href="#">MANDA L曼德尔床架</a></h3>
+                                                <div class="good-list-item__description">
+                                                    胡桃木饰面+茶镜 1200*500*1800
+                                                    胡桃木饰面+茶镜 1200*500*1800
+                                                    胡桃木饰面+茶镜 1200*500*1800
+                                                    胡桃木饰面+茶镜 1200*500*1800
+                                                    胡桃木饰面+茶镜 1200*500*1800
+                                                </div>
+                                                <div class="good-list-item__price">
+                                                    ¥ 3,999
+                                                </div>
+                                                <div class="good-list-item__btn-box">
+                                                    <a href="#" class="btn btn-big">&#xe662;&nbsp;加入购物车</a>
+                                                    <a href="#" class="btn btn-primary-big">&#xf0054;&nbsp;收藏</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="good-detail-extend__recommend-item">
+                                            <div class="good-list-item">
+                                                <div class="good-list-item__img">
+                                                    <a href="#"><img src="/images/img/img760_760.jpg" alt=""/></a>
+                                                </div>
+                                                <h3 class="good-list-item__title"><span>销量：<em>350</em></span><a href="#">MANDA L曼德尔床架</a></h3>
+                                                <div class="good-list-item__description">
+                                                    胡桃木饰面+茶镜 1200*500*1800
+                                                    胡桃木饰面+茶镜 1200*500*1800
+                                                    胡桃木饰面+茶镜 1200*500*1800
+                                                    胡桃木饰面+茶镜 1200*500*1800
+                                                    胡桃木饰面+茶镜 1200*500*1800
+                                                </div>
+                                                <div class="good-list-item__price">
+                                                    ¥ 3,999
+                                                </div>
+                                                <div class="good-list-item__btn-box">
+                                                    <a href="#" class="btn btn-big">&#xe662;&nbsp;加入购物车</a>
+                                                    <a href="#" class="btn btn-primary-big">&#xf0054;&nbsp;收藏</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="good-detail-extend__recommend-item">
+                                            <div class="good-list-item">
+                                                <div class="good-list-item__img">
+                                                    <a href="#"><img src="/images/img/img760_760.jpg" alt=""/></a>
+                                                </div>
+                                                <h3 class="good-list-item__title"><span>销量：<em>350</em></span><a href="#">MANDA L曼德尔床架</a></h3>
+                                                <div class="good-list-item__description">
+                                                    胡桃木饰面+茶镜 1200*500*1800
+                                                    胡桃木饰面+茶镜 1200*500*1800
+                                                    胡桃木饰面+茶镜 1200*500*1800
+                                                    胡桃木饰面+茶镜 1200*500*1800
+                                                    胡桃木饰面+茶镜 1200*500*1800
+                                                </div>
+                                                <div class="good-list-item__price">
+                                                    ¥ 3,999
+                                                </div>
+                                                <div class="good-list-item__btn-box">
+                                                    <a href="#" class="btn btn-big">&#xe662;&nbsp;加入购物车</a>
+                                                    <a href="#" class="btn btn-primary-big">&#xf0054;&nbsp;收藏</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /good-detail-extend__inner-bd -->
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+    @@include('../common/footer/_footer.html')
+</div>
+@@include('../common/footer/_foot.html')
+</body>
+</html>
