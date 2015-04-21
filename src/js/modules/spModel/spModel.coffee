@@ -121,7 +121,7 @@ define ['config','cookie'], (config, $cookie)->
     Sp.store = (name, value, version) ->
         if value
             # 记忆存储时间，方便以后根据时间清除
-            Time = localStorage.getItem storeTimeName || {}
+            Time = localStorage.getItem(storeTimeName) || {}
             Time[name] = version || new Date().getTime()
             setStorage storeTimeName, Time
             return setStorage name, value

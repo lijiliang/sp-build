@@ -92,6 +92,7 @@ gulp.task 'css:common',->
 
 
     gulp.src [tmpCss]
+    .pipe $.plumber()
     #.pipe $.sourcemaps.init()
     .pipe $.rimraf()
     .pipe $.sass()
@@ -121,6 +122,7 @@ gulp.task 'css:pages',->
                     pageCssDirFilesPaths.push(pageCssDirPath+'/'+file)
                 if(pageCssDirFilesPaths.length)
                     gulp.src pageCssDirFilesPaths
+                    .pipe $.plumber()
                     #.pipe $.sourcemaps.init()
                     .pipe $.concat(item+".dev.scss")
                     .pipe $.sass()
@@ -137,6 +139,7 @@ gulp.task 'css:pages',->
                 entryArr.push(pageCssDirPath+'/'+item+'.scss');
 
     gulp.src entryArr
+    .pipe $.plumber()
     .pipe $.sass()
     .pipe $.autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4')
     .pipe $.size()
@@ -145,6 +148,7 @@ gulp.task 'css:pages',->
 
     # min css
     gulp.src entryArr
+    .pipe $.plumber()
     .pipe $.sass()
     .pipe $.autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4')
     .pipe $.minifyCss()
@@ -159,10 +163,12 @@ gulp.task 'css:pages',->
 ###
 gulp.task 'styles', ->
     gulp.src [configs.dirs.src + '/css/style.scss',configs.dirs.src + '/css/style_ie8.scss']
+        .pipe $.plumber()
         .pipe $.sass()
         .pipe $.autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4')
         .pipe $.size()
         .pipe gulp.dest(cssBuildPath)
+
 
 # 雪碧图
 gulp.task 'sprite', ['css:common','css:pages','images'], (callback)->
@@ -183,6 +189,7 @@ gulp.task 'sprite', ['css:common','css:pages','images'], (callback)->
                 entryArr.push cssBuildPath+item+'.css'
 
     gulp.src entryArr
+        .pipe $.plumber()
         .pipe $.cssSpritesmith({
             # sprite背景图源文件夹，只有匹配此路径才会处理，默认 images/slice/
             imagepath: configs.dirs.dist + '/' + configs.version+'/images/slice/',
@@ -241,6 +248,7 @@ listJson = {};
 gulp.task 'html:listJson', ->
     listJson = {};
     gulp.src configs.dirs.src + '/html/*/*.html'
+        .pipe $.plumber()
         .pipe $.map (file)->
             _filePath = file.path.split(path.sep).join('/');
             filePath = _filePath.split("/html/")[1];
@@ -261,6 +269,7 @@ gulp.task 'html:listJson', ->
 
 gulp.task 'html:list', ['html:listJson'], ->
     gulp.src configs.dirs.src + '/html/index.hbs'
+        .pipe $.plumber()
         .pipe $.size()
         .pipe $.compileHandlebars(listJson)
         .pipe $.rename('index.html')
@@ -275,6 +284,7 @@ gulp.task 'html:list', ['html:listJson'], ->
 ###
 gulp.task 'html', ->
     gulp.src configs.dirs.src + '/html/**/*.html'
+        .pipe $.plumber()
         .pipe $.fileInclude({
             prefix: '@@',
             basepath: '@file',
@@ -299,6 +309,7 @@ gulp.task 'dev',['webpack:dev'], ->
     commonFilsMap.push(jsBuildPath+'_common.dev.js');
     #输出正常的common.js
     gulp.src commonFilsMap
+        .pipe $.plumber()
         .pipe $.sourcemaps.init()
         .pipe $.concat("common.dev.js")
         .pipe $.size()
@@ -329,7 +340,7 @@ gulp.task 'doc', ->
  * @description 本地资源静态DEMO服务器
  *
 ###
-gulp.task "server", ['build:dev','html','html:list','ie','ie:min','fonts'] , ->
+gulp.task "server", ['buildCommon:dev','html','html:list','ie','ie:min','fonts','sprite'] , ->
     browserSync(
         port: 9000
         ui:
@@ -337,12 +348,13 @@ gulp.task "server", ['build:dev','html','html:list','ie','ie:min','fonts'] , ->
         server:
             baseDir: [htmlPath,staticPath]
         files: [htmlPath + '/*.html',staticPath+ '/**']
+        logFileChanges: false
     )
 
     #css and sprite
     gulp.watch [configs.dirs.src + '/css/**/*.scss',configs.dirs.src + '/images/slice/*.png'], ['sprite']
     #js
-    gulp.watch configs.dirs.src + '/js/?(modules|pages)/**/*.?(coffee|js|jsx|cjsx|hbs|scss|css)', ['dev']
+    gulp.watch configs.dirs.src + '/js/?(modules|pages|widgets)/**/*.?(coffee|js|jsx|cjsx|hbs|scss|css)', ['dev']
     #html
     gulp.watch configs.dirs.src + '/html/**/*.html', ['html','html:list']
     gulp.watch configs.dirs.src + '/html/index.hbs', ['html:list']
@@ -389,56 +401,52 @@ gulp.task 'default',['clean'], ->
 
 
 # 构建任务，生成未压缩版
-gulp.task 'build:dev',()->
-    gulp.start 'webpack:dev',()->
+gulp.task 'buildCommon:dev',['webpack:dev'],()->
+    commonFilsMap = [];
+    commonFilsMap = configs.vendorList.concat(configs.globalList);
+    commonFilsMap.push(jsBuildPath+'_common.dev.js');
+    #console.log(commonFilsMap);
 
-        commonFilsMap = [];
-        commonFilsMap = configs.vendorList.concat(configs.globalList);
-        commonFilsMap.push(jsBuildPath+'_common.dev.js');
-        #console.log(commonFilsMap);
-
-        #输出正常的common.js
-        gulp.src commonFilsMap
-            .pipe $.sourcemaps.init()
-            .pipe $.concat("common.dev.js")
-            .pipe $.size()
-            .pipe gulp.dest(jsBuildPath)
-            .pipe $.uglify()
-            .pipe $.size()
-            .pipe $.rename("common.js")
-            .pipe gulp.dest(jsBuildPath)
-            .pipe $.sourcemaps.write('./')
-            .pipe gulp.dest(jsBuildPath)
-            .pipe $.map ()->
-                gulp.start('sprite')
+    #输出正常的common.js
+    gulp.src commonFilsMap
+        .pipe $.plumber()
+        .pipe $.sourcemaps.init()
+        .pipe $.concat("common.dev.js")
+        .pipe $.size()
+        .pipe gulp.dest(jsBuildPath)
+        .pipe $.uglify()
+        .pipe $.size()
+        .pipe $.rename("common.js")
+        .pipe gulp.dest(jsBuildPath)
+        .pipe $.sourcemaps.write('./')
+        .pipe gulp.dest(jsBuildPath)
 
 
 # 构建任务，生成压缩版与未压缩版
 gulp.task 'build',['clean'],()->
-    gutil.log('-------- 开始合并相关模块 --------');
-    gulp.start 'webpack:dev','webpack:pro','ie','ie:min','fonts',()->
+    gulp.start 'buildCommon'
 
-        gutil.log('-------- 开始合并common.js/common.min.js --------');
 
-        commonFilsMap = [];
-        commonFilsMap = configs.vendorList.concat(configs.globalList);
-        commonFilsMap.push(jsBuildPath+'_common.dev.js');
-        #console.log(commonFilsMap);
+gulp.task 'buildCommon',['webpack:dev','webpack:pro','ie','ie:min','fonts','sprite'],->
 
-        #输出正常的common.js
-        gulp.src commonFilsMap
-            .pipe $.sourcemaps.init()
-            .pipe $.concat("common.dev.js")
-            .pipe $.size()
-            .pipe gulp.dest(jsBuildPath)
-            .pipe $.uglify()
-            .pipe $.size()
-            .pipe $.rename("common.js")
-            .pipe gulp.dest(jsBuildPath)
-            .pipe $.sourcemaps.write('./')
-            .pipe gulp.dest(jsBuildPath)
-            .pipe $.map ()->
-                gulp.start('sprite')
+    commonFilsMap = [];
+    commonFilsMap = configs.vendorList.concat(configs.globalList);
+    commonFilsMap.push(jsBuildPath+'_common.dev.js');
+    #console.log(commonFilsMap);
+
+    #输出正常的common.js
+    gulp.src commonFilsMap
+        .pipe $.plumber()
+        .pipe $.sourcemaps.init()
+        .pipe $.concat("common.dev.js")
+        .pipe $.size()
+        .pipe gulp.dest(jsBuildPath)
+        .pipe $.uglify()
+        .pipe $.size()
+        .pipe $.rename("common.js")
+        .pipe gulp.dest(jsBuildPath)
+        .pipe $.sourcemaps.write('./')
+        .pipe gulp.dest(jsBuildPath)
 
 ###
  * Task: Map
