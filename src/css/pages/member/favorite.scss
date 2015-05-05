@@ -1,0 +1,49 @@
+@import "../../modules/settings/_setting_pages";
+//我的收藏夹
+.cart-table.favorites-table{
+  border:0 none;
+  .cart-table{
+    &__bd,&__hd{
+      padding-right:0;
+    }
+    &__item{
+      padding:20*$px 0;
+    }
+
+    &__col-01{
+      width:60/960*100%;
+    }
+    &__col-02{
+      width:430/960*100%;
+    }
+    &__col-03{
+      width:210/960*100%;
+    }
+    &__col-04{
+      width:160/960*100%;
+    }
+    &__col-05{
+      width:100/960*100%;
+    }
+    &__col-06{
+
+    }
+    &__col-07{
+
+    }
+  }
+}
+.favorites-table{
+  &__remarks{
+    width:5em;
+    text-align:center;
+    line-height:24*$px;
+    margin-top:-3*$px;
+  }
+}
+
+.page-favorites{
+  .main-layout{
+    //overflow:visible;
+  }
+}

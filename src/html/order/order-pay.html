@@ -7,8 +7,8 @@
     <meta name="viewport" content="width=device-width">
     <link rel="shortcut icon" href="/favicon.ico">
     <title>订单支付</title>
-    @@include('../common/header/_head.html')
-    <link rel="stylesheet" href="/css/orderIndex.dev.css">
+    @@include('../_common/header/head.html')
+    @@include('./_include/meta.html')
 </head>
 <body>
 <div class="page page-order-pay layout-fixed" data-module="orderPay">
@@ -85,7 +85,7 @@
                             </div>
 
                             <div class="pay-list-box">
-                                <div class="`pay-list-box`__inner u-clearfix">
+                                <div class="pay-list-box__inner u-clearfix">
                                     <div class="span4 pay-list-box__item _active">
                                         <div class="pay-list-box__item-inner">
                                             <img src="/images/payicon_alipay.jpg" alt=""/>
@@ -120,8 +120,8 @@
             </div>
         </div>
     </div>
-    @@include('../common/footer/_footer.html')
+    @@include('../_common/footer/footer.html')
 </div>
-@@include('../common/footer/_foot.html')
+@@include('../_common/footer/foot.html')
 </body>
 </html>

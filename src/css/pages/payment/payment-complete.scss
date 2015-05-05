@@ -1,0 +1,23 @@
+@import "../../modules/settings/_setting_pages";
+
+.order-info-compete {
+  margin: 20*$px;
+  padding: 0 20*$px;
+  &__title {
+    font-size: 18*$px;
+  }
+  &__description {
+    font-size: 14*$px;
+  }
+  &__address-item {
+    margin-top: 15*$px;
+    line-height: 24*$px;
+    .order-piece {
+      font-size: 16*$px;
+      color: $color_gold;
+    }
+    label {
+      color: $color_gray_text;
+    }
+  }
+}

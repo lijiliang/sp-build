@@ -1,0 +1,105 @@
+{
+  "code": 0,
+  "msg": "成功",
+  "data": {
+    "goods": [
+      {
+        "id": 1,
+        "title": "iphone5",
+        "production_cycle": 1,
+        "goods_sku": [
+          {
+            "id": 1,
+            "goods_id": 1,
+            "name": "iphone5s cdma",
+            "attribute": "",
+            "quantity": 10,
+            "price": "100.00",
+            "total_price": 1000,
+            "cover": "http://7i7itl.com1.z0.glb.clouddn.com/2015/02/06/a5de7c92_overview.jpg"
+          },
+          {
+            "id": 1,
+            "goods_id": 1,
+            "name": "iphone5s cdma1111",
+            "attribute": "",
+            "quantity": 10,
+            "price": "100.00",
+            "total_price": 1000,
+            "cover": "http://7i7itl.com1.z0.glb.clouddn.com/2015/02/06/a5de7c92_overview.jpg"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "iphone9999",
+        "production_cycle": 1,
+        "goods_sku": [
+          {
+            "id": 2,
+            "goods_id": 2,
+            "name": "iphone5s gsm",
+            "attribute": "",
+            "quantity": 10,
+            "price": "150.00",
+            "total_price": 1500,
+            "cover": "http://7i7itl.com1.z0.glb.clouddn.com/2015/02/06/2cc99652_overview.jpg"
+          },
+          {
+            "id": 2,
+            "goods_id": 2,
+            "name": "iphone5s gsm",
+            "attribute": "",
+            "quantity": 10,
+            "price": "150.00",
+            "total_price": 1500,
+            "cover": "http://7i7itl.com1.z0.glb.clouddn.com/2015/02/06/2cc99652_overview.jpg"
+          },
+          {
+            "id": 2,
+            "goods_id": 2,
+            "name": "iphone5s gsm",
+            "attribute": "",
+            "quantity": 10,
+            "price": "150.00",
+            "total_price": 1500,
+            "cover": "http://7i7itl.com1.z0.glb.clouddn.com/2015/02/06/2cc99652_overview.jpg"
+          },
+          {
+            "id": 2,
+            "goods_id": 2,
+            "name": "iphone5s gsm",
+            "attribute": "",
+            "quantity": 10,
+            "price": "150.00",
+            "total_price": 1500,
+            "cover": "http://7i7itl.com1.z0.glb.clouddn.com/2015/02/06/2cc99652_overview.jpg"
+          },
+          {
+            "id": 2,
+            "goods_id": 2,
+            "name": "iphone5s gsm",
+            "attribute": "",
+            "quantity": 10,
+            "price": "150.00",
+            "total_price": 1500,
+            "cover": "http://7i7itl.com1.z0.glb.clouddn.com/2015/02/06/2cc99652_overview.jpg"
+          },
+          {
+            "id": 2,
+            "goods_id": 2,
+            "name": "iphone5s gsm",
+            "attribute": "",
+            "quantity": 10,
+            "price": "150.00",
+            "total_price": 1500,
+            "cover": "http://7i7itl.com1.z0.glb.clouddn.com/2015/02/06/2cc99652_overview.jpg"
+          }
+        ]
+      }
+    ],
+    "total_sku": 2,
+    "total_price": 2500,
+    "is_delivery": 0
+  }
+}

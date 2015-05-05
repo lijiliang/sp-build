@@ -1,7 +1,6 @@
 # 下拉选择框 SelectBox
-define ['Sp','./cart','./cartEmpty','LightModalBox'], (Sp, cartTpl, cartEmptyTpl, LightModalBox)->
+define ['Sp','./tpl-layout','./tpl-empty','LightModalBox'], (Sp, cartTpl, cartEmptyTpl, LightModalBox)->
     name = 'cart'
-
     #API
     host = Sp.config.host + '/api/'
     #host = 'http://admin.sipin.benny:8000/api/'
@@ -66,7 +65,8 @@ define ['Sp','./cart','./cartEmpty','LightModalBox'], (Sp, cartTpl, cartEmptyTpl
             @$container = @$el.parent()
             @$content = @$container.find '.header-cart__content'
             @shouldUpdate = 1
-            @_renderEmptyCart()
+            # @_renderEmptyCart()
+            @$content.html '<p class="ui-loading"></p>'
             @$container.hover ()=>
                 @_getCart()
             @_cart = @

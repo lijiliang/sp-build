@@ -20,6 +20,11 @@ $sy_exchange: ($sy_ratio/$sy_html_base_font_size)*1rem;//px的值转换为rem
 //$px: $sy_exchange;
 $px: 1px;
 
+/*
+ * Max page width
+ */
+$max_page_width: 1600*$px;
+
 // 字体
 //==============
 $font_h1: 20*$px;

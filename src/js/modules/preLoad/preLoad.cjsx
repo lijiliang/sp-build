@@ -50,6 +50,10 @@ define ['LoginModalBox', 'AutoComplete', 'NavDropDown',
             target: ".j-dropdown-menu2"
             event: "mouseenter"
 
+        topbarDropDown2 = new TopbarDropDown
+            target: ".j-dropdown-menu3"
+            event: "mouseenter"
+
 
         # $(".header-menu__ul li").on "mouseenter",()->
         #     $(this).find(".header-menu-popbox").show()

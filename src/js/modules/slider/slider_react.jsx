@@ -1,5 +1,3 @@
-React = require('vendor/react/react');
-
 SliderItem = React.createClass({
   render: function(){
 

@@ -1,5 +1,5 @@
 define(function(){
     return {
-        host: "http://sipin.com"
+        host: "http://"+window.location.host
     };
 });

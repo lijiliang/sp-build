@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <title>返修/退换货申请提交成功</title>
+    @@include('../_common/header/head.html')
+    @@include('./_include/meta.html')
+</head>
+<body>
+<div class="page page-cs-record-list layout-fixed" data-module="">
+    <!--header-->
+    @@include('../_common/header/header.html')
+    <!--/header end-->
+
+    <div class="container container-border-bottom">
+        <div class="container__wrap">
+            <div class="layout-fixed-inner">
+                <div class="container__main">
+                    <div class="container__main-inner u-clearfix">
+                        <!--nav-->
+                        @@include('../_common/nav/nav.html', { "navName":"卧室" } )
+                        <!--/nav end-->
+                        <div class="main-layout u-wrap u-clearfix">
+                            <div class="main-layout-sidebar">
+                                <div class="center-menu">
+                                    <a class="center-menu__item" href="#">帮助中心</a>
+                                    <a class="center-menu__item _active" href="#">售后服务</a>
+                                    <a class="center-menu__item" href="#">意见反馈</a>
+                                </div>
+                            </div>
+                            <div class="main-layout-container">
+                                <!-- detail -->
+                                <div class="apply-success">
+                                    <h3>您的退换货编号为：12882482</h3>
+                                    <p>亲爱的客户，为您带来了不便和困扰，深感抱歉！</p>
+                                    <p>退回商品时，请务必附上您的退换货编号、姓名以及联系方式、以便我们可以更快速地为您办理退换货服务哦！</p>
+                                    <p>您的退换货申请会在48小时内审核，请您保持收货电话畅通，以便及时沟通。</p>
+                                    <a href="cs-record-list.html" class="btn btn-primary-big">查看售后记录</a>
+                                </div>
+                                <!-- /detail end -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @@include('../_common/footer/footer.html')
+</div>
+@@include('../_common/footer/foot.html')
+</body>
+</html>

@@ -7,7 +7,8 @@
     <meta name="viewport" content="width=device-width">
     <link rel="shortcut icon" href="/favicon.ico">
     <title>购物车</title>
-    @@include('../common/header/_head.html')
+    @@include('../_common/header/head.html')
+    @@include('./_include/meta.html')
 </head>
 <body>
 <div class="page page-cart layout-fixed" data-module="cart">
@@ -72,7 +73,7 @@
                             <!--未登录-->
                             <div class="u-fr">
                                 <span class="u-mr_10">登录即可永久保存购物车商品</span>
-                                <a class="btn btn-primary" href="#">现在登录</a>
+                                <a class="btn btn-primary j-login" href="javascript:;">现在登录1</a>
                             </div>
                             <!--/未登录 end-->
                             <h2 class="u-f18">我的购物车</h2>
@@ -85,8 +86,9 @@
             </div>
         </div>
     </div>
-    @@include('../common/footer/_footer.html')
+    @@include('../_common/footer/footer.html')
 </div>
-@@include('../common/footer/_foot.html')
+@@include('../_common/footer/foot.html')
+<script src="/js/cart-cart.js"></script>
 </body>
 </html>

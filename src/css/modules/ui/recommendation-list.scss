@@ -1,0 +1,92 @@
+//推荐
+.recommendation-list {
+  &__item{
+    position:relative;
+    overflow:hidden;
+  }
+  &__hd{
+    margin-top:16*$px;
+    line-height:40*$px;
+    font-size:24*$px;
+    color:$color_gray3;
+  }
+  &__img-box{
+    width:50%;
+    padding-right:10*$px;
+    @extend %box-sizing-border;
+  }
+  img{
+    width:100%;
+    display:block;
+  }
+  &__text{
+    position:absolute;
+    overflow:hidden;
+    top:10*$px;
+    right:0;
+    bottom:10*$px;
+    margin-left:10*$px;
+    padding-left:16*$px;
+    width:50%;
+  }
+  &__title{
+    @extend %ellipsis-basic;
+    line-height:28*$px;
+    font-size:14*$px;
+    color:$color_black;
+    margin:16/220*100% 0 6/220*100%;
+  }
+  &__desc{
+    height:36*$px;
+    line-height:18*$px;
+    margin-bottom:10/220*100%;
+    overflow:hidden;
+    font-size:12*$px;
+  }
+  &__price{
+    font-size:18*$px;
+    color:$color_gold;
+    line-height:20*$px;
+    margin:10/220*100% 0 14/220*100% ;
+  }
+  &__btn{
+    font-size: 12*$px;
+  }
+  @include max-screen(1500px){
+    &__desc{ display:none;}
+  }
+}
+.recommendation-list{
+  margin:0 20*$px 60*$px;
+  .new-goods-list-box{
+    border-top:0 none;
+  }
+  .swipe-actions{
+    &__prev{
+      left:-70*$px;
+    }
+    &__next{
+      right:-70*$px;
+    }
+    &__prev,
+    &__next{
+      background:rgba(201,201,201,.5);
+      &:hover{
+        background:rgba(201,201,201,.8);
+      }
+    }
+  }
+}
+
+@include max-screen(1300px){
+  .recommendation-list{
+    .swipe-actions{
+      &__prev{
+        left:20*$px;
+      }
+      &__next{
+        right:20*$px;
+      }
+    }
+  }
+}

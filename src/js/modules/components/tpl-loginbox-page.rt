@@ -1,0 +1,29 @@
+<rt-require dependency="widgets/react-checkbox/react-checkbox" as="ReactCheckbox"/>
+<form method="post" action="#" class="form">
+    <div class="form-item">
+        <div class="form-field">
+            <input id="account" onFocus="{this.showAccountTips}" onKeyUp="{this.checkEnter}" onChange="{this.checkAccount}" onBlur="{this.checkExist}" type="text" class="form-text" name="username" placeholder="手机号/邮箱/用户名" />
+        </div>
+        <p class="u-color_white is_account_error u-mt_10 _tips_p" style="display:block">{this.state.account.info}</p>
+    </div>
+    <div class="form-item u-mt_30">
+        <div class="form-field">
+            <input id="password" onKeyUp="{this.checkEnter}" onFocus="{this.showPassTips}" onChange="{this.checkPass}" type="password" class="form-text" name="password" placeholder="密码" />
+        </div>
+        <p class="u-color_white is_password_error u-mt_10 _tips_p" style="display:block">{this.state.password.info}</p>
+    </div>
+    <div class="form-item u-mt_15">
+        <div class="form-field form-field-rc u-clearfix">
+            <label class="u-fl">
+                <ReactCheckbox checked={this.state.remember} onChange="{this.checkRemember}" label='记住用户名' />
+            </label>
+            <a class="forget-link u-fr u-color_white" href="/member/forgotPass">忘记密码？</a>
+        </div>
+    </div>
+    <div class="form-action action-left u-mt_30">
+        <a onClick={this.login} class="{this.getLoginBtnClass()}" href="#">登录</a>
+    </div>
+    <div class="form-action action-left u-mt_20">
+        还不是斯品用户？<a class="btn-right" href="/member/register">马上注册》</a>
+    </div>
+</form>

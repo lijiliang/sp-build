@@ -1,0 +1,219 @@
+@import "../../modules/settings/_setting_pages";
+.pay-list-box {
+  border-bottom: 1*$px solid $color_gray_border;
+  &__inner {
+    padding: 20*$px;
+  }
+  &__item-inner {
+    position: relative;
+    border: 1*$px solid $color_gray_border;
+    display: inline-block;
+    cursor: pointer;
+  }
+  &__item._active {
+    .pay-list-box__item-inner {
+      border: 1*$px solid $color_gold;
+      &:before {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 1.25rem;
+        height: 1.25rem;
+        background: url("../images/slice/type_selected.png") no-repeat 0 0;
+      }
+    }
+
+  }
+}
+
+.order-info-compete {
+  margin: 20*$px;
+  padding: 0 20*$px;
+  &__title {
+    font-size: 18*$px;
+  }
+  &__description {
+    font-size: 14*$px;
+  }
+  &__address-item {
+    margin-top: 15*$px;
+    line-height: 24*$px;
+    .order-piece {
+      font-size: 16*$px;
+      color: $color_gold;
+    }
+    label {
+      color: $color_gray_text;
+    }
+  }
+}
+
+//我的订单
+.order-list-tab{
+  margin:14*$px 20*$px 12*$px;
+  &__item{
+    display:block;
+    font-size:18*$px;
+    color:$color_black;
+    /* margin:4*$px 96*$px 0 0; */
+    margin:4*$px 96/1920*100% 0 0;
+    line-height:34*$px;
+    @extend %float;
+    &:hover{
+      color:$color_gold_hover;
+      border-bottom:2px solid $color_gold_hover;
+    }
+    &._active{
+      color:$color_gold;
+      border-bottom:2px solid $color_gold;
+    }
+  }
+}
+.order-list{
+
+}
+.cart-table.order-list-table{
+  border-width:1px 0;
+  margin-bottom:20*$px;
+  .cart-table{
+    &__hd,&__bd,&__ft{
+      padding:0;
+    }
+    &__hd{
+      border-left:1px solid #fff;
+      border-right:1px solid #fff;
+      margin:0 -1px;
+    }
+    &__item{
+      padding:40*$px 0 20*$px;
+      position:relative;
+      &-info{
+        position:absolute;
+        top:0;
+        //left:54/1120*100%;
+        left:0;
+        padding:0 16*$px;
+        min-width:104*$px;
+        text-align:center;
+        color:#fff;
+        background:#dcdcdc;
+        line-height:24*$px;
+      }
+    }
+
+    /*&__col-01{
+      width:54/1120*100%;
+    }
+    &__col-02{
+      width:380/1120*100%;
+    }
+    &__col-03{
+      width:136/1120*100%;
+    }
+    &__col-04{
+      width:110/1120*100%;
+    }
+    &__col-05{
+      width:196/1120*100%;
+    }
+    &__col-06{
+      width:168/1120*100%;
+    }
+    &__col-07{
+      width:74/1120*100%;
+    }*/
+
+    &__col-01{
+      width:48/960*100%;
+    }
+    &__col-02{
+      width:370/960*100%;
+    }
+    &__col-03{
+      width:70/960*100%;
+    }
+    &__col-04{
+      width:100/960*100%;
+    }
+    &__col-05{
+      width:170/960*100%;
+    }
+    &__col-06{
+      width:148/960*100%;
+    }
+    &__col-07{
+      width:54/960*100%;
+    }
+
+  }
+}
+.order-list-table{
+  &__item{
+    &-img-box{
+      width:80*$px;
+      //height:80*$px;
+      margin-right:40*$px;
+      @extend %float;
+
+      img{
+        width:100%;
+        display:block;
+      }
+    }
+    &-img-title{
+      margin-top:10*$px;
+      width:80*$px;
+      line-height:14*$px;
+      //max-height:28*$px;
+      height:28*$px;
+      overflow:hidden;
+    }
+  }
+}
+.order-list-log{
+  position:absolute;
+  right:60px;
+  top:0;
+  z-index:9;
+  background:#fff;
+  border:1px solid $color_gray_border;
+  width:500*$px;
+  box-shadow:0 5px 13px rgba(0,0,0,.09);
+  display:none;
+
+  &:before,&:after{
+    content:'';
+    border:10px solid transparent;
+    position:absolute;
+    right:98*$px;
+  }
+  &:before{
+    top:-20px;
+    border-bottom-color:$color_gray_border;
+    z-index:-1;
+  }
+  &:after{
+    top:-19px;
+    border-bottom-color:#fff;
+  }
+
+  .order-tracking{
+    margin:0 20*$px;
+    &__hd, &__ft{
+      padding:0;
+    }
+    &__bd{
+      padding:14*$px 0 0;
+    }
+    &__col-01{
+      width:150/450*100%;
+    }
+    &__col-02{
+      width:200/450*100%;
+    }
+    &__col-03{
+      width:100/450*100%;
+    }
+  }
+}

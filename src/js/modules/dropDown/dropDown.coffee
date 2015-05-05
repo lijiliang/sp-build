@@ -1,5 +1,5 @@
 # 下拉菜单
-define ['./dropDown_layout'], (dropDown_layout)->
+define ['./tpl_layout'], (dropDown_layout)->
     dropdownObj = []
     class DropDown
         constructor: (@options)->

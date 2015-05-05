@@ -1,0 +1,26 @@
+<div class="order-info-address__box">
+    {{#each this}}
+        <div class="order-info-address__item u-clearfix" data-id="{{id}}" data-is-default="{{is_default}}" data-region-id="{{#if district_id}}{{district_id}}{{else}}{{city_id}}{{/if}}">
+            <div class="order-info-address__checkbox u-fl{{#if is_default}} _active{{/if}}">
+                <div>
+                    <span class="u-mr_5">{{consignee}}</span>
+                    <span class="u-mr_5">{{mobile}}</span>
+                </div>
+                <div class="u-ellipse">{{province_name}} {{city_name}} {{district_name}} {{address}}</div>
+            </div>
+            <div class="order-info-address__item-action">
+                {{#if is_default}}{{else}}
+                    <a class="u-black-link j-address-set-default order-info-address__item-action-set-default" href="javascript:;">设为默认</a>
+                    <span class="u-ml_10 u-mr_10 u-color_gray order-info-address__item-action-set-default">|</span>
+                {{/if}}
+                <a class="u-black-link j-address-update" href="javascript:;">修改</a>
+                <span class="u-ml_10 u-mr_10">|</span>
+                <a class="u-black-link j-address-del" href="javascript:;">删除</a>
+            </div>
+        </div>
+    {{/each}}
+    <div class="order-info-address__btn">
+        <a href="javascript:;" class="btn btn-primary j-address-create">使用新地址</a>
+        <a href="/member#j-order-info-address" class="u-ml_20 order-info-address__manage">管理收货地址</a>
+    </div>
+</div>

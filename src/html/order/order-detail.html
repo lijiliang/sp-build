@@ -7,7 +7,8 @@
     <meta name="viewport" content="width=device-width">
     <link rel="shortcut icon" href="/favicon.ico">
     <title>订单详情</title>
-    @@include('../common/header/_head.html')
+    @@include('../_common/header/head.html')
+    @@include('./_include/meta.html')
 </head>
 <body>
 <div class="page page-order-detail layout-fixed" data-module="orderDetail">
@@ -98,18 +99,28 @@
                                 <div class="order-tracking__col-02 u-fl">处理信息</div>
                                 <div class="order-tracking__col-03 u-fl">处理人</div>
                             </div>
-                            <div class="order-tracking__bd u-clearfix">
-                                <div class="order-tracking__col-01 u-fl">
-                                    <div>2015-01-04  01:04:55</div>
-                                    <div>2015-01-04  01:04:55</div>
+                            <div class="order-tracking__bd">
+                                <div class="u-clearfix order-tracking__bd__row">
+                                    <div class="order-tracking__col-01 u-fl">
+                                        <div>2015-01-04  01:04:55</div>
+                                    </div>
+                                    <div class="order-tracking__col-02 u-fl">
+                                        <div>您提交了订单，请等待系统确认</div>
+                                    </div>
+                                    <div class="order-tracking__col-03 u-fl">
+                                        <div>客户</div>
+                                    </div>
                                 </div>
-                                <div class="order-tracking__col-02 u-fl">
-                                    <div>您提交了订单，请等待系统确认</div>
-                                    <div>系统已经确认，等待客户付款</div>
-                                </div>
-                                <div class="order-tracking__col-03 u-fl">
-                                    <div>客户</div>
-                                    <div>斯品系统操作员</div>
+                                <div class="u-clearfix order-tracking__bd__row">
+                                    <div class="order-tracking__col-01 u-fl">
+                                        <div>2015-01-04  01:04:55</div>
+                                    </div>
+                                    <div class="order-tracking__col-02 u-fl">
+                                        <div>系统已经确认，等待客户付款</div>
+                                    </div>
+                                    <div class="order-tracking__col-03 u-fl">
+                                        <div>斯品系统操作员</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -237,8 +248,8 @@
             </div>
         </div>
     </div>
-    @@include('../common/footer/_footer.html')
+    @@include('../_common/footer/footer.html')
 </div>
-@@include('../common/footer/_foot.html')
+@@include('../_common/footer/foot.html')
 </body>
 </html>

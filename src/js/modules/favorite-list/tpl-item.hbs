@@ -1,0 +1,31 @@
+{{#each this}}
+<div data-key="{{@index}}" class="cart-table__item cart-table__item-{{goods_id}} u-clearfix">
+    <div class="cart-table__col-01 u-fl">
+        <span data-id="{{goods_id}}" class="check-fav ui-checkbox"></span>
+    </div>
+    <div class="cart-table__col-02 u-fl">
+        <div class="cart-table__item-img-box">
+            <img src="{{goods.goods_sku.has_cover.media.full_path}}" alt=""/>
+        </div>
+        <div class="cart-table__item-title">{{goods.title}}</div>
+        <div class="cart-table__item-desc">
+            <span class="u-color_gray">商品编号: </span>
+            <span class="u-color_black">{{goods.primary_sku_id}}</span>
+        </div>
+        <div class="cart-table__item-desc">{{goods.subtitle}}</div>
+    </div>
+    <div class="cart-table__col-03 u-fl">
+        <div class="cart-table__item-price">¥ {{goods.goods_sku.goods_sku_price.price}}</div>
+        <div class="cart-table__item-price-info u-del">¥ {{goods.goods_sku.goods_sku_price.basic_price}}</div>
+    </div>
+    <div class="cart-table__col-04 u-fl">
+        <div class="u-ml_20">有货</div>
+    </div>
+    <div class="cart-table__col-05 u-fl">
+        <div class="favorites-table__remarks">
+            <a class="u-black-link u-block" href="/item/{{goods.goods_sku.sku_sn}}.html">查看商品</a>
+            <a class="u-black-link u-block j-cancel-one-favorite" data-id="{{goods_id}}" href="#">取消收藏</a>
+        </div>
+    </div>
+</div>
+{{/each}}

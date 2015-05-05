@@ -1,0 +1,86 @@
+.nav-dropdown {
+  border: 1px solid $color_gray_border;
+  font-size: 8*$px;
+  width: 14*$px;
+  height: 14*$px;
+  line-height: 14*$px;
+  color: $color_gray;
+  background: #fff;
+  display: inline-block;
+  text-align: center;
+  cursor: pointer;
+}
+
+.nav-dropdown._active {
+  border: 1px solid $color_gold;
+  color: $color_gold;
+}
+
+.nav-dropdown-content {
+  width: 200*$px;
+  background: #fff;
+  border: 1*$px solid $color_gray_border;
+  &__innner {
+    position: relative;
+    padding: 15*$px;
+    li {
+      margin-bottom: 10*$px;
+    }
+    li:last-child {
+      margin-bottom: 0 !important;
+    }
+    a {
+      color: $color_black;
+      display: inline-block;
+      padding: 2*$px 5*$px;
+      &:hover {
+        background: $color_gold_hover;
+        color: #fff;
+      }
+    }
+  }
+}
+
+.topbar-dropdown-content {
+  min-width: 85*$px;
+  background: #fff;
+  border: 1px solid $color_gray_border;
+  &__innner {
+    position: relative;
+    padding: 10*$px;
+    li {
+      margin-bottom: 10*$px;
+    }
+    li:last-child {
+      margin-bottom: 0 !important;
+    }
+    a {
+      color: $color_gray_text;
+      &:hover {
+        color: $color_gold_hover;
+      }
+    }
+  }
+  &__top-border {
+    height: 1*$px;
+    background: #fff;
+    width: 70*$px;
+    position: absolute;
+    left: 0;
+    top: -1*$px;
+  }
+}
+
+/* 关注我们下拉框 */
+#topbar_followus {
+    width:240px;
+}
+.social-icon-list{
+    padding:10px 0;
+    &__item {
+        text-align:center;
+        a {
+            color:$color_gold !important
+        }
+    }
+}

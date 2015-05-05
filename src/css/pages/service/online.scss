@@ -1,0 +1,11 @@
+@import "../../modules/settings/_setting_pages";
+/**
+ * @tofishes
+ * 在线客服页面
+ */
+.online-chat {
+    margin: 100*$px auto;
+    min-width: 960*$px;
+    min-height: 650*$px;
+    box-shadow: 0 0 24px rgba(0, 0, 0, .28)
+}

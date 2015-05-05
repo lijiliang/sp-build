@@ -319,7 +319,7 @@ SliderList = React.createClass
         <div ref="wrapper" className={classes}>
             <div
             ref="prev"
-            className="ui-slider-list__prev iconfont u-text-center"
+            className="ui-slider-list__prev u-text-center"
             onClick={@handlePrev}></div>
             <div className="ui-slider-list__ul" ref="ul">
                 <div className="ui-slider-list__ul-inner u-clearfix" ref="inner">
@@ -328,7 +328,7 @@ SliderList = React.createClass
             </div>
             <div
             ref="next"
-            className="ui-slider-list__next iconfont u-text-center"
+            className="ui-slider-list__next u-text-center"
             onClick={@handleNext}></div>
         </div>
 

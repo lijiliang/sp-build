@@ -1,0 +1,71 @@
+//swipe组件基本样式
+.swipe {
+  overflow: hidden;
+  visibility: hidden;
+  position: relative;
+}
+.swipe-wrap {
+  overflow: hidden;
+  position: relative;
+}
+.swipe-item {
+  float:left;
+  width:100%;
+  position: relative;
+  overflow:hidden;
+}
+.swipe-points {
+  position: absolute;
+  bottom: 20*$px;
+  left: 47%;
+  height:18*$px;
+}
+.swipe-points span {
+  display: inline-block;
+  width:14*$px;
+  height:14*$px;
+  margin-right:10*$px;
+  border: 2px solid #fff;
+  border-radius: 100%;
+  background: rgba(255,255,255,0.5);
+  cursor: pointer;
+}
+.swipe-points span._active {
+  border: 2px solid #bb9a83;
+  background: rgba(187,154,131,0.5);
+}
+
+.swipe-actions {
+  &__prev,&__next{
+    background: rgba(0,0,0,0.1);
+    border-radius: 100%;
+    color: #fff;
+    font-size:24*$px;
+    width:50*$px;
+    height:50*$px;
+    line-height:50*$px;
+    position: absolute;
+    top:47%;
+    text-align: center;
+    &:hover {
+      background: rgba(0,0,0,0.2);
+      color: #fff;
+    }
+  }
+  &__prev{
+    left:20*$px;
+    &-icon{
+      &:before{
+        content:'\f0115';
+      }
+    }
+  }
+  &__next{
+    right:20*$px;
+    &-icon{
+      &:before{
+        content:'\f0116';
+      }
+    }
+  }
+}

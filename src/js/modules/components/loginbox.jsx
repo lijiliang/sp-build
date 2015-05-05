@@ -1,4 +1,4 @@
-define(['Sp','Validator','widgets/reactCheckbox/reactCheckbox','cookie'],function(Sp, Validator,ReactCheckbox,cookie){
+define(['Sp','Validator','cookie','./tpl-loginbox-modal','./tpl-loginbox-page'],function(Sp, Validator,cookie,tplLoginboxModal,tplLoginbox){
 
     /**
      * 登录页组件
@@ -16,6 +16,8 @@ define(['Sp','Validator','widgets/reactCheckbox/reactCheckbox','cookie'],functio
         searchObj[tmp[0]]=tmp[1];
     }
 
+    var timer = null;
+
     var Loginbox = React.createClass({
         getInitialState: function(){
             return {
@@ -23,48 +25,173 @@ define(['Sp','Validator','widgets/reactCheckbox/reactCheckbox','cookie'],functio
                     val: $.cookie('sipin_member_name') || '',
                     error: true,
                     info:"",
-                    isChecked: false
+                    isChecked: false,
+                    _val:''
                 },
                 password: {
                     val: '',
                     error: true,
                     info:"",
-                    isChecked: false
+                    isChecked: false,
+                    _val:''
                 },
                 submit_active: false,
-                remember: false
-            }
+                remember: false,
+                isChecking: false,
+                checkTime: 15 // 只进行10次错误尝试
+            };
         },
         componentDidMount: function(){
              var self = this;
-             setInterval(function(){
-                var account = document.getElementById('account').value.trim() || null;
-                var password = document.getElementById('password').value.trim() || null;
 
-                self.setAccount(account);
-                self.setPass(password);
+             if($.cookie('sipin_member_name')){
+                 $("#account").val($.cookie('sipin_member_name'));
+                 $("#password").val("");
+             }
+
+             timer = setInterval(function(){
+
+                var state = self.state;
+
+                var account = $("#account").val().trim() || null;
+                var password = $("#password").val() || null;
+
+                if(state.account._val!=account)
+                    self.setAccount(account);
+                if(state.password._val!=password)
+                    self.setPass(password);
+
+                if(!$("#account").is(":focus") && state.account._val!=account && !state.isChecking && state.checkTime>0 ){
+                    self.checkExist();
+                }
+
              },500);
+
+         },
+         componentWillUnmount: function(){
+             clearInterval(timer);
          },
          checkEnter: function(e){
              if(e.keyCode==13){
-                 this.submitLogin(e);
+                 this.login();
              }
          },
+         checkExist: function(){
+             var self = this;
+             var account_val = $("#account").val();
+             var state = this.state;
+
+             if( account_val && account_val.length>=4 && state.account.isChecked === false ){
+
+                 state.account.error = false;
+                 state.isChecking = true;
+                 // 正则检查
+                 var account = $.trim(state.account.val);
+                 if(validator.methods.email(account)){
+                     // 检查邮箱
+                     Sp.get( Sp.config.host + "/api/member/checkEmail",{
+                         email: account
+                     },function(res){
+                         if(res && res.code !== 0){
+                             state.account.info = "帐号不存在";
+                             state.account.isChecked = false;
+                         }else{
+                             state.account.isChecked = true;
+                             self.setChecked();
+                         }
+                         state.account._val = account;
+                         state.isChecking = false;
+                         self.setState(state);
+                     },function(err){
+                         state.isChecking = false;
+                         state.checkTime = state.checkTime-1;
+                         self.setState(state);
+                     });
+                 }else if (validator.methods.phone(account)){
+                     // 检查手机
+                     Sp.get( Sp.config.host + "/api/member/checkMobile",{
+                         mobile: account
+                     },function(res){
+                         if(res && res.code !== 0){
+                             state.account.info = "帐号不存在";
+                             state.account.isChecked = false;
+                         }else{
+                             state.account.isChecked = true;
+                             self.setChecked();
+                         }
+                         state.account._val = account;
+                         state.isChecking = false;
+                         self.setState(state);
+                     },function(err){
+                         state.isChecking = false;
+                         state.checkTime = state.checkTime-1;
+                         self.setState(state);
+                     });
+                 }else {
+                     // 检查用户名
+                     Sp.get( Sp.config.host + "/api/member/checkName",{
+                         name: account
+                     },function(res){
+                         if(res && res.code !== 0){
+                             state.account.info = "帐号不存在";
+                             state.account.isChecked = false;
+                         }else{
+                             state.account.isChecked = true;
+                             self.setChecked();
+                         }
+                         state.account._val = account;
+                         state.isChecking = false;
+                         self.setState(state);
+                     },function(err){
+                         state.isChecking = false;
+                         state.checkTime = state.checkTime-1;
+                         self.setState(state);
+                     });
+                 }
+             }
+         },
+         setChecked: function(){
+             var state = this.state;
+             var value =  $("#account").val();
+
+             if(state.account._val!=="" && state.account._val!==value){
+                 state.account.isChecked = false;
+             }
+
+             if(!state.account.error && !state.password.error && state.account.isChecked){
+                 state.submit_active = true;
+             }else{
+                 state.submit_active = false;
+             }
+
+             this.setState(state);
+         },
          setAccount: function(value){
+             var self = this;
+
              if(value){
                  var state = this.state;
 
-                 state.account.error = !(value.length>=4);
-                 if(!state.account.error)
+                 state.account.error = value.length<4;
+
+                 if (!state.account.error)
                     state.account.info = "";
                  else{
-                     if(value.length>1 && value.length<4){
+                     if(value.length<4){
                          state.account.info = "请输入正确的帐号";
                      }
                  }
 
+                 if(state.account._val==value && !state.account.isChecked){
+                     state.account.info = "帐号不存在";
+                 }
+
                  state.account.val = value;
+
                  this.setState(state);
+
+                 this.setChecked();
+
              }
          },
         checkAccount: function(e){
@@ -77,17 +204,22 @@ define(['Sp','Validator','widgets/reactCheckbox/reactCheckbox','cookie'],functio
             if(value){
                 var state = this.state;
 
-                state.password.error = !(value.length>=6);
+                state.password.error = value.length<6;
+
                 if(!state.password.error)
                     state.password.info = "";
                 else{
-                    if(value.length>1 && value.length<6){
+                    if(value.length<6){
                         state.password.info = "请输入正确的密码";
                     }
                 }
 
                 state.password.val = value;
+                state.password._val = value;
+
                 this.setState(state);
+
+                this.setChecked();
             }
         },
         checkPass: function(e){
@@ -101,87 +233,6 @@ define(['Sp','Validator','widgets/reactCheckbox/reactCheckbox','cookie'],functio
             state.remember = isChecked;
             this.setState(state);
         },
-        submitLogin: function(e){
-            e.preventDefault();
-            e.stopPropagation();
-            var self = this;
-            var state = this.state;
-
-            if(!state.account.val.length && !state.password.val.length){
-                return;
-            }
-
-            if( !state.account.val.length ){
-                state.account.error=true;
-                state.account.info = "请输入帐号";
-            }
-            if( !state.password.val.length ){
-                state.password.error=true;
-                state.password.info = "请输入密码";
-            }
-
-            // 如果长度正确
-            if( !state.account.error && !state.password.error){
-                // 正则检查
-                var account = $.trim(state.account.val);
-                if(validator.methods.email(account)){
-                    // 检查邮箱
-                    Sp.get( Sp.config.host + "/api/member/checkEmail",{
-                        email: account
-                    },function(res){
-                        if(res && res.code != 0){
-                            state.account.info = "帐号不存在";
-                            state.account.isChecked = false;
-                            self.setState(state);
-                        }else{
-                            state.account.isChecked = true;
-                            self.setState(state);
-                            self.login();
-                        }
-                    });
-                }else if (validator.methods.phone(account)){
-                    // 检查手机
-                    Sp.get( Sp.config.host + "/api/member/checkMobile",{
-                        mobile: account
-                    },function(res){
-                        if(res && res.code != 0){
-                            state.account.info = "帐号不存在";
-                            state.account.isChecked = false;
-                            self.setState(state);
-                        }else{
-                            state.account.isChecked = true;
-                            self.setState(state);
-                            self.login();
-                        }
-                    });
-                }else {
-                    // 检查用户名
-                    Sp.get( Sp.config.host + "/api/member/checkName",{
-                        name: account
-                    },function(res){
-                        if(res && res.code != 0){
-                            state.account.info = "帐号不存在";
-                            state.account.isChecked = false;
-                            self.setState(state);
-                        }else{
-                            state.account.isChecked = true;
-                            self.setState(state);
-                            self.login();
-                        }
-                    });
-                }
-
-            }else{
-                if(state.account.val!="" && state.account.error){
-                    state.account.info = "帐号格式不正确";
-                }
-                if(state.password.val!="" && state.password.error){
-                    state.password.info = "密码格式不正确";
-                }
-            }
-
-            this.setState(state);
-        },
         login: function(){
             var self = this;
             var state = this.state;
@@ -190,18 +241,33 @@ define(['Sp','Validator','widgets/reactCheckbox/reactCheckbox','cookie'],functio
                 password: state.password.val,
                 remember: state.remember ? 1 : 0
             };
+
+            if(!this.state.submit_active){
+                return false;
+            }
+
+            if(postData.remember){
+                $.cookie('sipin_member_name',postData.account);
+            }else{
+                $.removeCookie('sipin_member_name');
+            }
             Sp.post( Sp.config.host + '/api/member/login',postData,function(res){
-                if(res&&res.code==0){
-                    if(typeof searchObj['redirect'] !="undefined")
-                        window.location.href = searchObj['redirect'];
-                    else
-                        window.location.href = "/";
+                if(res&&res.code===0){
+                    if(self.pageType == "pop"){
+                        self.props.success();
+                    }else{
+                        // 登录成功跳转到首页
+                        if(typeof searchObj.redirect !=="undefined")
+                            window.location.href = searchObj.redirect;
+                        else
+                            window.location.href = "/";
+                    }
                 }else{
-                    if(res&&res.code==1&&res.data.status==0){
+                    if(res&&res.code==1&&res.data.status===0){
                         var _info = function(){
                             return(
                                 <span>此帐号尚未激活，请<a target="_blank" href={res.data.url}>马上激活</a></span>
-                            )
+                            );
                         };
                         state.account.info = _info();
                     }else{
@@ -214,7 +280,7 @@ define(['Sp','Validator','widgets/reactCheckbox/reactCheckbox','cookie'],functio
                     }
                 }
                 self.setState(state);
-            })
+            });
         },
         showAccountTips: function(){
             var state = this.state;
@@ -230,44 +296,23 @@ define(['Sp','Validator','widgets/reactCheckbox/reactCheckbox','cookie'],functio
                 this.setState(state);
             }
         },
-        render: function(){
-
-            var loginBtnClass = classSet({
+        getLoginBtnClass: function(){
+            return classSet({
+                'j-login-submit': true,
                 'formbtn': true,
                 'btn-primary': true,
-                '_disable': this.state.submit_active || (this.state.account.error || this.state.password.error)
+                '_disable': !this.state.submit_active
             });
+        },
+        render: function(){
 
-            return (
-                <form method="post" action="#" className="form">
-                    <div className="form-item">
-                        <div className="form-field">
-                            <input id="account" onKeyUp={this.checkEnter} onFocus={this.showAccountTips} onChange={this.checkAccount} type="text" className="form-text" name="username" placeholder="手机号/邮箱/用户名" />
-                        </div>
-                        <p className="u-color_white is_account_error u-mt_10 _tips_p" style={{display: "block"}}>{this.state.account.info}</p>
-                    </div>
-                    <div className="form-item u-mt_30">
-                        <div className="form-field">
-                            <input id="password" onKeyUp={this.checkEnter} onFocus={this.showPassTips} onChange={this.checkPass} type="password" className="form-text" name="password" placeholder="密码" />
-                        </div>
-                        <p className="u-color_white is_password_error u-mt_10 _tips_p" style={{display: "block"}}>{this.state.password.info}</p>
-                    </div>
-                    <div className="form-item u-mt_15">
-                        <div className="form-field form-field-rc u-clearfix">
-                            <label className="u-fl">
-                                <ReactCheckbox checked={this.state.remember} onChange={this.checkRemember} label='自动登录' />
-                            </label>
-                            <a className="forget-link u-fr u-color_white" href="/member/forgotPass">忘记密码？</a>
-                        </div>
-                    </div>
-                    <div className="form-action action-left u-mt_30">
-                        <a onClick={this.submitLogin} className={loginBtnClass} href="javascript:void(0);">登录</a>
-                    </div>
-                    <div className="form-action action-left u-mt_20">
-                        还不是斯品用户？<a className="btn-right" href="/member/register">马上注册》</a>
-                    </div>
-                </form>
-            )
+            //console.log(this.state);
+            if(this.props.pageType == "pop"){
+                return tplLoginboxModal.apply(this);
+            }else{
+                return tplLoginbox.apply(this);
+            }
+
         }
     });
 

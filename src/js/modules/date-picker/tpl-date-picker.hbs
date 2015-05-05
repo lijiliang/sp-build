@@ -1,0 +1,21 @@
+<div class="ui-date-picker__date-box u-clearfix">
+    <div class="ui-date-picker__date-title">时间段</div>
+    {{#each dates}}
+        <div class="ui-date-picker__date-item">
+            <div class="ui-date-picker__date-item-date">{{date}}</div>
+            <div class="ui-date-picker__date-item-day">{{day}}</div>
+        </div>
+    {{/each}}
+    </div>
+<div class="ui-date-picker__time-box u-clearfix">
+    <div class="ui-date-picker__time-title">{{time.am}}</div>
+    {{#each dates}}
+        <div class="ui-date-picker__checkbox{{#if disabled}} _disabled{{/if}}{{#if disabledAM}} _disabled{{/if}}" _date="{{date}}" _time="{{am}}">{{#if disabled}} 不{{/if}}{{#if disabledAM}} 不{{/if}}{{text}}</div>
+    {{/each}}
+</div>
+<div class="ui-date-picker__time-box u-clearfix">
+    <div class="ui-date-picker__time-title">{{time.pm}}</div>
+    {{#each dates}}
+        <div class="ui-date-picker__checkbox{{#if disabled}} _disabled{{/if}}{{#if disabledPM}} _disabled{{/if}}" _date="{{date}}" _time="{{pm}}">{{#if disabled}} 不{{/if}}{{#if disabledPM}} 不{{/if}}{{text}}</div>
+    {{/each}}
+</div>

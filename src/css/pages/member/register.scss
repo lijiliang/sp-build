@@ -1,0 +1,78 @@
+@import "../../modules/settings/_setting_pages";
+.register-box {
+  padding-left: 20*$px;
+  padding-bottom: 100*$px;
+  //width: 400*$px;
+  .form-field {
+    position: relative;
+  }
+  .form-text {
+    width: 318*$px;
+  }
+  .text-captcha {
+    width: 155*$px;
+  }
+  .text-verifycode {
+    width: 185*$px;
+  }
+  .form-regetcode {
+    position: absolute;
+    right: -150*$px;
+    top: 0;
+    .btn-big {
+      background: #fff;
+    }
+  }
+  .formbtn {
+    background: $color_gold;
+    color: #fff;
+    border: none;
+    width: 160*$px;
+    padding: 10*$px 0;
+    font-size: 14*$px;
+    height: auto;
+    &:hover {
+      background: $color-gold_hover;
+    }
+  }
+  .formbtn._disable {
+    background: $color_gold;
+    border: 1*$px solid $color_gold;
+    color: $color_gray_border;
+    opacity: .7;
+    cursor: default;
+  }
+}
+
+.register-box .forgot_code_input {
+  width: 160*$px;
+}
+
+.register-box-wrap {
+  width: 960*$px;
+  &__sidebar {
+    min-height: 400*$px;
+    margin-top: 40*$px;
+    border-left: 1*$px solid $color_gray_border;
+    margin-left: -1*$px;
+    .login-box__auth-item {
+      color: $color_gray;
+      &:hover {
+        color: $color_gold_hover;
+      }
+    }
+  }
+  &__sidebar-inner {
+    padding: 0 20*$px 0 20*$px;
+  }
+}
+
+._register-email-complete-width {
+  width: 600*$px;
+  .ui-complete-icon:before {
+    background: url("../images/email_verify_icon.png") no-repeat 0 0;
+    width: 48px;
+    height: 31px;
+    content: '';
+  }
+}

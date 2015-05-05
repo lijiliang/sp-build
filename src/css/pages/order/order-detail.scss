@@ -1,0 +1,62 @@
+@import "../../modules/settings/_setting_pages";
+.edit-order-modal-box {
+  width: 730*$px;
+  padding: 10*$px 15*$px 0 15*$px;
+  background: #fff;
+}
+
+//订单详情
+.order-tracking{
+  margin:0 20*$px;
+  &__hd,&__bd,&__ft{
+    padding:0 20*$px;
+  }
+  &__hd{
+    border-bottom:1px solid $color_gray_border;
+    line-height:52*$px;
+  }
+  &__bd{
+    padding:14*$px 20*$px 0;
+    &__row {
+      padding: 0 0 10*$px;
+    }
+  }
+  &__col-01, &__col-02, &__col-03 {
+    > div {
+      padding: 0 10*$px 0 0;
+    }
+  }
+  &__col-01{
+    width:384/1120*100%;
+  }
+  &__col-02{
+    width:602/1120*100%;
+  }
+  &__col-03{
+    width:134/1120*100%;
+  }
+}
+.order-info{
+  margin:0 20*$px;
+  &__hd{
+    line-height:30*$px;
+    padding:14*$px 20*$px 6*$px;
+  }
+  &__bd{
+    padding:0 20*$px 14*$px;
+    line-height:30*$px;
+  }
+  &__title{
+    color:$color_gray_text;
+  }
+  &__content{
+    margin-left:5em;
+  }
+}
+
+//订单详情修改地址
+.j-order-address-modified{
+  .form-address-btns{
+    display:none;
+  }
+}

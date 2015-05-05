@@ -1,0 +1,275 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <title>返修/退换货申请</title>
+    @@include('../_common/header/head.html')
+    @@include('./_include/meta.html')
+</head>
+<body>
+<div class="page page-cs-record-list layout-fixed" data-module="orderApply">
+    <!--header-->
+    @@include('../_common/header/header.html')
+    <!--/header end-->
+
+    <div class="container container-border-bottom">
+        <div class="container__wrap">
+            <div class="layout-fixed-inner">
+                <div class="container__main">
+                    <div class="container__main-inner u-clearfix">
+                        <!--nav-->
+                        @@include('../_common/nav/nav.html', { "navName":"卧室" } )
+                        <!--/nav end-->
+                        <div class="main-layout u-wrap u-clearfix">
+                            <div class="main-layout-sidebar">
+                                <div class="center-menu">
+                                    <a class="center-menu__item" href="#">帮助中心</a>
+                                    <a class="center-menu__item _active" href="#">售后服务</a>
+                                    <a class="center-menu__item" href="#">意见反馈</a>
+                                </div>
+                            </div>
+                            <div class="main-layout-container cs-order-wrap">
+                                <!-- detail -->
+                                <div class="main-title">
+                                    <h2 class="u-f20">售后服务规则</h2>
+                                </div>
+                                <table class="simple-grid">
+                                    <thead>
+                                    <tr>
+                                        <th>
+                                            退换类别
+                                        </th>
+                                        <th>
+                                            退换原因
+                                        </th>
+                                        <th>
+                                            商品签收7天内是否支持退换货
+                                        </th>
+                                        <th>
+                                            商品签收8-60天是否支持退换货
+                                        </th>
+                                        <th>
+                                            商品签收60天以上在质保期内是否支持保修
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>性能故障</td>
+                                            <td>产品出现性能故障，经由厂家检测，出具检测单证实产品确有问题</td>
+                                            <td>是</td>
+                                            <td>是</td>
+                                            <td>是</td>
+                                        </tr>
+                                        <tr>
+                                            <td>物流损</td>
+                                            <td>因物流运输导致商品外观损坏、残缺，无法正常使用（外包装破损与商品破损位置一致）</td>
+                                            <td>是</td>
+                                            <td>否</td>
+                                            <td>否</td>
+                                        </tr>
+                                        <tr>
+                                            <td>缺少附件</td>
+                                            <td>经核实实际收到商品附件与网页介绍包装清单中的内容不符</td>
+                                            <td>是</td>
+                                            <td>是，可补附件</td>
+                                            <td>否</td>
+                                        </tr>
+                                        <tr>
+                                            <td>商品实物与网站不符</td>
+                                            <td>经核实实际收到商品实物与网页介绍规格参数中的内容不符</td>
+                                            <td>是</td>
+                                            <td>是</td>
+                                            <td>否</td>
+                                        </tr>
+                                        <tr>
+                                            <td>发错货</td>
+                                            <td>收到商品与实际订购商品不符</td>
+                                            <td>是</td>
+                                            <td>是</td>
+                                            <td>否</td>
+                                        </tr>
+                                        <tr>
+                                            <td>开箱残</td>
+                                            <td>送货上门师傅现场打开包装，发现商品外观破损</td>
+                                            <td>是</td>
+                                            <td>否</td>
+                                            <td>否</td>
+                                        </tr>
+                                        <tr>
+                                            <td>错买、多买</td>
+                                            <td>在商品（包装及附件）完好的前提下</td>
+                                            <td>是</td>
+                                            <td>是</td>
+                                            <td>否</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5">
+                                                <div class="service-intro">
+                                                    服务说明
+                                                    <ol>
+                                                        <li>属于质量问题的，可将问题商品、附件、说明书、发票、保卡、购物凭证、包装，一并返回商城办理退换货手续。</li>
+                                                        <li>建议商品外包装在收货之日起保留30天或更长时间。外包装及附件赠品，退换货时请一并退回。</li>
+                                                        <li>若购买商品有破损、缺少、配送有误等问题，请立即与斯品客服人员联系，在您签收验货后发现上述现象我们将无法与物流公司核实为您处理退换货。</li>
+                                                        <li>关于物流损：请您在收货时务必仔细验货，如发现商品外包装或商品本身外观存在异常，需当场向配送人员指出，并拒收整个包裹；如您在收货后发现外观异常，请在收货48小时内提交退换货申请。如超时未申请，将无法受理。</li>
+                                                        <li>关于商品实物与网站描述不符：斯品商城保证所出售的商品均为正品，可能会根据市场需求更改产品包装、产地或者一些附件，所以我们无法确保您收到的货物与商城图片、产地、附件说明完全一致。</li>
+                                                        <li>如果您在使用时对商品质量表示置疑，您可出具相关书面鉴定，我们会按照国家法律规定予以处理。</li>
+                                                    </ol>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+
+                                <div class="main-title _with-border-bottom">
+                                    <h2 class="u-f20">提交服务表单</h2>
+                                </div>
+                                <div class="order-info__form">
+                                    <form action="/aftersales/create" method="post" id="cs-order-apply-form" class="form form-horizontal">
+                                        <input type="hidden" name="order_id" value="">
+                                        <input type="hidden" name="order_goods_id" value="">
+                                        <input type="hidden" name="type_id" value="1">
+                                        <input type="hidden" name="upload" id="uploader-images-id" value="">
+
+                                        <div class="form-item form-label-vertical">
+                                            <label class="form-label" for="">
+                                                <span class="form-required">* </span>商品申请：
+                                            </label>
+                                            <div class="form-field">
+                                                <ul class="list-item goods-list">
+                                                    <li>
+                                                        <img src="/images/index/1F_01.jpg" alt="" class="t-pic cover-s">
+                                                        <div class="t-txt">
+                                                            <p class="ellipsis-one">HEMNES 汉尼斯床架</p>
+                                                            <div class="amount-box u-clearfix">
+                                                                <div class="amount-box__input">
+                                                                    <input data-max="10" type="text" name="goods_amount" value="1"/>
+                                                                </div>
+                                                                <div class="amount-box__btns">
+                                                                    <a href="#" class="amount-box__btn amount-box__btns-up iconfont">&#xe628;</a>
+                                                                    <a href="#" class="amount-box__btn amount-box__btns-down iconfont">&#xe629;</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="form-item">
+                                            <label class="form-label" for="">
+                                                <span class="form-required">* </span>服务类型：
+                                            </label>
+                                            <div class="form-field u-color_black form-radios" data-name="type_id">
+                                                <span class="ui-checkbox ui-radio _active" _name="sservice_type" _checked="true" data-value="1"> 退货</span>
+                                                <span class="ui-checkbox ui-radio" _name="sservice_type" _checked="false" data-value="2"> 换货</span>
+                                                <span class="ui-checkbox ui-radio" _name="sservice_type" _checked="false" data-value="3"> 部件维护</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-item">
+                                            <label class="form-label" for="">
+                                                <span class="form-required">* </span>申请原因：
+                                            </label>
+                                            <div class="form-field u-color_black">
+                                                <div id="j-select-box" class="ui-select-box _icon-dropdown" _name="reason_id">
+                                                    <div class="ui-options _active" _value="1">性能故障</div>
+                                                    <div class="ui-options" _value="2">物流损</div>
+                                                    <div class="ui-options" _value="3">缺少附件</div>
+                                                    <div class="ui-options" _value="4">商品实物与网站不符</div>
+                                                    <div class="ui-options" _value="5">发错货</div>
+                                                    <div class="ui-options" _value="6">开箱残</div>
+                                                    <div class="ui-options" _value="7">错买、多买</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-item">
+                                            <label class="form-label" for="">
+                                                <span class="form-required">* </span>问题描述：
+                                            </label>
+                                            <div class="form-field word-count-checker">
+                                                <textarea class="form-textarea"  name="description" cols="30" rows="10" required maxlength="500"></textarea>
+                                                <p class="word-count-tip">您还可以输入<span class="word-counter">500</span>字</p>
+
+                                                <div class="clearfix">
+                                                    <div class="t-pic">图片信息：</div>
+                                                    <div class="t-txt">
+                                                        <div id="upload-picker">上传图片</div>
+                                                        <p id="upload-preview" class="img-preview"></p>
+                                                        <p>为了帮助我们更好的解决问题，请您上传图片</p>
+                                                        <p class="desc">最多可上传5张图片，每张图片大小不超过5M，支持bmp,gif,jpg,png,jpeg格式文件</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-item">
+                                            <label class="form-label" for="">
+                                                <span class="form-required">* </span>取货地址：
+                                            </label>
+                                            <div class="form-field">
+                                                <div class="u-inline-block placeSelect u-clearfix">
+                                                    <div class="_place_box stock-btn u-inline-block u-mr_10">
+                                                        <a class="btn _place_click" href="javascript:void(0);">
+                                                            <i class="_place_province" data-type="province_id" data-id="-1">请选择</i>
+                                                            <input class="province-value" type="hidden" name="province_id" value="">
+                                                            <span class="iconfont">&#xf0122;</span>
+                                                        </a>
+                                                    </div>
+                                                    <div class="_place_box stock-btn u-inline-block u-mr_10" style="display: none;">
+                                                        <a class="btn _place_click" href="javascript:void(0);">
+                                                            <i class="_place_city" data-type="city_id" data-id="-1">请选择</i>
+                                                            <input class="city-value" type="hidden" name="city_id" value="">
+                                                            <span class="iconfont">&#xf0122;</span>
+                                                        </a>
+                                                    </div>
+                                                    <div class="_place_box stock-btn u-inline-block u-mr_10" style="display: none;">
+                                                        <a class="btn _place_click" href="javascript:void(0);">
+                                                            <i class="_place_district" data-type="district_id" data-id="-1">请选择</i>
+                                                            <input class="district-value" type="hidden" name="district_id" value="">
+                                                            <span class="iconfont">&#xf0122;</span>
+                                                        </a>
+                                                    </div>
+                                                    <input type="text"  class="form-text form-text-small" name="address" placeholder="街道地址" value="" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-item">
+                                            <label class="form-label" for="">
+                                                <span class="form-required">* </span>联系人：
+                                            </label>
+                                            <div class="form-field">
+                                                <input type="text" placeholder="" class="form-text" name="name" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-item">
+                                            <label class="form-label" for="">
+                                                <span class="form-required">* </span>联系电话：
+                                            </label>
+                                            <div class="form-field">
+                                                <input type="text" placeholder="" class="form-text valid-mobile" name="mobile" required>
+                                                <p id="error-mobile-tip" class="u-color_orange u-mt_10 _tips_p" >请填写正确的手机号码</p>
+                                            </div>
+                                        </div>
+                                        <div class="form-item">
+                                            <div class="form-field">
+                                            <input type="submit" class="btn btn-big" value="提交申请"/>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <!-- /detail end -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @@include('../_common/footer/footer.html')
+</div>
+@@include('../_common/footer/foot.html')
+</body>
+</html>

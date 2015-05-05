@@ -1,0 +1,28 @@
+<div class="order-cart-table__options-bd form form-horizontal" id="j-new-invoice">
+    <div class="order-info__form">
+        <div class="form-item">
+            <label class="form-label">
+                发票方式：
+            </label>
+            <div class="form-field u-color_black">
+                普通发票(纸质)
+            </div>
+        </div>
+        <div class="form-item">
+            <label class="form-label">
+                发票抬头：
+            </label>
+            <div class="form-field u-color_black">
+                <span class="ui-checkbox ui-radio u-mr_60" _name="invoice_person" _checked="{{#if title_type}}false{{else}}true{{/if}}"> 个人</span>
+                <span class="ui-checkbox ui-radio" _name="invoice_company" _checked="{{#if title_type}}true{{else}}false{{/if}}"> 单位</span>
+                <input type="text" placeholder="单位名称" class="form-text _required invoice_company_name" name="invoice_company_name" value="{{company_name}}">
+            </div>
+        </div>
+        <div class="form-item">
+            <div class="form-field">
+                <a href="javascript:;" class="btn btn-big j-invoice-save">保存我的发票信息</a>
+                <a href="javascript:;" class="btn btn-big j-invoice-cancel u-ml_20">取消</a>
+            </div>
+        </div>
+    </div>
+</div>

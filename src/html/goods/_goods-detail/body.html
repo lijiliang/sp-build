@@ -1,0 +1,28 @@
+</head>
+<body>
+<div class="page page-good-detail" data-module="goodDetail">
+    @@include('../../_common/header/header.html')
+    <div class="container container-border-bottom">
+        <div class="container__wrap">
+            <div class="layout-fixed-inner">
+                <div class="container__main">
+                    <div class="container__main-inner">
+                        @@include('../../_common/nav/nav.html', { "navName":"床" } )
+                        <!-- good-detail-box -->
+                        @@include('./detail-box.html')
+                        <!-- /good-detail-box -->
+
+                        <!-- good-detail-extend -->
+                        @@include('./detail-extend.html')
+                        <!-- /good-detail-extend -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @@include('../../_common/footer/footer.html')
+</div>
+@@include('../../_common/footer/foot.html')
+<script src="/js/goods-detail.js"></script>
+</body>
+</html>
