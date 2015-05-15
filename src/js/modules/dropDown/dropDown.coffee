@@ -56,7 +56,7 @@ define ['./tpl_layout'], (dropDown_layout)->
             left = this.options.$target.offset().left
             ml = $(window).width()-left-this.options.$target.width()
             if(this.dropDownBox.width()+this.options.$target.offset().left>$(window).width())
-                left = $(window).width()-this.dropDownBox.width()-ml/2+2
+                left = this.options.$target.offset().left - this.dropDownBox.width() + this.options.$target.outerWidth()
             if(this.dropDownBox.is(":hidden"))
                 this.dropDownBox.css
                     left: left

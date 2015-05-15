@@ -1,6 +1,6 @@
 # tofishes
 # 售后服务相关页面功能
-define ['Sp','Checkbox', 'SelectBox', 'Amount', 'PlaceSelector_v2', 'LoginModalBox', 'liteModalBox', 'uploader', 'validate'], (Sp, Checkbox, SelectBox, Amount, Places, loginModal, LiteModalBox)->
+define ['Sp','Checkbox', 'SelectBox', 'Amount', 'PlaceSelector_v2', 'LoginModalBox', 'liteModalBox', 'uploader', 'validate','preLoad'], (Sp, Checkbox, SelectBox, Amount, Places, loginModal, LiteModalBox)->
     # 获取七牛图片的缩略图
     # http://developer.qiniu.com/docs/v6/kb/speed_up_staticfile.html
     getQiniuThumb = (img_url)->

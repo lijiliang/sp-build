@@ -35,7 +35,7 @@
 
         &._disabled{
             cursor: default;
-            opacity: .3;
+            opacity: 0;
             &,&:hover{
                 background: none;
                 color: $color_gray;

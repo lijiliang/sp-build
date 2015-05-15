@@ -20,6 +20,18 @@ $formHorizontalSwitch: true !default;
   span {display: none}
 }
 
+/* 浅灰色，删除线 */
+.ui-deprecated {
+  color: $color_gray_text;
+  text-decoration: line-through;
+  vertical-align: middle;
+}
+/* 强调  */
+.ui-emphasis {
+  color: $color_emphasis;
+  vertical-align: middle;
+}
+
 //首页框架
 // .page-index {
 //     .container {
@@ -409,7 +421,7 @@ input[type="button"]{
       }
       &._step-1 {
         &:after {
-          width: 12.5%;
+          width: 0;
         }
         ._step-1 {
           background: $color_success;
@@ -417,7 +429,7 @@ input[type="button"]{
       }
       &._step-2 {
         &:after {
-          width: 37.5%;
+          width: 25%;
         }
         ._step-1, ._step-2 {
           background: $color_success;
@@ -425,7 +437,7 @@ input[type="button"]{
       }
       &._step-3 {
         &:after {
-          width: 62.5%;
+          width: 50%;
         }
         ._step-1, ._step-2, ._step-3 {
           background: $color_success;
@@ -433,7 +445,7 @@ input[type="button"]{
       }
       &._step-4 {
         &:after {
-          width: 87.5%;
+          width: 75%;
         }
         ._step-1, ._step-2, ._step-3, ._step-4 {
           background: $color_success;
@@ -458,7 +470,7 @@ input[type="button"]{
       }
       &._step-1 {
         &:after {
-          width: 16.667%;
+          width: 0;
         }
         ._step-1 {
           background: $color_success;
@@ -466,7 +478,7 @@ input[type="button"]{
       }
       &._step-2 {
         &:after {
-          width: 50%;
+          width: 33.33%;
         }
         ._step-1, ._step-2 {
           background: $color_success;
@@ -474,7 +486,7 @@ input[type="button"]{
       }
       &._step-3 {
         &:after {
-          width: 83.333%;
+          width: 66.6%;
         }
         ._step-1, ._step-2, ._step-3 {
           background: $color_success;
@@ -496,7 +508,7 @@ input[type="button"]{
       }
       &._step-1 {
         &:after {
-          width: 25%;
+          width: 0%;
         }
         ._step-1 {
           background: $color_success;
@@ -504,7 +516,7 @@ input[type="button"]{
       }
       &._step-2 {
         &:after {
-          width: 75%;
+          width: 50%;
         }
         ._step-1, ._step-2 {
           background: $color_success;
@@ -1055,6 +1067,7 @@ input[type="button"]{
     left:0;
     right:0;
     margin: 10*$px auto;
+    background: #fff;
   }
   &__content {
     position: relative;
@@ -1083,7 +1096,7 @@ input[type="button"]{
 
 /* 登录框 */
 .login-modal-box {
-  width: 410*$px;
+  min-width: 410*$px;
   background: #fff;
   padding: 10*$px 15*$px 0 15*$px;
   position: relative;

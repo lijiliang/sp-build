@@ -87,23 +87,23 @@ define ['Sp',  'CheckAll',  'LightModalBox', './tpl-item'], ( Sp, CheckAll, Ligh
                 initCheckbox $ '.cart-table'
             else
                 #$("#j-favorite-body").html('<div class="cart-table__item u-text-center u-clearfix">暂时没有任何收藏</div>')
+                self.renderEmpty()
 
-                $empty = [
-                        '<div class="cart-table__empty">'
-                        '<div class="cart-table__empty-info">'
-                        '<div class="u-f18">收藏夹暂时没有商品！</div>'
-                        '<div class="u-f14">'
-                        '您可以 '
-                        '<a href="/">返回首页</a>'
-                        ' 挑选喜欢的商品'
-                        '</div>'
-                        '</div>'
-                        '</div>'
-                    ].join ''
-                $ '.main-layout-container'
-                .html $empty
-
-
+        renderEmpty: ()->
+            $empty = [
+                    '<div class="cart-table__empty">'
+                    '<div class="cart-table__empty-info">'
+                    '<div class="u-f18">收藏夹暂时没有商品！</div>'
+                    '<div class="u-f14">'
+                    '您可以 '
+                    '<a href="/">返回首页</a>'
+                    ' 挑选喜欢的商品'
+                    '</div>'
+                    '</div>'
+                    '</div>'
+                ].join ''
+            $ '.main-layout-container'
+            .html $empty
         # 点击取消收藏
         handleDeleteFavorite: ()->
             self = this
@@ -134,6 +134,10 @@ define ['Sp',  'CheckAll',  'LightModalBox', './tpl-item'], ( Sp, CheckAll, Ligh
                     #self.reGetData()  # 重载数据
                     $.each ids,(index,id)->
                         $(".cart-table__item-"+id).remove();
+                    #@tofishes 检查剩余项目,有分页，所以重新获取数据
+                    isEmpty = $('#j-favorite-body').children().length == 0
+                    if isEmpty then self.reGetData()
+
 
                 else
                     lightModalBox = new LightModalBox

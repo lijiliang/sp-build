@@ -111,6 +111,7 @@ template {
 
 a {
   background: transparent; /* 1 */
+  cursor: pointer;
 
   &:active,
   &:hover {

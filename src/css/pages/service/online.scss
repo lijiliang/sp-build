@@ -3,9 +3,196 @@
  * @tofishes
  * 在线客服页面
  */
+$color_dialog: #f4f4f4;
+
+textarea {
+    padding: 5px;
+    width: 520*$px;
+    height: 55*$px;
+    vertical-align: middle;
+    border: 1px solid $color_gray_border;
+    resize: none;
+    outline: none;
+
+    &:focus {
+        border-color: $color_gold_hover;
+    }
+}
 .online-chat {
-    margin: 100*$px auto;
-    min-width: 960*$px;
-    min-height: 650*$px;
-    box-shadow: 0 0 24px rgba(0, 0, 0, .28)
+    margin: 50*$px auto;
+    width: 960*$px;
+    box-shadow: 0 0 24*$px rgba(0, 0, 0, .28);
+
+    a {
+        color: $color_gray;
+    }
+    a:hover {
+        color: $color_gold_hover;
+    }
+
+    h2, h3 {
+        font-size: 16*$px;
+        line-height: inherit;
+    }
+    h3 {
+        margin: 15*$px 0;
+    }
+
+    header {
+        position: relative;
+        padding: 0 20*$px;
+        height: 40*$px;
+        line-height: 40*$px;
+        background: $color_black;
+        color: #fff;
+
+        > p {
+            position: absolute;
+            right: 20*$px;
+            top: 0;
+            font-size: 14*$px;
+        }
+    }
+    section {
+        position: relative;
+        padding: 0 260*$px 0 0;
+        min-height: 650*$px;
+    }
+    aside {
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 260*$px;
+        border-left: 1*$px solid $color_gray_border;
+    }
+    .inputer {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 260*$px;
+        background: #f8f8f8;
+
+        > * {
+            padding: 10*$px 20*$px;
+            border-top: 1px solid $color_gray_border;
+        }
+        
+        button {
+            float: right;
+            width: 120*$px;
+            height: 66*$px;
+            vertical-align: middle;
+        }
+    }
+    
+    .emotion-trigger {
+        margin-right: 20*$px;
+    }
+
+    .panel {
+        padding: 20*$px;
+    }
+    .item-list {
+        li {
+            padding: 0 0 15*$px;
+        }
+    }
+    .entry-link > * {
+        display: inline-block;
+        margin: 0 0 15*$px;
+        width: 100*$px;
+    }
+    .dialogue {
+        margin: 0 0 133*$px;
+        max-height: 500*$px;
+        overflow-y: auto;
+
+        li {
+            position: relative;
+            margin: 0 0 15*$px;
+            padding: 0 40*$px;
+        }
+        
+        blockquote {
+            position: relative;
+            display: inline-block;
+            margin: 8*$px;
+            padding: 15*$px 25*$px;
+            background: $color_dialog;
+            border-radius: 20*$px;
+            text-align: left;
+        }
+
+        .arrow {
+            position: absolute;
+            left: -8*$px;
+            top: -3*$px;
+            width: 27*$px;
+            height: 25*$px;
+            background: url(../images/slice/quote-arrow-left.png);
+        }
+
+        .avatar {
+            position: absolute;
+            left: 0;
+            top: 2*$px;
+
+            img {
+                width: 30*$px;
+                height: 30*$px;
+            }
+        }
+
+        cite {
+            display: block;
+            color: $color_gold_hover;
+            font-style: normal;
+        }
+        time {
+            margin: 0 20*$px;
+        }
+    }
+    .servicer {
+        text-align: right;
+
+        .arrow {
+            left: auto;
+            top: -3*$px;
+            right: -8*$px;
+            background: url(../images/slice/quote-arrow-right.png);
+        }
+        .avatar {
+            left: auto;
+            right: 0;
+        }
+        cite {
+            color: #994b53;
+            text-align: right;
+        }
+    }
+}
+
+#comment-service-online-form {
+    .comment-service-input {
+        margin: 20*$px 0;
+        width: 100%;
+        height: 60*$px;
+    }
+
+    .service-feedback {
+        .ui-radio {
+            display: inline-block;
+            margin-right: 60*$px;
+            vertical-align: top;
+
+            &:before {
+                top: 10*$px;
+            }
+
+            .icon {
+                margin: 15*$px 0 0;
+            }
+        }
+    }
 }

@@ -41,6 +41,7 @@ define ['Sp','AddCartModalBox','LightModalBox','LoginModalBox'], ( Sp, AddCartMo
             lightModalBox.show()###
             if !loginBox
                 loginBox = new LoginModalBox
+                    width: 440
                     top: 250
                     mask: true
                     closeBtn: true

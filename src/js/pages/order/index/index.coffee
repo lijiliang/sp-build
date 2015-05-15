@@ -1,5 +1,5 @@
 # order-list
-define ['Sp','Checkbox','CheckAll','SelectBox','ConfirmModalBox', 'preLoad'], (Sp, Checkbox, CheckAll, SelectBox, ConfirmModalBox)->
+define ['Sp','Checkbox','CheckAll','SelectBox','ConfirmModalBox', 'AlertModalBox', 'preLoad'], (Sp, Checkbox, CheckAll, SelectBox, ConfirmModalBox, AlertModalBox)->
 
 
     #API
@@ -62,16 +62,18 @@ define ['Sp','Checkbox','CheckAll','SelectBox','ConfirmModalBox', 'preLoad'], (S
                     'half_year': half_year
                     'one_year': half_year * 2
 
-                begin_at = $('#j-select-time input').val()
+                begin_at_type = $('#j-select-time input').val()
                 status_id = $('#j-select-status input').val()
 
-                if begin_at != 'all'
-                    params.begin_at = Sp.date.format(new Date(now - times[begin_at]))
+                if begin_at_type != 'all'
+                    params.begin_at_type = begin_at_type #Sp.date.format(new Date(now - times[begin_at]))
                 if status_id != 'all'
                     params.status_id = status_id
 
                 params = $.param params
-                if params then path += '?' + params
+                query = location.search
+                if query then query += '&' else query = '?'
+                if params then path += query + params
 
                 location.href = path
 
@@ -115,7 +117,7 @@ define ['Sp','Checkbox','CheckAll','SelectBox','ConfirmModalBox', 'preLoad'], (S
         $item.on 'click', '.j-order-delete', ()->
             $this = $ @
             $item = $this.closest '.cart-table__item'
-            id = $parent.data 'id'
+            id = $item.data 'id'
 
             confirmModalBox = new ConfirmModalBox
                 width: 400
@@ -139,6 +141,12 @@ define ['Sp','Checkbox','CheckAll','SelectBox','ConfirmModalBox', 'preLoad'], (S
                 $parent = $el.closest '.cart-table__item'
                 id = $parent.data 'id'
                 ids.push id if $el.checkbox 'check'
+
+            if !ids.length
+                alertModal = new AlertModalBox
+                    content: '您未选择需要合并付款的订单！'
+                return false
+
             #提交, melo说用form post提交，这里用js触发页面的form
             $('#j-order-pay-ids').val ids.join ','
             $('#j-order-pay-form').submit()

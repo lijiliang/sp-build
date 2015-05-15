@@ -38,10 +38,11 @@ define(['Sp','Validator','cookie','./tpl-loginbox-modal','./tpl-loginbox-page'],
                 submit_active: false,
                 remember: false,
                 isChecking: false,
-                checkTime: 15 // 只进行10次错误尝试
+                checkTime: 15 // 只进行15次错误尝试
             };
         },
         componentDidMount: function(){
+
              var self = this;
 
              if($.cookie('sipin_member_name')){
@@ -83,6 +84,7 @@ define(['Sp','Validator','cookie','./tpl-loginbox-modal','./tpl-loginbox-page'],
 
              if( account_val && account_val.length>=4 && state.account.isChecked === false ){
 
+                 state.account.info = "正在检查帐号是否存在...";
                  state.account.error = false;
                  state.isChecking = true;
                  // 正则检查
@@ -97,15 +99,17 @@ define(['Sp','Validator','cookie','./tpl-loginbox-modal','./tpl-loginbox-page'],
                              state.account.isChecked = false;
                          }else{
                              state.account.isChecked = true;
-                             self.setChecked();
+                             state.account.info = '';
                          }
                          state.account._val = account;
-                         state.isChecking = false;
                          self.setState(state);
+                         self.setChecked();
                      },function(err){
                          state.isChecking = false;
                          state.checkTime = state.checkTime-1;
+                         state.account.info = '';
                          self.setState(state);
+                         self.setChecked();
                      });
                  }else if (validator.methods.phone(account)){
                      // 检查手机
@@ -116,16 +120,18 @@ define(['Sp','Validator','cookie','./tpl-loginbox-modal','./tpl-loginbox-page'],
                              state.account.info = "帐号不存在";
                              state.account.isChecked = false;
                          }else{
+                             state.account.info = '';
                              state.account.isChecked = true;
-                             self.setChecked();
                          }
                          state.account._val = account;
-                         state.isChecking = false;
                          self.setState(state);
+                         self.setChecked();
                      },function(err){
                          state.isChecking = false;
                          state.checkTime = state.checkTime-1;
+                         state.account.info = '';
                          self.setState(state);
+                         self.setChecked();
                      });
                  }else {
                      // 检查用户名
@@ -137,15 +143,17 @@ define(['Sp','Validator','cookie','./tpl-loginbox-modal','./tpl-loginbox-page'],
                              state.account.isChecked = false;
                          }else{
                              state.account.isChecked = true;
-                             self.setChecked();
+                             state.account.info = '';
                          }
                          state.account._val = account;
-                         state.isChecking = false;
                          self.setState(state);
+                         self.setChecked();
                      },function(err){
                          state.isChecking = false;
                          state.checkTime = state.checkTime-1;
+                         state.account.info = '';
                          self.setState(state);
+                         self.setChecked();
                      });
                  }
              }
@@ -154,10 +162,11 @@ define(['Sp','Validator','cookie','./tpl-loginbox-modal','./tpl-loginbox-page'],
              var state = this.state;
              var value =  $("#account").val();
 
-             if(state.account._val!=="" && state.account._val!==value){
-                 state.account.isChecked = false;
-             }
+            //  if(state.account._val!=="" && state.account._val!==value){
+            //      state.account.isChecked = false;
+            //  }
 
+             //console.log(!state.account.error , !state.password.error , state.account.isChecked);
              if(!state.account.error && !state.password.error && state.account.isChecked){
                  state.submit_active = true;
              }else{
@@ -168,9 +177,9 @@ define(['Sp','Validator','cookie','./tpl-loginbox-modal','./tpl-loginbox-page'],
          },
          setAccount: function(value){
              var self = this;
+             var state = this.state;
 
              if(value){
-                 var state = this.state;
 
                  state.account.error = value.length<4;
 
@@ -182,17 +191,18 @@ define(['Sp','Validator','cookie','./tpl-loginbox-modal','./tpl-loginbox-page'],
                      }
                  }
 
-                 if(state.account._val==value && !state.account.isChecked){
-                     state.account.info = "帐号不存在";
-                 }
-
                  state.account.val = value;
 
-                 this.setState(state);
-
-                 this.setChecked();
-
+             }else{
+                 state.account.error = true;
+                 state.account.info = "请输入正确的帐号";
+                 state.account.val = "";
              }
+
+             state.account.isChecked = false;
+             state.checkTime = 15;
+             this.setState(state);
+             this.setChecked();
          },
         checkAccount: function(e){
             e.preventDefault();
@@ -253,7 +263,7 @@ define(['Sp','Validator','cookie','./tpl-loginbox-modal','./tpl-loginbox-page'],
             }
             Sp.post( Sp.config.host + '/api/member/login',postData,function(res){
                 if(res&&res.code===0){
-                    if(self.pageType == "pop"){
+                    if(self.props.pageType == "pop"){
                         self.props.success();
                     }else{
                         // 登录成功跳转到首页

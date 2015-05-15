@@ -227,8 +227,14 @@
   }
   &__title .btn {
     position: absolute;
-    right: 20*$px;
+    right: 0*$px;
     bottom: 20*$px;
+    color: #3a3a3a;
+    border: 1*$px solid #3a3a3a;
+    &:hover{
+      color: #fff;
+      border: 1px solid #d6b59b;
+    }
   }
   &__logo {
     width: 300*$px;
@@ -239,8 +245,7 @@
     margin-left: auto;
   }
   &__content {
-    border-top: 1*$px solid $color_gray2;
-    border-bottom: 1*$px solid $color_gray2;
+    border: 1*$px solid $color_gray2;
     overflow: hidden;
     box-shadow: 0 -6*$px 0*$px #F8F8F8;
   }

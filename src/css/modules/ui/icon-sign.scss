@@ -1,0 +1,92 @@
+/**
+ * @tofishes
+ * 单独的图标定义
+ * 用法：  i.icon.i-xxx
+ */
+.icon {
+    display: inline-block;
+    vertical-align: middle;
+    height: 20*$px;
+    width: 20*$px;
+    background-repeat: none;
+}
+.i-smile {
+    background-image: url(../images/slice/icon-smile.png);
+    width: 22*$px;
+    height: 22*$px;
+
+    &:hover {
+        background-image: url(../images/slice/icon-smile-active.png);
+    }
+}
+.i-img {
+    background-image: url(../images/slice/icon-img.png);
+    width: 21*$px;
+    height: 21*$px;
+
+    &:hover {
+        background-image: url(../images/slice/icon-img-active.png);
+    }
+}
+.i-heart {
+    background-image: url(../images/slice/icon-heart.png);
+    width: 23*$px;
+
+    &:hover {
+        background-image: url(../images/slice/icon-heart-active.png);
+    }
+}
+a:hover .i-heart {
+    background-image: url(../images/slice/icon-heart-active.png);
+}
+.i-phone {
+    background-image: url(../images/slice/icon-phone.png);
+    height: 12*$px;
+}
+
+.i-emoji-happy {
+    background-image: url(../images/slice/emoji-happy.png);
+    width: 22px;
+    height: 18px;
+}
+.i-emoji-common {
+    background-image: url(../images/slice/emoji-common.png);
+    width: 22px;
+    height: 22px;
+}
+.i-emoji-bad {
+    background-image: url(../images/slice/emoji-bad.png);
+    width: 22px;
+    height: 22px;
+}
+.i-emoji-cry {
+    background-image: url(../images/slice/emoji-cry.png);
+    width: 22px;
+    height: 22px;
+}
+
+
+.sign-free-install,
+.sign-derate {
+    position: relative;
+    display:inline-block;
+    height: 20*$px;
+
+    &:after {
+        content: '\20';
+        position: absolute;
+        top: -10*$px;
+        width: 60*$px;
+        height: 50*$px;
+    }
+}
+.sign-free-install:after {
+    right: -65*$px;
+    background: url(../images/promotion/sign-free-install.png)
+}
+.sign-derate:after {
+    left: -65*$px;
+    /* background: url(../images/promotion/sign-derate.png) no-repeat; */
+    /* 临时修改 */
+    background: url(../images/promotion/sign-free-install.png)
+}

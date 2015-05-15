@@ -5,7 +5,7 @@
         margin-top: 18px;
         li {
             float: left;
-            margin:0 40*$px;
+            margin:0 25*$px;
         }
         li:hover,li._active {
             a {
@@ -38,19 +38,22 @@
         left:0;
         width:100%;
         // max-width: $max_page_width;
-        background: rgba(255, 255, 255, 0.95) !important;
-        filter: Alpha(opacity=90);
-        background: #fff; /*实现IE背景透明*/
+        background: #fff\9; /*实现IE背景透明*/
+        background: rgba(255, 255, 255, 0.95);
+        filter: alpha(opacity=95);
         box-shadow: 0 10px 15px #ddd;
     }
     &__menulist-inner {
-        padding:10px 150px;
+        max-width: 1600px;
+        margin: 0 auto;
+        padding:10px 0px;
     }
     &__menulist-item-wrap {
         display:none;
     }
     &__menulist-item {
         text-align:center;
+        position: relative;
         a {
             color:$color_black;
             &:hover {
@@ -69,14 +72,12 @@
         box-shadow: 0 5px 10px #ddd;
     }
 }
-
-
 @media (max-width: 1440*$px) {
     .header-menu-v2__menu {
         margin-left:45*$px;
     }
     .header-menu-v2__menu li {
-        margin:0 40*$px;
+        margin:0 20*$px;
     }
 }
 
@@ -85,24 +86,24 @@
         margin-left:25*$px;
     }
     .header-menu-v2__menu li {
-        margin:0 25*$px;
+        margin:0 20*$px;
     }
 }
 @media (max-width: 1095*$px) {
     .header-menu-v2__menu {
-        margin-left:50*$px;
+        margin-left:25*$px;
     }
     .header-menu-v2__menu li {
-        margin:0 10*$px;
+        margin:0 15*$px;
     }
 }
 
 
 @media (max-width: 1024*$px) {
     .header-menu-v2__menu {
-        margin-left:25*$px;
+        margin-left:20*$px;
     }
     .header-menu-v2__menu li {
-        margin:0 20*$px;
+        margin:0 15*$px;
     }
 }

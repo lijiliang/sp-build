@@ -9,7 +9,7 @@ $gridSpanSwitch: true !default;;//是否开启grid class(.span1, .span2...)，�
 //-----------------------------------------------------
 $baseFontSize:          12px !default;
 $baseLineHeight:        1.5 !default;
-$baseFontFamily:        'helvetica neue', arial, "PingHei", 'Hiragino Sans GB', stheiti, 'Microsoft YaHei', 'WenQuanYi Micro Hei', sans-serif;
+$baseFontFamily:        'helvetica neue', arial, "PingHei", 'Hiragino Sans GB', stheiti, 'Microsoft YaHei', 'WenQuanYi Micro Hei', sans-serif,iconfont;
 //$fontCn:                "SimSun"; //宋体
 //$fontYaHei:             "Microsoft Yahei"; //微软雅黑
 // link
@@ -25,6 +25,7 @@ $color_gray: #7d7d7d;   // 内容简介段落主要颜色
 $color_gold: #e6be99;   // 页面主体颜色
 $color_gold_hover: #e9c998;   // 动态交互主体颜色
 $color_orange: #f3981c;   // 交互 橙色
+$color_emphasis: #a74453; // 强调，突出显示，暗红色
 
 $color_gray2: #eaeaea;  // 边框线条颜色
 $color_gray_border: #eaeaea;  // 边框线条颜色

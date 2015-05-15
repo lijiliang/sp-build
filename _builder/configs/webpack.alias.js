@@ -61,6 +61,7 @@ module.exports = {
     'agreementModalBox': 'modules/agreement-modal-box/agreement-modal-box',
     'uploader': 'modules/uploader/uploader',
     'ConfirmModalBox': 'modules/confirm-modal-box/confirm-modal-box',
+    'AlertModalBox': 'modules/alert-modal-box/alert-modal-box',
     'liteModalBox': 'modules/lite-modal-box/lite-modal-box',
 
     // 模块

@@ -157,7 +157,7 @@ define ['Sp', 'SetEmailModalBox', 'SetPhoneModalBox', 'VerifyEmailModalBox', 'Ve
 
         $email_action_box = $ ".email_action_box"
         # 设置
-        $(document).on "click","#j-modify-email", ->
+        $(document).on "click","#j-setEmail-btn", ->
             $email_action_box.html actionTpl
             $emailBox.html inputTpl
             $("#j-user-email-ipt").focus()
@@ -257,6 +257,14 @@ define ['Sp', 'SetEmailModalBox', 'SetPhoneModalBox', 'VerifyEmailModalBox', 'Ve
             $phone_action_box.html actionTpl
             $phoneBox.html inputTpl
             $("#j-user-phone-ipt").focus()
+            $("#j-user-phone-ipt").val ''
+            return false
+
+        # 更换
+        $(document).on "click",'#j-changePhone-btn',->
+            $phone_action_box.html actionTpl
+            $phoneBox.html inputTpl
+            $("#j-user-phone-ipt").focus()
             $("#j-user-phone-ipt").val _SP.pageData.phone.val
             return false
 
@@ -295,7 +303,7 @@ define ['Sp', 'SetEmailModalBox', 'SetPhoneModalBox', 'VerifyEmailModalBox', 'Ve
                                 mask: true
                                 maskClose: true
                                 closeBtn: true
-                                phone: _SP.pageData.phone.val
+                                phone: value
                                 success: ()->
                                     _SP.pageData.phone.val = value
                                     $phone_action_box.html editActionTpl

@@ -11,8 +11,8 @@ define ['ModalBox','./tpl-layout'], (ModalBox,tpl)->
         render: ()->
             super
 
-            $ok = this.modal.find '.confirm-box__ok'
-            $cancel = this.modal.find '.confirm-box__cancel'
+            $ok = this.modal.find '.confirm-modal-box__ok'
+            $cancel = this.modal.find '.confirm-modal-box__cancel'
 
             $ok.on 'click', ()=>
                 @options.confirmCallback.call @ if typeof @options.confirmCallback is 'function'

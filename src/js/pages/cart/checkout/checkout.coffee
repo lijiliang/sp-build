@@ -1,5 +1,8 @@
 # for order-settlement Page
 define ['Sp','DatePicker','AddressList','InvoiceList','Checkbox', 'preLoad'], (Sp, DatePicker, AddressList, InvoiceList, Checkbox)->
+
+    Coupon = require './coupon'
+
     member_id = _SP.member
     orderData =
         member_address_id: ''
@@ -7,6 +10,7 @@ define ['Sp','DatePicker','AddressList','InvoiceList','Checkbox', 'preLoad'], (S
         reserve_installation_time: ''
         invoice_id: ''
         note: ''
+        coupon_ids: ''
 
     #API
     host = Sp.config.host
@@ -22,10 +26,13 @@ define ['Sp','DatePicker','AddressList','InvoiceList','Checkbox', 'preLoad'], (S
             #console.log res
         submit: (data)->
             Sp.post @baseUrl + @path.submit, data, @fn, @fn
-        getTotalPrice: (region_id)->
-            param = ''
-            if region_id then param = '?region_id=' + region_id
-            Sp.get @baseUrl + @path.getTotalPrice + param, {}, @fn, @fn
+        # getTotalPrice: (region_id)->
+        #     param = ''
+        #     if region_id then param = '?region_id=' + region_id
+        #     Sp.get @baseUrl + @path.getTotalPrice + param, {}, @fn, @fn
+        getTotalPrice: (data)->
+            data = {} if !data
+            Sp.get @baseUrl + @path.getTotalPrice, data, @fn, @fn
 
 
     Fn = ->
@@ -36,12 +43,18 @@ define ['Sp','DatePicker','AddressList','InvoiceList','Checkbox', 'preLoad'], (S
             member_id: member_id
             callback: (address_id, region_id)->
                 console.log address_id, region_id
-                Action.getTotalPrice region_id
+                # 给优惠券使用
+                _SP.region_id = region_id
+
+                Action.getTotalPrice region_id : region_id
                 .done (res)->
                     if res.code is 0 and res.data and res.data isnt -1
+                        _SP.total_price = res.data.total_price
                         $('#j-total-price').html res.data.total_price
                         $('#j-total-delivery').html res.data.total_delivery
                         $('#j-total-installation').html res.data.total_installation
+                        $('#j-total-coupon').html res.data.coupon_abatement
+                        $('#j-total-delivery-installation-abatement').html res.data.delivery_abatement + res.data.installation_abatement
                         $('#j-total-amount').html res.data.total_amount
                         $('#j-total').html res.data.total
 
@@ -52,6 +65,8 @@ define ['Sp','DatePicker','AddressList','InvoiceList','Checkbox', 'preLoad'], (S
                         $('#j-total-price').html ''
                         $('#j-total-delivery').html ''
                         $('#j-total-installation').html ''
+                        $('#j-total-coupon').html ''
+                        $('#j-total-delivery-installation-abatement').html ''
                         $('#j-total-amount').html ''
                         $('#j-total').html ''
                         $el = $ '#j-order-submit'
@@ -63,6 +78,8 @@ define ['Sp','DatePicker','AddressList','InvoiceList','Checkbox', 'preLoad'], (S
         initInvoice()
         initSubmit()
         initNote()
+        initCoupon()
+
 
     initNote = ()->
         $box = $ '#j-order-comment-box'
@@ -167,6 +184,18 @@ define ['Sp','DatePicker','AddressList','InvoiceList','Checkbox', 'preLoad'], (S
 
                 else
                     return false
+
+    initCoupon = () ->
+    	React.render(React.createElement(Coupon, {
+            id: member_id
+            total_price: _SP.total_price
+            callback: (coupon_ids) ->
+                console.log 'coupon_ids: ', coupon_ids
+                orderData.coupon_ids = coupon_ids
+
+    	}), document.getElementById 'j-coupon-option');
+
+
 
 
 

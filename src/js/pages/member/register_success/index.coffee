@@ -65,6 +65,7 @@ define ['Sp','Validator','agreementModalBox','LoginModalBox', 'preLoad'], (Sp,Va
         $(document).on "click",".j-quick-login", ->
             if !loginBox
                 loginBox = new LoginModalBox
+                    width: 440
                     top: 200
                     mask: true
                     closeBtn: true

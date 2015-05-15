@@ -22,14 +22,21 @@
     margin:30*$px 0;
   }
 }
+.cs-record-detail{
+    padding-left: 6*$px;
+}
 .cs-record-detail {
   .order-info__bd {
-    padding-top: 10*$px;
+    padding-top: 15*$px;
     padding-left: 0;
+  }
+  .order-info__item{
+    margin-bottom: 33*$px;
   }
   .order-info__title {
     width: 100*$px;
     text-align: right;
+    color: #a0a0a0;
   }
 }
 
@@ -244,5 +251,36 @@ em.number {
 .page-cs-order-list{
   .order-list-tab__item{
     margin-right:30*$px;
+  }
+}
+.order-tracking{
+  margin:0 20*$px;
+  &__hd,&__bd,&__ft{
+    padding:0 20*$px;
+  }
+  &__hd{
+    border-bottom:1px solid $color_gray_border;
+    line-height:52*$px;
+  }
+  &__bd{
+    padding:14*$px 20*$px 0;
+    &__row {
+      padding: 0 0 10*$px;
+    }
+  }
+  &__col-01, &__col-02, &__col-03 {
+    > div {
+      padding: 0 10*$px 0 0;
+      margin-bottom: 8*$px;
+    }
+  }
+  &__col-01{
+    width:384/1120*100%;
+  }
+  &__col-02{
+    width:602/1120*100%;
+  }
+  &__col-03{
+    width:134/1120*100%;
   }
 }

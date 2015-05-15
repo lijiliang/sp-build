@@ -27,7 +27,7 @@ module.exports = {
     ieRequireList: [
         path.join(__dirname, src_dir, '/js/vendor/console-shim/console-shim.js'),
         path.join(__dirname, src_dir, '/js/vendor/html5shiv/dist/html5shiv.js'),
-        path.join(__dirname, src_dir, '/js/vendor/respond/dest/respond.js'),
+        path.join(__dirname, src_dir, '/js/vendor/respond/dest/respond.src.js'),
         path.join(__dirname, src_dir, '/js/vendor/es5-shim/es5-shim.js'),
         path.join(__dirname, src_dir, '/js/vendor/es5-shim/es5-sham.js'),
         path.join(__dirname, src_dir, '/js/vendor/json2/json2.js')

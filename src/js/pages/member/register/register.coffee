@@ -30,6 +30,7 @@ define ['Sp','Validator','modules/check-password-strength/index','agreementModal
 
     checkStrong = checkPasswordStrength
 
+    timer = null
     #获取手机验证码
     verifycode = ->
         time = 0
@@ -69,6 +70,7 @@ define ['Sp','Validator','modules/check-password-strength/index','agreementModal
         $(document).on "click",".j-quick-login", ->
             if !loginBox
                 loginBox = new LoginModalBox
+                    width: 440
                     top: 200
                     mask: true
                     closeBtn: true
@@ -85,12 +87,6 @@ define ['Sp','Validator','modules/check-password-strength/index','agreementModal
             account = $(this).val()
             account = $.trim(account)
 
-            if account.length == 0
-                $(".is_account_tips").show().text "请输入邮箱或11位手机号"
-                $(".is_account_error").hide()
-            else
-                $(".is_account_tips").hide()
-
             complete = (that)->
                 if !$(that).siblings(".form-success-tips").length
                     $(that).after success_text
@@ -98,13 +94,21 @@ define ['Sp','Validator','modules/check-password-strength/index','agreementModal
                 validatored.account = true
                 if validator.methods.phone(account)
                     if !validatored.code
+                        document.getElementById('captcha').src = '/api/captcha?' + Math.random();
                         $("#reg-captcha").show()
-                        $(".text-captcha").focus()
-                else
-                    validatored.code = true
-                    validatored.phonecode = true
-                    $("#reg-captcha").hide()
-                    $("#phone-code-box").hide()
+                        $("#phone-code-box").hide()
+                        $(".text-captcha").val('').focus()
+                    else if !validator.phonecode
+                        $("#reg-captcha").hide()
+                        $("#phone-code-box").show().val('').focus()
+                        clearInterval timer
+                        time = 120
+                        _timerFn();
+                    else
+                        #validatored.code = true
+                        #validatored.phonecode = true
+                        $("#reg-captcha").hide()
+                        $("#phone-code-box").hide()
                 checkOK()
 
             error = (that)->
@@ -115,19 +119,19 @@ define ['Sp','Validator','modules/check-password-strength/index','agreementModal
                 validatored.code = false
                 validatored.phonecode = false
 
-            if !(validator.methods.email(account) or validator.methods.phone(account))
-                if account.length !=0
-                    $(".is_account_error").show().text "请输入正确的邮箱或者手机号"
-                error self
-            else if validator.methods.phone(account)
-                if(registObj.account == account && validatored.phonecode!=true)
-                    $("#reg-captcha").hide()
-                    $("#phone-code-box").show()
-                else if($("#reg-captcha").is(":hidden") && validatored.phonecode!=true)
+            #todo 这里有点问题
+            # if !validator.methods.email(account) or !validator.methods.phone(account)
+            #     if account.length !=0
+            #         $(".is_account_error").show().text "请输入正确的邮箱或者手机号"
+            #     error self
+            # else
+            if validator.methods.phone(account)
+                #console.log(registObj.account == account,validatored.phonecode);
+                $(".is_account_error").hide()
+                if($("#reg-captcha").is(":hidden") && validatored.phonecode!=true)
                     Sp.get Sp.config.host + "/api/member/checkMobile",{
                         mobile: account
                     },(res)->
-                        registObj.account = account;
                         if res && res.code == 0
                             if parseInt(res.data.status) == 1
                                 $(".is_account_error").show().html "该账号已经存在，请马上<a class='j-quick-login' href='#'>登陆</a>"
@@ -135,6 +139,23 @@ define ['Sp','Validator','modules/check-password-strength/index','agreementModal
                                 $(".is_account_error").show().html "该账号已经存在，尚未激活"
                         else
                             complete self
+                else if(validatored.phonecode!=true)
+                    if(validatored.code!=true)
+                        $("#reg-captcha").show()
+                        $("#phone-code-box").hide()
+                    else
+                        $("#reg-captcha").hide()
+                        $("#phone-code-box").show()
+
+            else if !validator.methods.email(account)
+                if account.length == 0
+                    $(".is_account_tips").show().text "请输入邮箱或11位手机号"
+                    $(".is_account_error").hide()
+                else
+                    $(".is_account_tips").hide()
+                    $(".is_account_error").show().text "请输入正确的邮箱或者手机号"
+                    error self
+
 
 
             checkOK()
@@ -209,6 +230,7 @@ define ['Sp','Validator','modules/check-password-strength/index','agreementModal
                 issend = true
                 Sp.post Sp.config.host + "/api/member/sendSms", data, (res)->
                     if res and res.code ==0
+                        validatored.code = true
                         $("#reg-captcha").hide()
                         $(".text-verifycode").removeAttr("disabled");
                         $("#phone-code-box").show()
@@ -218,7 +240,6 @@ define ['Sp','Validator','modules/check-password-strength/index','agreementModal
                             $(".form-verifycode .btn").html '<span class="u-color_darkred u-fl">120</span> <span class="u-color_black">秒后重新获取</span>'
                             $(".form-verifycode .btn").addClass "_disable"
                             _timerFn()
-                        validatored.code = true
                     else
                         $(".is_captcha_error").show().text "请输入正确的图形验证码"
                         validatored.code = false

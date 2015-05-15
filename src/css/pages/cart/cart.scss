@@ -1,3 +1,6 @@
 @import "../../modules/settings/_setting_pages";
 /* cart */
 /* cart的css都被公用了 - -! 见 ui/_common-cart */
+
+/* checkout */
+@import "./checkout.scss";

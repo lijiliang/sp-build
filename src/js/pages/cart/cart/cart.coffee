@@ -43,6 +43,7 @@ define ['Sp','Checkbox','CheckAll','Amount_v2','PlaceSelector','./cart-layout','
             e.stopPropagation();
             if(!loginBox)
                 loginBox = new LoginModalBox
+                    width: 440
                     top: 250
                     mask: true
                     closeBtn: true
@@ -220,6 +221,7 @@ define ['Sp','Checkbox','CheckAll','Amount_v2','PlaceSelector','./cart-layout','
                         # 登录框
                         if !loginBox
                             loginBox = new LoginModalBox
+                                width: 440
                                 top: 250
                                 mask: true
                                 closeBtn: true

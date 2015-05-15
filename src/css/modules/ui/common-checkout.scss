@@ -163,3 +163,71 @@
     }
   }
 }
+
+//优惠券
+.order-coupon{
+    &__hd{}
+    &__bd{}
+    &__ft{
+        margin: 12*$px 0;
+    }
+    .ui-tab{
+        margin: 0;
+        &__item{
+            font-size: 12*$px;
+        }
+    }
+    &__list{
+        &-hd{
+            padding: 12*$px 0;
+            width: (70+180+180)*$px;
+        }
+    }
+    &__table{
+        width: (70+180+180)*$px;
+        ._td-1{
+            width: 70*$px;
+        }
+        ._td-2{
+            width: 180*$px;
+        }
+        ._td-3{
+            width: 180*$px;
+        }
+    }
+    .ui-lg-checkbox{
+        border-color: #fff;
+        width: (70+180+180)*$px;
+        /* margin-bottom: 10*$px; */
+        padding: 7*$px 8*$px;
+        margin-left: -8*$px;
+        &._active{
+          border-color:$color_gold;
+        }
+        &:hover{
+          border-color:$color_gold_hover;
+        }
+        //without hover style
+        &._without-hover{
+            cursor: default;
+            &:hover{
+                border-color:$color_gray_border;
+            }
+            &._active,&._active:hover{
+                border-color:$color_gold_hover;
+            }
+        }
+        &._disable{
+            border-color: #fff;
+            &:hover{
+              &:before{
+                display:none;
+              }
+            }
+        }
+    }
+}
+
+.coupon-modal-box__content-inner{
+    padding: 10*$px 0 20*$px 0;
+}

@@ -120,6 +120,9 @@ define ['config','cookie', './storage', './calc'], (config, $cookie, Store, Calc
     Sp.get = (url, data, success, error)->
         Sp.query "GET", url , data, success, error
 
+    Sp.put = (url, data, success, error)->
+        Sp.query "PUT", url , data, success, error
+
     Sp.query = (type, url, data, success, error)->
         Sp.ajax type, url, data, success, error
 

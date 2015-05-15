@@ -242,7 +242,13 @@
 
 
 @media (max-width: 1360*$px){
-  .header-search {
+   .header-search {
+    width: 450*$px;
+    &__text {
+      width: 366*$px;
+    }
+  }
+  .layout-fixed .header-search {
     width: 450*$px;
     &__text {
       width: 366*$px;
@@ -260,14 +266,21 @@
   .header-search {
     width: 400*$px;
     &__text {
-      width: 316*$px;
+      width: 280*$px;
     }
+  }
+  .layout-fixed .header-search {
+    width: 370*$px;
+    &__text {
+      width: 280*$px;
+    }
+
   }
 }
 
 @media (max-width: 1024*$px){
-    
-  .header-search {
+
+   .header-search {
     width: 360*$px;
     &__text {
       width: 276*$px;
@@ -309,4 +322,15 @@
 ._pop-verify-text {
   padding-left: 55*$px;
   padding-right: 55*$px;
+}
+
+.add_imitate_logo{
+  float: left;
+  width: 107px;
+  height: 55px;
+}
+.header-menu-coming-soon-icon{
+  position: absolute;
+  left: 72%;
+  top: 16px;
 }

@@ -100,11 +100,15 @@ define ['Sp',
 
 
         # 默认物流费
-        _regionId = $("._place_area").data("id") || $("._place_city").data("id")
-        # 处理cookie
-        _regionCookieId = parseInt $.cookie('region_district_id' ) || parseInt $.cookie('region_city_id')
+        _regionId = parseInt $("._place_area").data("id") || parseInt $("._place_city").data("id")
 
-        if _regionId
+        # 处理cookie
+        if $.cookie('region_district_id' )!=-1
+            _regionCookieId = parseInt $.cookie('region_district_id' )
+        else
+            _regionCookieId = parseInt $.cookie('region_city_id')
+
+        if _regionCookieId
             _regionId = _regionCookieId;
 
         if _regionId
@@ -114,7 +118,7 @@ define ['Sp',
                     if(dilivery == -1)
                         console.log("此地区暂时不支持配送")
                     else
-                        $("#delivery").text(dilivery+".00")
+                        $("#j-delivery").text(dilivery+".00")
                 else
                     Sp.log("没有获取到配送信息")
 
@@ -123,7 +127,7 @@ define ['Sp',
             target: "#stock-btn .btn"
             closeBtn: ".close"
             callback: (res)->
-                regionId = if res.district.id!=-1 then res.district.id else if res.city.id !=-1 then res.city.id
+                regionId = if parseInt(res.district.id)!=-1 then res.district.id else if parseInt(res.city.id) !=-1 then res.city.id
                 if regionId
                     #查询物流费
                     getDelivery regionId,(dilivery)->
@@ -132,7 +136,7 @@ define ['Sp',
                             if(dilivery == -1)
                                 alert("此地区暂时不支持配送")
                             else
-                                $("#delivery").text(dilivery+".00")
+                                $("#j-delivery").text(dilivery+".00")
                         else
                             Sp.log("没有获取到配送信息")
 
@@ -219,6 +223,7 @@ define ['Sp',
                 # 登录框
                 if !loginBox
                     loginBox = new LoginModalBox
+                        width: 440
                         top: 250
                         mask: true
                         closeBtn: true

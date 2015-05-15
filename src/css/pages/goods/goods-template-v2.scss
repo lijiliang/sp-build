@@ -3,6 +3,10 @@
 /*模板 V2  20150330*/
 .goods-tpl-v2{
 
+    &__img{
+        margin-bottom: 2px;
+    }
+
     $tplWidth: 1380;
 
     margin:40/1400*100% 20/1400*100% 0 0;
