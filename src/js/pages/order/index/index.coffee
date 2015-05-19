@@ -52,8 +52,19 @@ define ['Sp','Checkbox','CheckAll','SelectBox','ConfirmModalBox', 'AlertModalBox
         selectBox = new SelectBox
             el: $ '.ui-select-box'
             callback: (value, text)->
+                getQuery = ()->
+                    ret = {}
+                    seg = location.search.replace(/^\?/,'').split('&')
+                    for item in seg
+                        if !item
+                            continue; 
+                        s = item.split '=';
+                        ret[s[0]] = s[1];
+                    
+                    return ret
+
                 path = location.pathname
-                params = {}
+                params = getQuery()
                     
                 # 算时间
                 now = new Date().getTime()
@@ -67,14 +78,17 @@ define ['Sp','Checkbox','CheckAll','SelectBox','ConfirmModalBox', 'AlertModalBox
 
                 if begin_at_type != 'all'
                     params.begin_at_type = begin_at_type #Sp.date.format(new Date(now - times[begin_at]))
+                else 
+                    delete params.begin_at_type
                 if status_id != 'all'
                     params.status_id = status_id
+                else 
+                    delete params.status_id
 
                 params = $.param params
-                query = location.search
-                if query then query += '&' else query = '?'
-                if params then path += query + params
-
+                
+                path += '?' + params
+                console.log('filter path: ', path)
                 location.href = path
 
     bindEvt = ()->

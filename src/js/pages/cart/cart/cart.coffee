@@ -139,8 +139,10 @@ define ['Sp','Checkbox','CheckAll','Amount_v2','PlaceSelector','./cart-layout','
                 $checked.each (i, item)->
                     $el = $ @
                     $parent = $el.closest '.cart-table__item'
-                    _this.price += +$parent.data 'total-price'
-                    _this.quantity += +$parent.data 'quantity'
+                    # _this.price += +$parent.data 'total-price'
+                    # _this.quantity += +$parent.data 'quantity'
+                    _this.price = Sp.Calc.Add(_this.price,+$parent.data 'total-price')
+                    _this.quantity = Sp.Calc.Add(_this.quantity,+$parent.data 'quantity')
                     _this.setCartTotalValue _this.quantity, _this.price
                 $ '.j-cart-submit'
                 .removeClass '_disable'

@@ -16,7 +16,7 @@ define ['Sp','Validator','modules/check-password-strength/index','agreementModal
         readed: true
 
     checkOK = ->
-        #console.log validatored.account , validatored.code , validatored.phonecode , validatored.password , validatored.repassword, validatored.readed
+        console.log validatored.account , validatored.code , validatored.phonecode , validatored.password , validatored.repassword, validatored.readed
         if validatored.account and validatored.code and validatored.phonecode and validatored.password and validatored.repassword and validatored.readed
             $(".j-register-btn").removeClass("_disable")
         else
@@ -119,7 +119,7 @@ define ['Sp','Validator','modules/check-password-strength/index','agreementModal
                 validatored.code = false
                 validatored.phonecode = false
 
-            #todo 这里有点问题
+            #todo
             # if !validator.methods.email(account) or !validator.methods.phone(account)
             #     if account.length !=0
             #         $(".is_account_error").show().text "请输入正确的邮箱或者手机号"
@@ -243,6 +243,7 @@ define ['Sp','Validator','modules/check-password-strength/index','agreementModal
                     else
                         $(".is_captcha_error").show().text "请输入正确的图形验证码"
                         validatored.code = false
+                    checkOK()
             else if val.length > 5
                 issend = false
                 $(".is_captcha_error").show().text "图形验证码长度不正确"
@@ -279,6 +280,7 @@ define ['Sp','Validator','modules/check-password-strength/index','agreementModal
                     else
                         $(".is_verify_error").show().text "请输入正确的短信验证码"
                         validatored.phonecode = false
+                    checkOK()
             else if val.length > 6
                 ischeck = false
                 $(".is_verify_error").show().text "验证码长度不正确"

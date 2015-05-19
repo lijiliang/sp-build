@@ -68,7 +68,7 @@ CouponList = React.createClass
                 when 1
                     text = '满' + task.threshold + '元'
             <div className={classes} key={i} onClick={@onClick.bind null, item, i}>
-                <table className="order-coupon__table u-color_gray">
+                <table className="order-coupon__table u-color_gray u-text-center">
                     <tr>
                         <td className="order-coupon__td _td-1">￥{task.value}</td>
                         <td className="order-coupon__td _td-2">{text}</td>
@@ -81,7 +81,7 @@ CouponList = React.createClass
     render: ->
         <div className="order-coupon__list">
             <div className="order-coupon__list-hd">
-                <table className="order-coupon__table u-color_gray">
+                <table className="order-coupon__table u-color_gray u-text-center">
                     <tr>
                         <td className="order-coupon__td _td-1">金额</td>
                         <td className="order-coupon__td _td-2">使用条件</td>

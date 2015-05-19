@@ -82,7 +82,9 @@ define(['Sp','Validator','cookie','./tpl-loginbox-modal','./tpl-loginbox-page'],
              var account_val = $("#account").val();
              var state = this.state;
 
-             if( account_val && account_val.length>=4 && state.account.isChecked === false ){
+             //console.log( account_val.length>=4 , state.account.isChecked === false);
+
+             if( account_val.length>=4 && state.account.isChecked === false ){
 
                  state.account.info = "正在检查帐号是否存在...";
                  state.account.error = false;
@@ -186,7 +188,7 @@ define(['Sp','Validator','cookie','./tpl-loginbox-modal','./tpl-loginbox-page'],
                  if (!state.account.error)
                     state.account.info = "";
                  else{
-                     if(value.length<4){
+                     if(value.length >0 && value.length<4){
                          state.account.info = "请输入正确的帐号";
                      }
                  }
@@ -195,7 +197,8 @@ define(['Sp','Validator','cookie','./tpl-loginbox-modal','./tpl-loginbox-page'],
 
              }else{
                  state.account.error = true;
-                 state.account.info = "请输入正确的帐号";
+                //  state.account.info = "请输入正确的帐号";
+                 state.account.info = "";
                  state.account.val = "";
              }
 
@@ -211,15 +214,17 @@ define(['Sp','Validator','cookie','./tpl-loginbox-modal','./tpl-loginbox-page'],
             this.setAccount(value);
         },
         setPass: function(value){
+
+            var state = this.state;
+
             if(value){
-                var state = this.state;
 
                 state.password.error = value.length<6;
 
                 if(!state.password.error)
                     state.password.info = "";
                 else{
-                    if(value.length<6){
+                    if(value.length>0 && value.length<6){
                         state.password.info = "请输入正确的密码";
                     }
                 }
@@ -227,6 +232,15 @@ define(['Sp','Validator','cookie','./tpl-loginbox-modal','./tpl-loginbox-page'],
                 state.password.val = value;
                 state.password._val = value;
 
+                this.setState(state);
+
+                this.setChecked();
+            }else{
+
+                state.password.val = '';
+                state.password._val = '';
+                state.password.info = "";
+                state.password.error = true;
                 this.setState(state);
 
                 this.setChecked();
@@ -294,14 +308,14 @@ define(['Sp','Validator','cookie','./tpl-loginbox-modal','./tpl-loginbox-page'],
         },
         showAccountTips: function(){
             var state = this.state;
-            if( !state.account.val.length ) {
+            if( state.account.val.length >0 && state.account.val.length<4 ) {
                 state.account.info = "请输入正确的帐号";
                 this.setState(state);
             }
         },
         showPassTips: function(){
             var state = this.state;
-            if( !state.account.val.length ){
+            if( state.account.val.length>0 && state.account.val.length<6 ){
                 state.password.info = "请输入正确的密码";
                 this.setState(state);
             }

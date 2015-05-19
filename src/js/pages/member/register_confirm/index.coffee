@@ -13,11 +13,11 @@ define ['Sp', 'LightModalBox', 'preLoad'], (Sp, LightModalBox)->
                     text : "验证邮件发送成功"
                 lightModalBox.show()
             else
-                Sp.log "邮箱发送验证码失败"
+                Sp.log "邮箱发送验证失败"
                 lightModalBox = new LightModalBox
                     width: 250
                     status: "error"
-                    text : "邮箱发送验证码失败"
+                    text : "邮箱发送验证失败"
                 lightModalBox.show()
 
         return false

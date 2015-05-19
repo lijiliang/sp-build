@@ -7,125 +7,112 @@
     <meta name="viewport" content="width=device-width">
     <link rel="shortcut icon" href="/favicon.ico">
     <title>斯品在线客服</title>
-    @@include('../_common/header/head.html')
-    @@include('./_include/meta.html')
+    <link rel="stylesheet" href="static/css/style.css" type="text/css" />
 </head>
 <body>
-<div class="online-chat">
+<div id="main_container" class="online-chat">
     <header>
         <h2>斯品在线客服</h2>
         <p><i class="icon i-phone"></i>客服热线： 4008-866-966</p>
     </header>
     <section class="u-clearfix">
         <article>
-            <div class="dialogue panel">
-                <ul>
-                    <li>
-                        <a class="avatar"><img src="http://tp3.sinaimg.cn/1275280670/50/5686210904/1" alt=""></a>
+            <div id="dialogue" class="dialogue panel">
+                <div id="welcome" class="welcome">
+                    <div class="wl_bg"><span class="fl lb"></span>
+                        <span class="sec" id="second_run">15</span>秒后系统自动为您分配接待客服...
+                    </div>
+                    <p>
+                        欢迎光临！<br>
+                        如果您对我们的产品或者服务有任何意见或建议，都可以随时与我们线上取得联系，我们客服人<br>
+                        员给您详尽细致的解答。
+                    </p>
+                    
+                    <div class="font_size_15">请选择以下客服人员进行对话：</div>
+                    <div id="kf_u_list" class="wel_kf_ch clear"><img src="static/image/loading.gif" /></div>
+                </div>
+
+                <div id="chat_container_guestbook" style="display:none;">
+                    <div class="wl_bg"><span class="fl lb"></span>当前无客服在线，欢迎留言。</div>
+                    <div class="wel_box">
+                        <table cellpadding="0" cellspacing="0" class="gb_table">
+                            <tr>
+                                <th height="60" width="80">联系方式：</th>
+                                <td><input type="text" class="ur_input_gb" id="guestbook_contact" value="" autocomplete="off" placeholder="手机号/Email/whatsapp..." size="60" /></td>
+                            </tr>
+                            <tr>
+                                <th height="110">留言内容：</th>
+                                <td><textarea class="ur_textarea_gb ft_yahei" id="guestbook_content" autocomplete="off" style="width:400px; height:130px;" placeholder="留言内容..."></textarea></td>
+                            </tr>
+                            <tr>
+                                <th height="60">&nbsp;</th>
+                                <td>
+                                    <input type="button" class="btn" onclick="guestbook_send()" value="提交留言" />
+                                    &emsp;
+                                    <span id="guestbook_err_msg" class="color_red"></span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div><!--end wel_box-->
+                </div><!--end main_wel 初始化客服选择框-->
+
+                <ul id="chat_msg_box" class="dialogue-list">
+                    <script type="template" id="dialog-content-tmpl">
+                    <li {{if !isServicer}}class="servicer"{{/if}}>
+                        <a class="avatar"><img src="${avatar}" alt=""></a>
                         
-                        <cite>妮可<time>2015-05-05 14:15:03</time></cite>
+                        <cite>${isServicer ? name : ''}<time>${time}</time>${!isServicer ? name : ''}</cite>
                 
                         <blockquote>
                             <p>
-                                小袄，今天吃饭了没有？
+                            {{html content}}
                             </p>
                             <i class="arrow"></i>
                         </blockquote>
                     </li>
-                    <li class="servicer">
-                        <a class="avatar"><img src="http://tp4.sinaimg.cn/1730077315/50/5679724630/1" alt=""></a>
-                        
-                        <cite><time>2015-05-05 14:15:55</time>小袄</cite>
-                
-                        <blockquote>
-                            <p>
-                                你睡啊你！没事出来吓人！
-                            </p>
-                            <i class="arrow"></i>
-                        </blockquote>
-                    </li>
-                    <li>
-                        <a class="avatar"><img src="http://tp3.sinaimg.cn/1275280670/50/5686210904/1" alt=""></a>
-                        
-                        <cite>妮可<time>2015-05-05 14:15:03</time></cite>
-                
-                        <blockquote>
-                            <p>
-                                小奥，你这样是很伤我小京的心的，我是普京，从小和你穿同一条裤子的普京普大哥，想当年
-我们在非洲，你喝羊奶我吃羊腿，都是同一个动物养大的。你...你怎么就把我给忘了！
-                            </p>
-                            <i class="arrow"></i>
-                        </blockquote>
-                    </li>
-                    <li class="servicer">
-                        <a class="avatar"><img src="http://tp4.sinaimg.cn/1730077315/50/5679724630/1" alt=""></a>
-                        
-                        <cite><time>2015-05-05 14:15:55</time>小袄</cite>
-                
-                        <blockquote>
-                            <p>
-                                你睡啊你！没事出来吓人！
-                            </p>
-                            <i class="arrow"></i>
-                        </blockquote>
-                    </li>
-                    <li>
-                        <a class="avatar"><img src="http://tp3.sinaimg.cn/1275280670/50/5686210904/1" alt=""></a>
-                        
-                        <cite>妮可<time>2015-05-05 14:15:03</time></cite>
-                
-                        <blockquote>
-                            <p>
-                                小袄，今天吃饭了没有？
-                            </p>
-                            <i class="arrow"></i>
-                        </blockquote>
-                    </li>
-                    <li class="servicer">
-                        <a class="avatar"><img src="http://tp4.sinaimg.cn/1730077315/50/5679724630/1" alt=""></a>
-                        
-                        <cite><time>2015-05-05 14:15:55</time>小袄</cite>
-                
-                        <blockquote>
-                            <p>
-                                小奥，你这样是很伤我小京的心的，我是普京，从小和你穿同一条裤子的普京普大哥，想当年
-我们在非洲，你喝羊奶我吃羊腿，都是同一个动物养大的。你...你怎么就把我给忘了！
-                            </p>
-                            <i class="arrow"></i>
-                        </blockquote>
-                    </li>
+                    </script>
                 </ul>
             </div>
             <div class="inputer">
                 <div class="bar">
-                    <a id="comment-trigger" class="u-fr u-f16"><i class="icon i-heart"></i> 满意度调查</a>
-                    <a class="emotion-trigger"><i class="icon i-smile"></i></a>
-                    <a class="transfer-trigger"><i class="icon i-img"></i></a>
+                    <!-- <a id="comment-trigger" class="u-fr u-f16"><i class="icon i-heart"></i> 满意度调查</a> -->
+                    <div class="emotion-box">
+                        <a class="emotion-trigger"><i class="icon i-smile"></i></a>
+                        <div id="emotion-panel" class="emotion-panel">
+                            <script id="emotion-item-tmpl" type="template">
+                            <a class="emotion-item" data-phrase="${phrase}">
+                                <img src="${icon}" alt="${phrase}"/>
+                            </a>
+                            </script>
+                        </div>
+                    </div>
+                    <!-- <a class="transfer-trigger"><i class="icon i-img"></i></a> -->
                 </div>
                 
                 <form onsubmit="return false;" class="u-clearfix">
-                    <textarea name="content" cols="30" rows="10"></textarea>
-                    <button class="btn btn-larger-big btn-color-orange">发送</button>
+                    <textarea id="msg_content" placeholder="请输入您要咨询的问题..." autocomplete="off" name="content" cols="30" rows="10"></textarea>
+                    <button onclick="send_msg()" class="btn btn-larger-big btn-color-orange">发送</button>
                 </form>
             </div>
         </article>
 
         <aside>
             <div class="panel">
-                <h3>热门问题</h3>
+                <!-- <h3>热门问题</h3>
                 <ul class="item-list">
                     <li><a href="">产品是不是正品？</a></li>
                     <li><a href="">产品是不是正品？</a></li>
                     <li><a href="">产品是不是正品？</a></li>
                     <li><a href="">产品是不是正品？</a></li>
                     <li><a href="">产品是不是正品？</a></li>
-                </ul>
-                <h3>快捷操作</h3>
+                </ul> -->
+                <img width="100%" src="static/image/logo.png" alt="">
+                <h3>帮助指南</h3>
                 <p class="entry-link">
-                    <a href="">》购物流程</a>
-                    <a href="">》付款方式</a>
-                    <a href="">》订单查询</a>
-                    <a href="">》退换货流程</a>
+                    <a href="http://www.sipin.com/article/2" target="_blank">》购物流程</a>
+                    <a href="http://www.sipin.com/order" target="_blank">》订单查询</a>
+                    <a href="http://www.sipin.com/article/7" target="_blank">》退换货流程</a>
+                    <a href="http://www.sipin.com/article/3" target="_blank">》常见问题</a>
                 </p>
             </div>
         </aside>
@@ -133,7 +120,46 @@
 
 </div>
 
-@@include('../_common/footer/foot.html')
-<script src="/js/service-online.js"></script>
+<script src="static/js/lib/jquery-1.8.0.min.js"></script>
+<script src="static/js/lib/jquery.tmpl.min.js"></script>
+<!--[if lte IE 7]>
+<script src="static/js/lib/json2.js"></script>
+<![endif]-->
+<script src="static/js/lib/socket.io-0.9.6.js"></script>
+<script src="static/js/lib/pomeloclient_ie.js"></script>
+<script src="static/js/config.js"></script>
+<script src="static/js/emotion.js"></script>
+<script src="static/js/client.on.js"></script>
+<script language="javascript">
+    <!--
+    var im_config = {
+        info_url: '', // http://www.sipin.com/...../chat-info.html 在线客服动态公告信息
+        website: app.CHAT_WEBSITE.WEBSITE_1
+    };
+
+    var im_lang = {
+        DUPLICATE_ERROR: '抱歉,连接错误，请尝试修改称呼。',
+        LOGIN_ERROR: '服务器正忙...请稍后访问...',
+        kf_name: '客服',
+        def_user_name: '客人',
+        chat_join: '加入对话',
+        chat_leave: '离开对话',
+        disconnect: '您已掉线，离开对话！可以刷新页面重试！',
+        im_kf: '您好，我是客服{name}，很高兴为您服务。',
+        require_username: '请输入用户名！',
+        username_too_long: '您的称呼过长！',
+        chat_not_connect: '尚未建立对话，<br>不可发送消息！',
+        please_choose_kf: '请先选择对话客服！',
+        require_content: '发送内容不能为空，请重新输入！',
+        content_max_length: '内容不能超过<br>1000个字符！',
+        require_contact_guest_book: '请留下您的联繫方式！',
+        require_content_guest_book: '请输入留言内容/留言内容太短！',
+        template_guest_book: '客人在线留言--联系方式：{guestbook_contact}--内容：{guestbook_content}',
+        success_guest_book: '留言成功！',
+        change_use_name: '改名失败,可能名字填写有误.',
+        change_kf: '指定客服失败.可能是客服不在线,另外要注意只有在等待状态才能指定客服.'
+    };
+    //-->
+</script>
 </body>
 </html>

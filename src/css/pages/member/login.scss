@@ -11,7 +11,7 @@
   &__inner {
     width: 100%;
     height: 100%;
-    background: url("../images/login_bg.jpg") no-repeat 0 0;
+    background: url("../images/login_bg.jpg")  no-repeat 0 0;
     background-size: cover;
   }
   &__login-form {
@@ -21,8 +21,9 @@
     .form-text {
       width: 338*$px;
       background: rgba(0, 0, 0, 0.2) !important;
-      filter: Alpha(opacity=40);
-      background: #000000; /*实现IE背景透明*/
+      /* filter: Alpha(opacity=40);
+      background: #000000;   实现IE背景透明 */
+      filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#66000000,endColorstr=#66000000);    /*IE8支持*/
       color: #ffffff;
     }
     .formbtn {

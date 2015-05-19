@@ -1560,6 +1560,7 @@ input[type="button"]{
 }
 
 .ui-options {
+  cursor:pointer;
   display: none;
   line-height: 30*$px;
   padding: 0 20*$px;
@@ -1573,6 +1574,7 @@ input[type="button"]{
     color: #fff;
     &:hover {
       color: $color_black;
+      background: $color_gold;
     }
   }
   &:hover {
