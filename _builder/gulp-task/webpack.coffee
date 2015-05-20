@@ -1,12 +1,12 @@
-fs = require 'fs'
-path = require 'path'
-gulp = require 'gulp'
-gutil = require 'gulp-util'
-config = require '../configs/config.coffee'
-webpack = require 'webpack'
+fs = require 'fs';
+path = require 'path';
+gulp = require 'gulp';
+gutil = require 'gulp-util';
+config = require '../configs/config.coffee';
+webpack = require 'webpack';
 
-webpackDevConfig = require('../configs/webpack.config.js')
-webpackDevCompiler = webpack(webpackDevConfig)
+webpackDevConfig = require('../configs/webpack.config.js')('pages',false);
+webpackDevCompiler = webpack(webpackDevConfig);
 
 module.exports = (gulp,$)->
     return (callback) ->

@@ -4,17 +4,44 @@ var webpack = require('webpack');
 var alias = require('./webpack.alias.js');
 var configs = require('./config');
 
+function getObjType(object){
+    return Object.prototype.toString.call(object).match(/^\[object\s(.*)\]$/)[1];
+};
+
 /**
  * 获取目录结构
  */
-var config = configs.dirs;
-var pagesDir = fs.readdirSync(config.pages);
+// var config = configs.dirs;
+// var pagesDir = fs.readdirSync(config.pages);
+
+// var entry = {};
+
+
+
+/**
+ * 获取目录结构
+ */
+var 
+config,
+default_dir,
+pagesDir;
+
+/*
+ * author: ralf
+ * 将目录打包成一个文件准备
+*/
+var 
+package_name,
+package_ary = [];
+
 
 var entry = {};
 
-function readPageDir(subDir) {
+
+function readPageDir(subDir,isPack) {
     var dirs = (subDir && subDir.fs) || pagesDir;
-    var dirsPath = (subDir && subDir.path) || config.pages;
+    // var dirsPath = (subDir && subDir.path) || config.pages;
+    var dirsPath = (subDir && subDir.path) || default_dir;
 
     var sameName = false;
     dirs.forEach(function(item) {
@@ -61,9 +88,20 @@ function readPageDir(subDir) {
 
     });
 
+    if(isPack){
+        for(var name in entry){
+           if(entry[name].length){
+                entry[name].map(function(item,i){
+                   package_ary.push(item);
+                });
+           }
+        }
+        entry = {};
+        entry[package_name] = package_ary;
+    }
 }
 
-readPageDir();
+// readPageDir();
 
 var plugins = [
     //new webpack.HotModuleReplacementPlugin(),
@@ -86,56 +124,80 @@ var plugins = [
     // }
 ];
 
-module.exports = {
-    //cache: true,
-    //debug: true,
-    devtool: "source-map",
-    recursive: true,
-    entry: entry,
-    output: {
-        path: path.join(__dirname,'../../', config.dist + '/' + configs.version + '/dev/js/'),
-        publicPath: '../../' + configs.version + '/dev/js/',
-        filename: configs.hash ? '[name]_[hash].js' : '[name].js',
-    },
-    externals: {
-        "jquery": "jQuery",
-        "$": "jQuery",
-        "React": "React"
-    },
-    plugins: plugins,
-    module: {
-        loaders: [{
-            test: /\.cjsx$/,
-            loaders: ['react-hot', 'coffee', 'cjsx']
-        }, {
-            test: /\.coffee$/,
-            loader: 'coffee',
-            //exclude: [/common/, /node_modules/]
-        }, {
-            test: /\.hbs$/,
-            loader: "handlebars-loader"
-        }, {
-            test: /\.jsx$/,
-            loader: "jsx-loader"
-        }, {
-            test: /\.js$/,
-            exclude: /node_modules/,
-            loader: "babel-loader"
-        }, {
-            test: /\.css$/,
-            loader: "style-loader!css-loader"
-        }, {
-            test: /\.scss$/,
-            loader: "style!css!sass"
-        }, {
-            test: /\.rt$/,
-            loader: "react-templates-loader"
-        }]
-    },
-    resolve: {
-        root: path.resolve(__dirname),
-        alias: alias,
-        extensions: ['', '.js', '.jsx', '.cjsx', '.coffee', '.html', '.css', '.scss', '.hbs', '.rt'],
-        modulesDirectories: ["node_modules"],
+// module.exports = { 
+
+module.exports = function(dirname,isPack){
+    config = configs.dirs;
+    if(getObjType(dirname)==='String'){
+        for(var item in config){
+            if(item == dirname){
+                pagesDir = fs.readdirSync(config[item]);
+                default_dir = config[item];
+            }
+        }
+        if(!pagesDir){
+            throw new Error("Error: you must identify a entry");
+            return false;
+        }
+        package_name = isPack ? dirname : '';
+        readPageDir(null,isPack);
     }
-};
+
+    else if( getObjType(isPack)==='Object'){
+        entry = isPack;
+    }
+    
+    return {
+        //cache: true,
+        //debug: true,
+        devtool: "source-map",
+        recursive: true,
+        entry: entry,
+        output: {
+            path: path.join(__dirname,'../../', config.dist + '/' + configs.version + '/dev/js/'),
+            publicPath: '../../' + configs.version + '/dev/js/',
+            filename: configs.hash ? '[name]_[hash].js' : '[name].js',
+        },
+        externals: {
+            "jquery": "jQuery",
+            "$": "jQuery",
+            "React": "React"
+        },
+        plugins: plugins,
+        module: {
+            loaders: [{
+                test: /\.cjsx$/,
+                loaders: ['react-hot', 'coffee', 'cjsx']
+            }, {
+                test: /\.coffee$/,
+                loader: 'coffee',
+                //exclude: [/common/, /node_modules/]
+            }, {
+                test: /\.hbs$/,
+                loader: "handlebars-loader"
+            }, {
+                test: /\.jsx$/,
+                loader: "jsx-loader"
+            }, {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                loader: "babel-loader"
+            }, {
+                test: /\.css$/,
+                loader: "style-loader!css-loader"
+            }, {
+                test: /\.scss$/,
+                loader: "style!css!sass"
+            }, {
+                test: /\.rt$/,
+                loader: "react-templates-loader"
+            }]
+        },
+        resolve: {
+            root: path.resolve(__dirname),
+            alias: alias,
+            extensions: ['', '.js', '.jsx', '.cjsx', '.coffee', '.html', '.css', '.scss', '.hbs', '.rt'],
+            modulesDirectories: ["node_modules"],
+        }
+    };
+}
