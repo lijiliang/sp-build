@@ -14,7 +14,7 @@ module.exports = (gulp,$)->
         firstPath = htmlDirPath + '/' + filename
         if (fs.statSync(firstPath).isDirectory() && filename.indexOf('_')!=0 )
             list[filename] = list[filename] || {}
-            list[filename].group = list[filename].group || {}
+            list[filename].group = list[filename].group || filename
             list[filename].list = list[filename].list || []
             includeDir = fs.readdirSync(firstPath)
             includeDir.map (_filename)->
