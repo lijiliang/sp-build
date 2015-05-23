@@ -21,7 +21,7 @@ function getObjType(object){
 /**
  * 获取目录结构
  */
-var 
+var
 config,
 default_dir,
 pagesDir;
@@ -30,7 +30,7 @@ pagesDir;
  * author: ralf
  * 将目录打包成一个文件准备
 */
-var 
+var
 package_name,
 package_ary = [];
 
@@ -124,7 +124,7 @@ var plugins = [
     // }
 ];
 
-// module.exports = { 
+// module.exports = {
 
 module.exports = function(dirname,isPack){
     config = configs.dirs;
@@ -146,7 +146,7 @@ module.exports = function(dirname,isPack){
     else if( getObjType(isPack)==='Object'){
         entry = isPack;
     }
-    
+
     return {
         //cache: true,
         //debug: true,
@@ -191,12 +191,15 @@ module.exports = function(dirname,isPack){
             }, {
                 test: /\.rt$/,
                 loader: "react-templates-loader"
+            },{
+                test: /\.md$/,
+                loader: "html!markdown"
             }]
         },
         resolve: {
             root: path.resolve(__dirname),
             alias: alias,
-            extensions: ['', '.js', '.jsx', '.cjsx', '.coffee', '.html', '.css', '.scss', '.hbs', '.rt'],
+            extensions: ['', '.js', '.jsx', '.cjsx', '.coffee', '.html', '.css', '.scss', '.hbs', '.rt','.md'],
             modulesDirectories: ["node_modules"],
         }
     };
