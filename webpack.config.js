@@ -1,9 +1,8 @@
 var fs = require('fs');
 var path = require('path');
 var webpack = require('webpack');
-var alias = require('./webpack.alias.js');
-var configs = require('./config');
-var $extend = require('extend')
+// var alias = require('./webpack.alias.js');
+// var configs = require('./config');
 
 function getObjType(object){
     return Object.prototype.toString.call(object).match(/^\[object\s(.*)\]$/)[1];
@@ -16,6 +15,8 @@ function getObjType(object){
 // var pagesDir = fs.readdirSync(config.pages);
 
 // var entry = {};
+
+
 
 /**
  * 获取目录结构
@@ -125,17 +126,9 @@ function readPageDir(subDir,isPack) {
 
 
 var plugins = function(dirname){
-  var
-  venders;
-  common_name = "_common.js",
-  min_Chunks = 2,
-  common_trunk_config = {
-      // chunks: entry,
-      filename: common_name,
-      minChunks: min_Chunks
-      //children: true
-      //minChunks: 5 //Infinity
-  }
+  var common_name = "_common.js";
+  if(dirname !== 'pages')
+    common_name = "_normal.js";
 
   var
   ret_plugins = [
@@ -144,32 +137,16 @@ var plugins = function(dirname){
       new webpack.IgnorePlugin(/vertx/) // https://github.com/webpack/webpack/issues/353
   ];
 
-  if(getObjType(dirname)==='String' && dirname !== 'pages')
-      common_trunk_config.filename = "_normal.js";
-
-  if(getObjType(dirname)==='Object'){
-      venders = dirname;
-      common_trunk_config.minChunks = "Infinity";
-  }
-
-  //commonstrunk plugin
-  if(dirname !== 'noCommon'){
-    if(venders && getObjType(venders)==='Object'){
-      for(var v in venders){
-        (function(item){
-          var vs = venders;
-          ret_plugins.push(
-            // new webpack.optimize.CommonsChunkPlugin(item+'.js',vs[item],'Infinity')
-            new webpack.optimize.CommonsChunkPlugin(item,item+'.js','Infinity')
-          );
-        })(v)
-      }
-    }
-    else{
-      ret_plugins.push(
-        new webpack.optimize.CommonsChunkPlugin(common_trunk_config)
-      );
-    }
+  if(dirname !== 'nocommon'){
+    ret_plugins.push(
+      new webpack.optimize.CommonsChunkPlugin({
+          chunks: entry,
+          filename: common_name,
+          minChunks: 2
+              //children: true
+              //minChunks: 5 //Infinity
+      })
+    );
 
     ret_plugins.push(
       new webpack.optimize.DedupePlugin()
@@ -200,16 +177,11 @@ var custom_modules = function(){
       }, {
           test: /\.jsx$/,
           loader: "jsx-loader"
-      },
-      // {
-      //     test: /\.js$/,
-      //     exclude: /node_modules/,
-      //     loader: "babel-loader",
-      //     query:{ compact: 'auto' }
-      // },
-      {
-          test: /[\/\\]src[\/\\]js[\/\\](vendor|global)[\/\\]/,   //http://stackoverflow.com/questions/28969861/managing-jquery-plugin-dependency-in-webpack
-          loader: "script-loader"   //不做任何处理
+      }, {
+          test: /\.js$/,
+          exclude: /node_modules/,
+          loader: "babel-loader",
+          query:{ compact: 'auto' }
       }, {
           test: /\.css$/,
           loader: "style-loader!css-loader"
@@ -226,49 +198,14 @@ var custom_modules = function(){
   }
 }
 
-custom_externals = {
-    "jquery": "jQuery",
-    "$": "jQuery",
-    "React": "React"
-
-}
-
 // module.exports = {
-/*
-* isPack  boolean   为true 将会对比 dirname和configs.dirs，如果匹配，会将该目录下所有文件打包为一个文件
-* isPack  jsonObject  指定打包的文件
-* sample   concat-common-js.js / webpack.js
-*/
-module.exports = function(dirname,isPack){
+
+var kkk = function(dirname,isPack){
     var idf_plugins = plugins(dirname);
-    var idf_externals = custom_externals;
 
-    config = configs.dirs;
-    if(getObjType(dirname)==='String'){
-        for(var item in config){
-            if(item == dirname){
-                pagesDir = fs.readdirSync(config[item]);
-                default_dir = config[item];
-            }
-        }
-        if(!pagesDir){
-            throw new Error("Error: you must identify a entry");
-            return false;
-        }
-        package_name = isPack === true ? dirname : '';
-        readPageDir(null,isPack);
-    }
-
-    else if( getObjType(isPack)==='Object'){
-        entry = $extend(true,{},isPack);
-        if(entry.noCommon) {
-          delete entry.noCommon;
-          idf_plugins = plugins('noCommon');
-        }
-        else {
-          delete entry.noCommon;
-          idf_plugins = plugins(entry);
-        }
+    if( getObjType(isPack)==='Object'){
+        entry = isPack;
+        idf_plugins = plugins('nocommon');
     }
 
     return {
@@ -276,20 +213,32 @@ module.exports = function(dirname,isPack){
         //debug: true,
         devtool: "source-map",
         recursive: true,
-        entry: entry,
+        entry: {},
         output: {
-            path: path.join(__dirname,'../../', config.dist + '/' + configs.version + '/dev/js/'),
-            publicPath: '../../' + configs.version + '/dev/js/',
-            filename: configs.hash ? '[name]_[hash].js' : '[name].js',
+            path: path.join(__dirname,'/dist/dev/js/'),
+            publicPath: '/dev/js/',
+            filename: '[name].js',
         },
-        externals: idf_externals,
         plugins: idf_plugins,
         module: custom_modules(),
         resolve: {
             root: path.resolve(__dirname),
-            alias: alias,
             extensions: ['', '.js', '.jsx', '.cjsx', '.coffee', '.html', '.css', '.scss', '.hbs', '.rt','.md'],
             modulesDirectories: ["node_modules"],
         }
     };
 }
+
+var testcommon = {
+    common: [ '/home/yc/code/git/sp-build/src/js/vendor/jquery/dist/jquery.js',
+  '/home/yc/code/git/sp-build/src/js/vendor/react/react-with-addons.js',
+  '/home/yc/code/git/sp-build/src/js/global/libs.js',
+  '/home/yc/code/git/sp-build/src/js/global/core.js',
+  '/home/yc/code/git/sp-build/src/js/global/toolkits.js',
+  './dist/1.0.0/dev/js/_common.js' ]
+}
+
+// module.exports = kkk(null,testcommon);
+webpack(kkk(null,testcommon)).run(function(err,stats){
+  return;
+});
