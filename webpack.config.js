@@ -1,6 +1,12 @@
 var fs = require('fs');
 var path = require('path');
+var $extend = require('extend');
 var webpack = require('webpack');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
+
+gulp = require ('gulp')
+gutil = require ('gulp-util')
+
 // var alias = require('./webpack.alias.js');
 // var configs = require('./config');
 
@@ -132,68 +138,28 @@ var plugins = function(dirname){
 
   var
   ret_plugins = [
-      //new webpack.HotModuleReplacementPlugin(),
-      new webpack.NoErrorsPlugin(),
-      new webpack.IgnorePlugin(/vertx/) // https://github.com/webpack/webpack/issues/353
-  ];
-
-  if(dirname !== 'nocommon'){
-    ret_plugins.push(
-      new webpack.optimize.CommonsChunkPlugin({
-          chunks: entry,
-          filename: common_name,
-          minChunks: 2
-              //children: true
-              //minChunks: 5 //Infinity
+      new ExtractTextPlugin("style.css", {
+          allChunks: true
       })
-    );
-
-    ret_plugins.push(
-      new webpack.optimize.DedupePlugin()
-      // function() {
-      //     this.plugin("done", function(stats) {
-      //       fs.writeFileSync(
-      //         path.join(__dirname, config.dist + '/js/' + pkg.version + '/' + pkg.config.distName.uncompressed + '/', "map.json"),
-      //         JSON.stringify(stats.toJson()));
-      //     })
-      // }
-    )
-  }
+  ]
   return ret_plugins;
 }
 
 var custom_modules = function(){
   return {
-      loaders: [{
-          test: /\.cjsx$/,
-          loaders: ['react-hot', 'coffee', 'cjsx']
-      }, {
-          test: /\.coffee$/,
-          loader: 'coffee',
-          //exclude: [/common/, /node_modules/]
-      }, {
-          test: /\.hbs$/,
-          loader: "handlebars-loader"
-      }, {
-          test: /\.jsx$/,
-          loader: "jsx-loader"
-      }, {
-          test: /\.js$/,
-          exclude: /node_modules/,
-          loader: "babel-loader",
-          query:{ compact: 'auto' }
-      }, {
+      loaders: [
+      {
           test: /\.css$/,
-          loader: "style-loader!css-loader"
-      }, {
+          loader: ExtractTextPlugin.extract("css-loader")
+      },
+      {
           test: /\.scss$/,
-          loader: "style!css!sass"
-      }, {
-          test: /\.rt$/,
-          loader: "react-templates-loader"
-      },{
-          test: /\.md$/,
-          loader: "html!markdown"
+          // loader: ExtractTextPlugin.extract("css!sass")
+          loader: ExtractTextPlugin.extract(
+              // activate source maps via loader query
+              'css?sourceMap!' +
+              'sass?sourceMap',{allChunks:true}
+          )
       }]
   }
 }
@@ -201,26 +167,27 @@ var custom_modules = function(){
 // module.exports = {
 
 var kkk = function(dirname,isPack){
-    var idf_plugins = plugins(dirname);
+    var idf_plugins = plugins('dirname');
 
-    if( getObjType(isPack)==='Object'){
-        entry = isPack;
-        idf_plugins = plugins('nocommon');
-    }
+    // if( getObjType(isPack)==='Object'){
+    //     entry = isPack;
+    //     idf_plugins = plugins('nocommon');
+    // }
 
     return {
         //cache: true,
         //debug: true,
-        devtool: "source-map",
+        // devtool: "source-map",
         recursive: true,
-        entry: {},
+        entry: {
+          common: './dist/_tmp/web-78481882042251538058147053234279'
+        },
         output: {
-            path: path.join(__dirname,'/dist/dev/js/'),
-            publicPath: '/dev/js/',
+            path: path.join(__dirname,'dist/_tmp/dist/'),
             filename: '[name].js',
         },
-        plugins: idf_plugins,
         module: custom_modules(),
+        plugins: idf_plugins,
         resolve: {
             root: path.resolve(__dirname),
             extensions: ['', '.js', '.jsx', '.cjsx', '.coffee', '.html', '.css', '.scss', '.hbs', '.rt','.md'],
@@ -239,6 +206,18 @@ var testcommon = {
 }
 
 // module.exports = kkk(null,testcommon);
-webpack(kkk(null,testcommon)).run(function(err,stats){
-  return;
-});
+// webpack(kkk('dirname',true)).run(function(err,stats){
+//   return;
+// });
+
+$ = require('gulp-load-plugins')();
+
+gulp.src(['./dist/_tmp/web-43659909674897799266568205785006.scss'])
+.pipe($.newer(path.join(__dirname,'dist/_tmp/dist/') + 'common.css'))
+.pipe($.plumber())
+// .pipe $.rimraf()
+.pipe($.sass())
+.pipe($.autoprefixer('last 2 version'))
+.pipe($.size())
+.pipe($.rename("common.css"))
+.pipe(gulp.dest(path.join(__dirname,'dist/_tmp/dist/')))

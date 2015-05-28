@@ -12,7 +12,9 @@ module.exports = {
         modules: src_dir + "/js/modules",
         widgets: src_dir + "/js/widgets",
         global: src_dir + "/js/global",
-        vendor: src_dir + "/js/vendor"
+        vendor: src_dir + "/js/vendor",
+
+        css_common: src_dir + "css/modules/base"
     },
     hash: false,
     vendorList: [

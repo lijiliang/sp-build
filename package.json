@@ -60,6 +60,8 @@
     "webpack": "^1.8.4"
   },
   "devDependencies": {
-    "extend": "^2.0.1"
+    "extend": "^2.0.1",
+    "extract-text-webpack-plugin": "^0.8.1",
+    "raw-loader": "^0.5.1"
   }
 }

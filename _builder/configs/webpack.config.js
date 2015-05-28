@@ -1,12 +1,22 @@
 var fs = require('fs');
 var path = require('path');
+var gulp = require('gulp');
+var gutil = require('gulp-util');
+var $extend = require('extend');
 var webpack = require('webpack');
-var alias = require('./webpack.alias.js');
 var configs = require('./config');
-var $extend = require('extend')
+var alias = require('./webpack.alias.js');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
+
+var $ = require('gulp-load-plugins')();
 
 function getObjType(object){
     return Object.prototype.toString.call(object).match(/^\[object\s(.*)\]$/)[1];
+};
+
+function guid(prefix) {
+    prefix = prefix || "web-";
+    return (prefix + Math.random() + Math.random()).replace(/0\./g, "");
 };
 
 /**
@@ -21,7 +31,7 @@ function getObjType(object){
  * 获取目录结构
  */
 var
-config,
+config = configs.dirs,
 default_dir,
 pagesDir;
 
@@ -50,40 +60,33 @@ function readPageDir(subDir,isPack) {
 
 
         //如果是目录
-        if (fs.statSync(dirsPath + '/' + item).isDirectory()) {
+        // 忽略下划线目录，如_test, _xxx
+        if (fs.statSync(dirsPath + '/' + item).isDirectory() && item.indexOf('_')!=0) {
             //获取目录里的脚本合并
+            var data = {
+                name: item,
+                path: dirsPath + '/' + item,
+                fs: fs.readdirSync(dirsPath + '/' + item),
+                filename: (subDir && subDir.filename + "-" + item) || item
+            };
+            readPageDir(data);
+        }
 
-            // 忽略test目录
-            if (item !== "_test") {
-
-                var data = {
-                    name: item,
-                    path: dirsPath + '/' + item,
-                    fs: fs.readdirSync(dirsPath + '/' + item),
-                    filename: (subDir && subDir.filename + "-" + item) || item
-                };
-
-                readPageDir(data);
-            }
-
-        } else {
+        else {
             var ext = path.extname(dirsPath + '/' + item);
-            if (ext == ".coffee" || ext == ".js" || ext == ".cjsx" || ext == ".jsx") {
-
+            if (ext == ".coffee" || ext == ".js" || ext == ".cjsx" || ext == ".jsx" || ext == ".scss" || ext == ".less") {
                 // 如果存在同名js
                 if (!sameName) {
                     if (name == item.replace(ext, '')) {
                         entry[_filename] = [dirsPath + '/' + item];
                         sameName = true;
-                    } else {
+                    }
+                    else {
                         entry[_filename] = entry[_filename] || [];
                         entry[_filename].push(dirsPath + '/' + item);
-                    }
-                }
+                } }
 
-            }
-
-        }
+        } }
 
     });
 
@@ -124,7 +127,7 @@ function readPageDir(subDir,isPack) {
 // ];
 
 
-var plugins = function(dirname){
+var plugins = function(dirname,isPack){
   var
   venders;
   common_name = "_common.js",
@@ -138,18 +141,22 @@ var plugins = function(dirname){
   }
 
   var
+  ExtractTextPlugin_allChunks = isPack === true ? true : false;
   ret_plugins = [
       //new webpack.HotModuleReplacementPlugin(),
       new webpack.NoErrorsPlugin(),
-      new webpack.IgnorePlugin(/vertx/) // https://github.com/webpack/webpack/issues/353
+      new webpack.IgnorePlugin(/vertx/), // https://github.com/webpack/webpack/issues/353
+      new ExtractTextPlugin("[name].css", {
+          allChunks: true
+      })
   ];
 
   if(getObjType(dirname)==='String' && dirname !== 'pages')
       common_trunk_config.filename = "_normal.js";
 
-  if(getObjType(dirname)==='Object'){
+  if(dirname && getObjType(dirname)==='Object'){
       venders = dirname;
-      common_trunk_config.minChunks = "Infinity";
+      // common_trunk_config.minChunks = "Infinity";
   }
 
   //commonstrunk plugin
@@ -160,28 +167,28 @@ var plugins = function(dirname){
           var vs = venders;
           ret_plugins.push(
             // new webpack.optimize.CommonsChunkPlugin(item+'.js',vs[item],'Infinity')
-            new webpack.optimize.CommonsChunkPlugin(item,item+'.js','Infinity')
+            new webpack.optimize.CommonsChunkPlugin(item,item+'.js',2)
           );
         })(v)
-      }
-    }
+    } }
+
     else{
       ret_plugins.push(
         new webpack.optimize.CommonsChunkPlugin(common_trunk_config)
-      );
-    }
+    ) }
 
     ret_plugins.push(
-      new webpack.optimize.DedupePlugin()
-      // function() {
-      //     this.plugin("done", function(stats) {
-      //       fs.writeFileSync(
-      //         path.join(__dirname, config.dist + '/js/' + pkg.version + '/' + pkg.config.distName.uncompressed + '/', "map.json"),
-      //         JSON.stringify(stats.toJson()));
-      //     })
-      // }
-    )
+        new webpack.optimize.DedupePlugin()
+        // function() {
+        //     this.plugin("done", function(stats) {
+        //       fs.writeFileSync(
+        //         path.join(__dirname, config.dist + '/js/' + pkg.version + '/' + pkg.config.distName.uncompressed + '/', "map.json"),
+        //         JSON.stringify(stats.toJson()));
+        //     })
+        // }
+    );
   }
+
   return ret_plugins;
 }
 
@@ -200,29 +207,30 @@ var custom_modules = function(){
       }, {
           test: /\.jsx$/,
           loader: "jsx-loader"
-      },
-      // {
-      //     test: /\.js$/,
-      //     exclude: /node_modules/,
-      //     loader: "babel-loader",
-      //     query:{ compact: 'auto' }
-      // },
-      {
+      }, {
           test: /[\/\\]src[\/\\]js[\/\\](vendor|global)[\/\\]/,   //http://stackoverflow.com/questions/28969861/managing-jquery-plugin-dependency-in-webpack
           loader: "script-loader"   //不做任何处理
       }, {
           test: /\.css$/,
-          loader: "style-loader!css-loader"
+          loader: ExtractTextPlugin.extract("css-loader")
       }, {
           test: /\.scss$/,
-          loader: "style!css!sass"
+          loader: ExtractTextPlugin.extract("style!sass")
+          // loader: "style!css!sass"
       }, {
           test: /\.rt$/,
           loader: "react-templates-loader"
       },{
           test: /\.md$/,
           loader: "html!markdown"
-      }]
+      }
+      // {
+      //     test: /\.js$/,
+      //     exclude: /node_modules/,
+      //     loader: "babel-loader",
+      //     query:{ compact: 'auto' }
+      // }
+      ]
   }
 }
 
@@ -230,7 +238,6 @@ custom_externals = {
     "jquery": "jQuery",
     "$": "jQuery",
     "React": "React"
-
 }
 
 // module.exports = {
@@ -239,57 +246,213 @@ custom_externals = {
 * isPack  jsonObject  指定打包的文件
 * sample   concat-common-js.js / webpack.js
 */
-module.exports = function(dirname,isPack){
-    var idf_plugins = plugins(dirname);
-    var idf_externals = custom_externals;
+module.exports = {
+  create: function(dirname,isPack,options){
 
-    config = configs.dirs;
-    if(getObjType(dirname)==='String'){
-        for(var item in config){
-            if(item == dirname){
-                pagesDir = fs.readdirSync(config[item]);
-                default_dir = config[item];
+      var idf_plugins = plugins(dirname,isPack),
+          idf_externals = custom_externals;
+
+      if(getObjType(dirname)==='String'){
+          entry = this.readDir(dirname,isPack,options);
+      }
+
+      else if( getObjType(isPack)==='Object'){
+          entry = $extend(true,{},isPack);
+          if(entry.noCommon) {
+              delete entry.noCommon;
+              idf_plugins = plugins('noCommon');
+          }
+          else {
+              delete entry.noCommon;
+              idf_plugins = plugins(entry);
+      } }
+
+      console.log(entry);
+
+      return {
+          //cache: true,
+          //debug: true,
+          devtool: "source-map",
+          recursive: true,
+          entry: entry,
+          output: {
+              path: path.join(__dirname,'../../', config.dist + '/' + configs.version + '/dev/js/'),
+              publicPath: '../../' + configs.version + '/dev/js/',
+              filename: configs.hash ? '[name]_[hash].js' : '[name].js',
+          },
+          externals: idf_externals,
+          plugins: idf_plugins,
+          module: custom_modules(),
+          resolve: {
+              root: path.resolve(__dirname),
+              alias: alias,
+              extensions: ['', '.js', '.jsx', '.cjsx', '.coffee', '.html', '.css', '.scss', '.hbs', '.rt','.md'],
+              modulesDirectories: ["node_modules"],
+      } } },
+
+  build: function(dirname,isPack,options){
+      var type = (options && options.type) ? options.type : undefined,
+          _webpackDevCompiler,
+          _webpackDevConfig = this.create(dirname,isPack,options);
+
+      if(type && (type==='less' || type==='sass' || type==='scss' || type==='stylus')){
+          //gulp deal with style
+          if(isPack===true){
+              gulp.src([entry.value])
+              .pipe($.newer(path.join(__dirname,'../../', config.dist + '/' + configs.version + '/dev/css/') + entry.key +'.css'))
+              .pipe($.plumber())
+              // .pipe $.rimraf()
+              .pipe($.sass())
+              .pipe($.autoprefixer('last 2 version'))
+              .pipe($.size())
+              .pipe($.rename(entry.key + ".css"))
+              .pipe(gulp.dest(path.join(__dirname,'../../', config.dist + '/' + configs.version + '/dev/css/')))
+          }
+          // return;
+      }else{
+          //if webpack sass-loader has fixed , then can use this module,
+          //node: edit fllow some code;
+          _webpackDevCompiler = webpack(_webpackDevConfig);
+          _webpackDevCompiler.run(function(err, stats){
+              if(err){
+                  throw new gutil.PluginError('[webpack]', err) ;
+              }
+              gutil.log('[webpack]', stats.toString({ colors: true } )) ;
+              return;
+          });
+      }
+
+  },
+
+  readDir: function(dirname,isPack,options){
+      opts = {
+          reanme: undefined,
+          type: undefined,
+          prepend: undefined,
+          prepend: undefined,
+          append: undefined
+      };
+
+      if(options && getObjType(options) === 'Object'){
+          opts = $extend(true,opts,options);
+      }
+
+      var prepend,
+          append,
+          requireCssList = '',
+          rename = opts.rename ? opts.rename : undefined,
+          type = opts.type ? opts.type : undefined;
+
+          //全局变量
+          pagesDir=undefined;
+          package_name='';
+          entry = {};
+          default_dir = dirname;
+
+      //匹配configs.dirs
+      for(var item in config){
+          if(item === dirname){
+              pagesDir = fs.readdirSync(config[item]);
+              default_dir = config[item];
+              package_name = isPack === true ? dirname : '';
+      } }
+
+      if(!pagesDir){
+          //直接匹配目录
+          if (!fs.existsSync(dirname)) {
+              throw new Error("==============Error: you must identify a entry");
+              return false;
+          }else{
+              pagesDir = fs.readdirSync(dirname);
+              package_name = isPack === true ? path.basename(dirname) : '';
+      } }
+
+      //生成entry 全局
+      readPageDir(null,isPack);
+
+      if(entry){
+        if(type==='less' || type==='sass'|| type==='stylus'){
+            if(isPack){
+                var ultimates = [];
+
+                /* for webpack
+                * but webpack sass-loader has problem,so maybe use it later
+                */
+                // for(var item in entry){
+                //     package_name = item;
+                //     prepend = (opts.prepend && getObjType(opts.prepend)==='Array') ? opts.prepend : undefined,
+                //     append = (opts.append && getObjType(opts.append)==='Array') ? opts.append : undefined;
+                //     if(prepend){
+                //         ultimates = prepend.concat(entry[item]);
+                //     }
+                //     else if(append){
+                //         ultimates = entry[item].concat(append);
+                //     }
+                //     else{
+                //         ultimates = entry[item];
+                //     }
+                //
+                //     for(var i=0; i<ultimates.length; i++)
+                //         requireCssList += 'require("'+ultimates[i]+'");\n';
+                // }
+                // var tmpFile = guid(),
+                //     tmpDir = config.dist + '/_tmp',
+                //     tmpCss = config.dist + '/_tmp/'+tmpFile+'.js';
+                //
+                // if (!fs.existsSync(tmpDir)) {
+                //     fs.mkdirSync(tmpDir);
+                // }
+                // fs.writeFileSync( tmpCss , requireCssList) ;
+                //
+                // package_name = rename ? rename : package_name;
+                // entry = {};
+                // entry[package_name] = tmpCss;
+
+
+
+                /* for gulp
+                *  now gulp can parse it no error
+                */
+                for(var item in entry){
+                    package_name = item;
+                    prepend = (opts.prepend && getObjType(opts.prepend)==='Array') ? opts.prepend : undefined,
+                    append = (opts.append && getObjType(opts.append)==='Array') ? opts.append : undefined;
+                    if(prepend){
+                        ultimates = prepend.concat(entry[item]);
+                    }
+                    else if(append){
+                        ultimates = entry[item].concat(append);
+                    }
+                    else{
+                        ultimates = entry[item];
+                    }
+
+                    for(var i=0; i<ultimates.length; i++)
+                        requireCssList += '@import "'+ultimates[i]+'";\n';
+                }
+                var tmpFile = guid(),
+                    tmpDir = config.dist + '/_tmp',
+                    tmpCss = config.dist + '/_tmp/'+tmpFile+'.'+type;
+
+                if (!fs.existsSync(tmpDir)) {
+                    fs.mkdirSync(tmpDir);
+                }
+                fs.writeFileSync( tmpCss , requireCssList) ;
+
+                package_name = rename ? rename : package_name;
+                entry = {};
+                entry[package_name] = tmpCss;
+                entry['key'] = package_name;
+                entry['value'] = tmpCss;
             }
-        }
-        if(!pagesDir){
-            throw new Error("Error: you must identify a entry");
-            return false;
-        }
-        package_name = isPack === true ? dirname : '';
-        readPageDir(null,isPack);
-    }
+            else{
 
-    else if( getObjType(isPack)==='Object'){
-        entry = $extend(true,{},isPack);
-        if(entry.noCommon) {
-          delete entry.noCommon;
-          idf_plugins = plugins('noCommon');
-        }
-        else {
-          delete entry.noCommon;
-          idf_plugins = plugins(entry);
-        }
-    }
+            }
+            // var tmpCss = config.dirs.src + '/css/_tmp.'+js;
+            // fs.writeFileSync( tmpCss , requireCssList) ;
+    } }
 
-    return {
-        //cache: true,
-        //debug: true,
-        devtool: "source-map",
-        recursive: true,
-        entry: entry,
-        output: {
-            path: path.join(__dirname,'../../', config.dist + '/' + configs.version + '/dev/js/'),
-            publicPath: '../../' + configs.version + '/dev/js/',
-            filename: configs.hash ? '[name]_[hash].js' : '[name].js',
-        },
-        externals: idf_externals,
-        plugins: idf_plugins,
-        module: custom_modules(),
-        resolve: {
-            root: path.resolve(__dirname),
-            alias: alias,
-            extensions: ['', '.js', '.jsx', '.cjsx', '.coffee', '.html', '.css', '.scss', '.hbs', '.rt','.md'],
-            modulesDirectories: ["node_modules"],
-        }
-    };
+    return entry;
+    // readPageDir();
+  }
 }

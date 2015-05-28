@@ -5,7 +5,7 @@ gutil = require 'gulp-util';
 config = require '../configs/config.coffee';
 webpack = require 'webpack';
 
-webpackDevConfig = require('../configs/webpack.config.js')('pages',false);
+webpackDevConfig = require('../configs/webpack.config.js').create('pages',false);
 webpackDevCompiler = webpack(webpackDevConfig);
 
 module.exports = (gulp,$)->
