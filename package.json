@@ -7,7 +7,6 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "sipin frontend",
-  "readmeFilename": "README.md",
   "license": "ISC",
   "dependencies": {
     "babel-core": "^5.1.11",
@@ -63,5 +62,13 @@
     "extend": "^2.0.1",
     "extract-text-webpack-plugin": "^0.8.1",
     "raw-loader": "^0.5.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/webkixi/sp-build.git"
+  },
+  "bugs": {
+    "url": "https://github.com/webkixi/sp-build/issues"
+  },
+  "homepage": "https://github.com/webkixi/sp-build#readme"
 }

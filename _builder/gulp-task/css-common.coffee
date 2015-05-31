@@ -46,12 +46,18 @@
 
 path = require 'path';
 config = require '../configs/config.coffee';
-webpackDevConfig = require('../configs/webpack.config.js')
 
 module.exports = (gulp,$)->
     return () ->
-        webpackDevConfig.build(path.join(__dirname,'../..', './src/css/modules'),true,{
+        require('../configs/webpack.config.js').build(path.join(__dirname,'../..', './src/css/modules'),true,{
             type: 'sass',
             rename: 'common',
             prepend: [path.join(__dirname,'../..',config.modulesCssDir+'_settings/_setting.scss')]
         });
+
+# module.exports = (gulp,$)->
+#     return () ->
+#         webpackDevConfig.build(path.join(__dirname,'../..', './src/css/less/mods'),true,{
+#             type: 'less',
+#             rename: 'nimei',
+#         });

@@ -12,12 +12,17 @@ var $ = require('gulp-load-plugins')();
 
 function getObjType(object){
     return Object.prototype.toString.call(object).match(/^\[object\s(.*)\]$/)[1];
-};
+}
+
+function clone(target){
+    var t = getObjType(target);
+    return t === 'Object' ? $extend(true, {}, target) : t === 'Array' ? $extend(true, [], target) : target;
+}
 
 function guid(prefix) {
     prefix = prefix || "web-";
     return (prefix + Math.random() + Math.random()).replace(/0\./g, "");
-};
+}
 
 /**
  * 获取目录结构
@@ -46,8 +51,10 @@ package_ary = [];
 
 var entry = {};
 
+// make directory json
+function readPageDir(subDir, isPack, depth) {
+    package_ary = [];
 
-function readPageDir(subDir,isPack) {
     var dirs = (subDir && subDir.fs) || pagesDir;
     // var dirsPath = (subDir && subDir.path) || config.pages;
     var dirsPath = (subDir && subDir.path) || default_dir;
@@ -61,7 +68,7 @@ function readPageDir(subDir,isPack) {
 
         //如果是目录
         // 忽略下划线目录，如_test, _xxx
-        if (fs.statSync(dirsPath + '/' + item).isDirectory() && item.indexOf('_')!=0) {
+        if ( fs.statSync(dirsPath + '/' + item).isDirectory() && item.indexOf('_')!=0) {
             //获取目录里的脚本合并
             var data = {
                 name: item,
@@ -74,7 +81,9 @@ function readPageDir(subDir,isPack) {
 
         else {
             var ext = path.extname(dirsPath + '/' + item);
-            if (ext == ".coffee" || ext == ".js" || ext == ".cjsx" || ext == ".jsx" || ext == ".scss" || ext == ".less") {
+            if (ext == ".coffee" || ext == ".js" || ext == ".cjsx" ||
+                ext == ".jsx" || ext == ".scss" || ext == ".less" ||
+                ext == ".css" || ext == "stylus") {
                 // 如果存在同名js
                 if (!sameName) {
                     if (name == item.replace(ext, '')) {
@@ -90,7 +99,13 @@ function readPageDir(subDir,isPack) {
 
     });
 
+
     if(isPack){
+        // var tmp_entry = {};
+        // var tmp_ary = Object.keys(entry);
+        // for(var i=0; i<tmp_ary.length; i++){
+        //     entry[i]
+        // }
         for(var name in entry){
            if(entry[name].length){
                 entry[name].map(function(item,i){
@@ -103,95 +118,77 @@ function readPageDir(subDir,isPack) {
     }
 }
 
-// readPageDir();
-//
-// var plugins = [
-//     //new webpack.HotModuleReplacementPlugin(),
-//     new webpack.NoErrorsPlugin(),
-//     new webpack.IgnorePlugin(/vertx/), // https://github.com/webpack/webpack/issues/353
-//     new webpack.optimize.CommonsChunkPlugin({
-//         chunks: entry,
-//         filename: "_common.js",
-//         minChunks: 2
-//             //children: true
-//             //minChunks: 5 //Infinity
-//     }),
-//     new webpack.optimize.DedupePlugin()
-//     // function() {
-//     //     this.plugin("done", function(stats) {
-//     //       fs.writeFileSync(
-//     //         path.join(__dirname, config.dist + '/js/' + pkg.version + '/' + pkg.config.distName.uncompressed + '/', "map.json"),
-//     //         JSON.stringify(stats.toJson()));
-//     //     })
-//     // }
-// ];
+//make webpack plugins
+var plugins = function(dirname, isPack, options){
 
+    var venders,
+        common_trunk_config = {
+            // chunks: entry,
+            filename: '_common.js',
+            minChunks: 2,
+            async: false
+            //children: true
+            //minChunks: 5 //Infinity
+        }
 
-var plugins = function(dirname,isPack){
-  var
-  venders;
-  common_name = "_common.js",
-  min_Chunks = 2,
-  common_trunk_config = {
-      // chunks: entry,
-      filename: common_name,
-      minChunks: min_Chunks
-      //children: true
-      //minChunks: 5 //Infinity
-  }
+    if(options && options.type){
+        if(options.type.toString().indexOf('ss')>-1 || options.type === 'stylus'){
+            dirname = 'noCommon';
+        }
+    }
 
-  var
-  ExtractTextPlugin_allChunks = isPack === true ? true : false;
-  ret_plugins = [
-      //new webpack.HotModuleReplacementPlugin(),
-      new webpack.NoErrorsPlugin(),
-      new webpack.IgnorePlugin(/vertx/), // https://github.com/webpack/webpack/issues/353
-      new ExtractTextPlugin("[name].css", {
-          allChunks: true
-      })
-  ];
+    var ExtractTextPlugin_allChunks = isPack === true ? true : false;
+        ret_plugins = [
+            //new webpack.HotModuleReplacementPlugin(),
+            new webpack.NoErrorsPlugin(),
+            new webpack.IgnorePlugin(/vertx/), // https://github.com/webpack/webpack/issues/353
+            new ExtractTextPlugin("../css/[name].css", {
+                allChunks: ExtractTextPlugin_allChunks,
+            })
+        ];
 
-  if(getObjType(dirname)==='String' && dirname !== 'pages')
-      common_trunk_config.filename = "_normal.js";
+    if(getObjType(dirname)==='String' && dirname !== 'pages')
+        common_trunk_config.filename = "_normal.js";
 
-  if(dirname && getObjType(dirname)==='Object'){
-      venders = dirname;
-      // common_trunk_config.minChunks = "Infinity";
-  }
+    if(dirname && getObjType(dirname)==='Object'){
+        venders = dirname;
+        // common_trunk_config.minChunks = "Infinity";
+    }
 
-  //commonstrunk plugin
-  if(dirname !== 'noCommon'){
-    if(venders && getObjType(venders)==='Object'){
-      for(var v in venders){
-        (function(item){
-          var vs = venders;
+    //commonstrunk plugin
+    if(dirname !== 'noCommon'){
+        if(venders && getObjType(venders)==='Object'){
+            for(var v in venders){
+                (function(item){
+                    var vs = venders;
+                    ret_plugins.push(
+                        // new webpack.optimize.CommonsChunkPlugin(item+'.js',vs[item],'Infinity')
+                        new webpack.optimize.CommonsChunkPlugin(item,item+'.js',2)
+                    );
+            })(v)
+        } }
+
+        else{
           ret_plugins.push(
-            // new webpack.optimize.CommonsChunkPlugin(item+'.js',vs[item],'Infinity')
-            new webpack.optimize.CommonsChunkPlugin(item,item+'.js',2)
-          );
-        })(v)
-    } }
+            new webpack.optimize.CommonsChunkPlugin(common_trunk_config)
+        ) }
 
-    else{
-      ret_plugins.push(
-        new webpack.optimize.CommonsChunkPlugin(common_trunk_config)
-    ) }
+        ret_plugins.push(
+            new webpack.optimize.DedupePlugin()
+            // function() {
+            //     this.plugin("done", function(stats) {
+            //       fs.writeFileSync(
+            //         path.join(__dirname, config.dist + '/js/' + pkg.version + '/' + pkg.config.distName.uncompressed + '/', "map.json"),
+            //         JSON.stringify(stats.toJson()));
+            //     })
+            // }
+        );
+    }
 
-    ret_plugins.push(
-        new webpack.optimize.DedupePlugin()
-        // function() {
-        //     this.plugin("done", function(stats) {
-        //       fs.writeFileSync(
-        //         path.join(__dirname, config.dist + '/js/' + pkg.version + '/' + pkg.config.distName.uncompressed + '/', "map.json"),
-        //         JSON.stringify(stats.toJson()));
-        //     })
-        // }
-    );
-  }
-
-  return ret_plugins;
+    return ret_plugins;
 }
 
+//make webpack loaders
 var custom_modules = function(){
   return {
       loaders: [{
@@ -215,8 +212,12 @@ var custom_modules = function(){
           loader: ExtractTextPlugin.extract("css-loader")
       }, {
           test: /\.scss$/,
-          loader: ExtractTextPlugin.extract("style!sass")
+          loader: ExtractTextPlugin.extract('style-loader',"raw!sass")
           // loader: "style!css!sass"
+      }, {
+          test: /\.less$/,
+          loader: ExtractTextPlugin.extract('style-loader',"raw!less")
+          // loader: ExtractTextPlugin.extract('style-loader',"css!less")
       }, {
           test: /\.rt$/,
           loader: "react-templates-loader"
@@ -234,6 +235,7 @@ var custom_modules = function(){
   }
 }
 
+//webpack externals
 custom_externals = {
     "jquery": "jQuery",
     "$": "jQuery",
@@ -249,7 +251,7 @@ custom_externals = {
 module.exports = {
   create: function(dirname,isPack,options){
 
-      var idf_plugins = plugins(dirname,isPack),
+      var idf_plugins = plugins(dirname, isPack, options),
           idf_externals = custom_externals;
 
       if(getObjType(dirname)==='String'){
@@ -267,7 +269,7 @@ module.exports = {
               idf_plugins = plugins(entry);
       } }
 
-      console.log(entry);
+      // console.log(entry);
 
       return {
           //cache: true,
@@ -286,40 +288,71 @@ module.exports = {
           resolve: {
               root: path.resolve(__dirname),
               alias: alias,
-              extensions: ['', '.js', '.jsx', '.cjsx', '.coffee', '.html', '.css', '.scss', '.hbs', '.rt','.md'],
+              extensions: ['', '.js', '.jsx', '.cjsx', '.coffee', '.html', '.css', '.scss','.less','.hbs', '.rt','.md'],
               modulesDirectories: ["node_modules"],
       } } },
 
-  build: function(dirname,isPack,options){
-      var type = (options && options.type) ? options.type : undefined,
+  build: function(dirname,isPack,options,cb){
+
+      if(!isPack)
+          isPack = false;
+
+      if(getObjType(isPack)==='Function'){
+          cb = isPack;
+          isPack = undefined;
+      }
+
+      if(!options)
+          options = {};
+
+      if(getObjType(options)==='Function'){
+          cb = options;
+          options = {};
+      }
+
+      if(getObjType(cb)!=='Function')
+          cb = undefined;
+
+      var tmpKey, tmpValue,
+          type = (options && options.type) ? options.type : undefined,
           _webpackDevCompiler,
           _webpackDevConfig = this.create(dirname,isPack,options);
 
-      if(type && (type==='less' || type==='sass' || type==='scss' || type==='stylus')){
-          //gulp deal with style
-          if(isPack===true){
-              gulp.src([entry.value])
-              .pipe($.newer(path.join(__dirname,'../../', config.dist + '/' + configs.version + '/dev/css/') + entry.key +'.css'))
-              .pipe($.plumber())
-              // .pipe $.rimraf()
-              .pipe($.sass())
-              .pipe($.autoprefixer('last 2 version'))
-              .pipe($.size())
-              .pipe($.rename(entry.key + ".css"))
-              .pipe(gulp.dest(path.join(__dirname,'../../', config.dist + '/' + configs.version + '/dev/css/')))
+      if(entry){
+          if(entry.key){
+              tmpKey = clone(entry.key);
+              tmpValue = clone(entry.value);
+              delete entry.key;
+              delete entry.value;
           }
-          // return;
-      }else{
-          //if webpack sass-loader has fixed , then can use this module,
-          //node: edit fllow some code;
-          _webpackDevCompiler = webpack(_webpackDevConfig);
-          _webpackDevCompiler.run(function(err, stats){
-              if(err){
-                  throw new gutil.PluginError('[webpack]', err) ;
+
+          if(type && (type==='sass' || type==='scss')){
+              //gulp deal with style
+              if(isPack===true){
+
+                  gulp.src([tmpValue])
+                  .pipe($.newer(path.join(__dirname,'../../', config.dist + '/' + configs.version + '/dev/css/') + tmpKey +'.css'))
+                  .pipe($.plumber())
+                  // .pipe $.rimraf()
+                  .pipe($.sass())
+                  .pipe($.autoprefixer('last 2 version'))
+                  .pipe($.size())
+                  .pipe($.rename(tmpKey + ".css"))
+                  .pipe(gulp.dest(path.join(__dirname,'../../', config.dist + '/' + configs.version + '/dev/css/')))
               }
-              gutil.log('[webpack]', stats.toString({ colors: true } )) ;
-              return;
-          });
+          }else{
+              //if webpack sass-loader has fixed , then can use this module,
+              //node: edit fllow some code;
+              _webpackDevCompiler = webpack(_webpackDevConfig);
+              _webpackDevCompiler.run(function(err, stats){
+                  if(err){
+                      throw new gutil.PluginError('[webpack]', err) ;
+                  }
+                  gutil.log('[webpack]', stats.toString({ colors: true } )) ;
+                  if(cb) cb();
+                  return;
+              });
+          }
       }
 
   },
@@ -330,7 +363,8 @@ module.exports = {
           type: undefined,
           prepend: undefined,
           prepend: undefined,
-          append: undefined
+          append: undefined,
+          depth: true
       };
 
       if(options && getObjType(options) === 'Object'){
@@ -368,82 +402,87 @@ module.exports = {
       } }
 
       //生成entry 全局
-      readPageDir(null,isPack);
+      readPageDir(null, isPack, opts.depth);
 
       if(entry){
-        if(type==='less' || type==='sass'|| type==='stylus'){
+        if(type==='less' || type==='sass'|| type==='stylus'|| type==='css'|| type==='scss'){
             if(isPack){
                 var ultimates = [];
 
-                /* for webpack
-                * but webpack sass-loader has problem,so maybe use it later
-                */
-                // for(var item in entry){
-                //     package_name = item;
-                //     prepend = (opts.prepend && getObjType(opts.prepend)==='Array') ? opts.prepend : undefined,
-                //     append = (opts.append && getObjType(opts.append)==='Array') ? opts.append : undefined;
-                //     if(prepend){
-                //         ultimates = prepend.concat(entry[item]);
-                //     }
-                //     else if(append){
-                //         ultimates = entry[item].concat(append);
-                //     }
-                //     else{
-                //         ultimates = entry[item];
-                //     }
-                //
-                //     for(var i=0; i<ultimates.length; i++)
-                //         requireCssList += 'require("'+ultimates[i]+'");\n';
-                // }
-                // var tmpFile = guid(),
-                //     tmpDir = config.dist + '/_tmp',
-                //     tmpCss = config.dist + '/_tmp/'+tmpFile+'.js';
-                //
-                // if (!fs.existsSync(tmpDir)) {
-                //     fs.mkdirSync(tmpDir);
-                // }
-                // fs.writeFileSync( tmpCss , requireCssList) ;
-                //
-                // package_name = rename ? rename : package_name;
-                // entry = {};
-                // entry[package_name] = tmpCss;
+                if(type=='less' ||type==='stylus' ||type==='css'){
+                    /* for webpack
+                    * but webpack sass-loader has problem,so maybe use it later
+                    */
+                    for(var item in entry){
+                        package_name = item;
+                        prepend = (opts.prepend && getObjType(opts.prepend)==='Array') ? opts.prepend : undefined,
+                        append = (opts.append && getObjType(opts.append)==='Array') ? opts.append : undefined;
+                        if(prepend){
+                            ultimates = prepend.concat(entry[item]);
+                        }
+                        else if(append){
+                            ultimates = entry[item].concat(append);
+                        }
+                        else{
+                            ultimates = entry[item];
+                        }
 
-
-
-                /* for gulp
-                *  now gulp can parse it no error
-                */
-                for(var item in entry){
-                    package_name = item;
-                    prepend = (opts.prepend && getObjType(opts.prepend)==='Array') ? opts.prepend : undefined,
-                    append = (opts.append && getObjType(opts.append)==='Array') ? opts.append : undefined;
-                    if(prepend){
-                        ultimates = prepend.concat(entry[item]);
+                        for(var i=0; i<ultimates.length; i++)
+                            requireCssList += 'require("'+ultimates[i]+'");\n';
                     }
-                    else if(append){
-                        ultimates = entry[item].concat(append);
-                    }
-                    else{
-                        ultimates = entry[item];
-                    }
+                    var tmpFile = guid(),
+                        tmpDir = config.dist + '/_tmp',
+                        tmpCss = config.dist + '/_tmp/'+tmpFile+'.js';
 
-                    for(var i=0; i<ultimates.length; i++)
-                        requireCssList += '@import "'+ultimates[i]+'";\n';
+                    if (!fs.existsSync(tmpDir)) {
+                        fs.mkdirSync(tmpDir);
+                    }
+                    fs.writeFileSync( tmpCss , requireCssList) ;
+
+                    package_name = rename ? rename : package_name;
+                    entry = {};
+                    entry[package_name] = tmpCss;
+                    // package_ary = tmpCss;
+                    entry['key'] = package_name;
+                    entry['value'] = tmpCss;
                 }
-                var tmpFile = guid(),
-                    tmpDir = config.dist + '/_tmp',
-                    tmpCss = config.dist + '/_tmp/'+tmpFile+'.'+type;
+                else{
+                    /* for gulp
+                    *  now gulp can parse it no error
+                    */
+                    for(var item in entry){
+                        package_name = item;
+                        prepend = (opts.prepend && getObjType(opts.prepend)==='Array') ? opts.prepend : undefined,
+                        append = (opts.append && getObjType(opts.append)==='Array') ? opts.append : undefined;
+                        if(prepend){
+                            ultimates = prepend.concat(entry[item]);
+                        }
+                        else if(append){
+                            ultimates = entry[item].concat(append);
+                        }
+                        else{
+                            ultimates = entry[item];
+                        }
 
-                if (!fs.existsSync(tmpDir)) {
-                    fs.mkdirSync(tmpDir);
+                        for(var i=0; i<ultimates.length; i++)
+                            requireCssList += '@import "'+ultimates[i]+'";\n';
+                    }
+                    var tmpFile = guid(),
+                        tmpDir = config.dist + '/_tmp',
+                        tmpCss = config.dist + '/_tmp/'+tmpFile+'.'+type;
+
+                    if (!fs.existsSync(tmpDir)) {
+                        fs.mkdirSync(tmpDir);
+                    }
+                    fs.writeFileSync( tmpCss , requireCssList) ;
+
+                    package_name = rename ? rename : package_name;
+                    entry = {};
+                    entry[package_name] = tmpCss;
+                    // package_ary = tmpCss;
+                    entry['key'] = package_name;
+                    entry['value'] = tmpCss;
                 }
-                fs.writeFileSync( tmpCss , requireCssList) ;
-
-                package_name = rename ? rename : package_name;
-                entry = {};
-                entry[package_name] = tmpCss;
-                entry['key'] = package_name;
-                entry['value'] = tmpCss;
             }
             else{
 
@@ -453,6 +492,5 @@ module.exports = {
     } }
 
     return entry;
-    // readPageDir();
   }
 }
