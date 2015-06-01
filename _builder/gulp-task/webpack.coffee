@@ -20,4 +20,4 @@
 # cb是个神奇的东东，居然不能去掉，什么bug
 module.exports = (gulp,$)->
     return (cb) ->
-        require('../configs/webpack.config.js').build('pages',false,cb);
+        require('../configs/webpack.config.js').build('pages',cb);

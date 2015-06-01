@@ -68,7 +68,7 @@ function readPageDir(subDir, isPack, depth) {
 
         //如果是目录
         // 忽略下划线目录，如_test, _xxx
-        if ( fs.statSync(dirsPath + '/' + item).isDirectory() && item.indexOf('_')!=0) {
+        if ( depth && fs.statSync(dirsPath + '/' + item).isDirectory() && item.indexOf('_')!=0) {
             //获取目录里的脚本合并
             var data = {
                 name: item,
@@ -101,11 +101,6 @@ function readPageDir(subDir, isPack, depth) {
 
 
     if(isPack){
-        // var tmp_entry = {};
-        // var tmp_ary = Object.keys(entry);
-        // for(var i=0; i<tmp_ary.length; i++){
-        //     entry[i]
-        // }
         for(var name in entry){
            if(entry[name].length){
                 entry[name].map(function(item,i){
@@ -299,7 +294,7 @@ module.exports = {
 
       if(getObjType(isPack)==='Function'){
           cb = isPack;
-          isPack = undefined;
+          isPack = false;
       }
 
       if(!options)
@@ -335,10 +330,25 @@ module.exports = {
                   .pipe($.plumber())
                   // .pipe $.rimraf()
                   .pipe($.sass())
-                  .pipe($.autoprefixer('last 2 version'))
+                  .pipe($.autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
                   .pipe($.size())
                   .pipe($.rename(tmpKey + ".css"))
                   .pipe(gulp.dest(path.join(__dirname,'../../', config.dist + '/' + configs.version + '/dev/css/')))
+              }else{
+                  for(var file in entry){
+                      if(entry[file].length){
+                          (function(item){
+                              gulp.src(entry[item])
+                              .pipe($.newer(path.join(__dirname,'../../', config.dist + '/' + configs.version + '/dev/css/') + item +'.css'))
+                              .pipe($.plumber())
+                              // .pipe $.rimraf()
+                              .pipe($.sass())
+                              .pipe($.autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
+                              .pipe($.size())
+                              .pipe($.rename(item + ".css"))
+                              .pipe(gulp.dest(path.join(__dirname,'../../', config.dist + '/' + configs.version + '/dev/css/')))
+                          })(file);
+                  } }
               }
           }else{
               //if webpack sass-loader has fixed , then can use this module,
@@ -373,9 +383,14 @@ module.exports = {
 
       var prepend,
           append,
+          styleType = false,
           requireCssList = '',
           rename = opts.rename ? opts.rename : undefined,
           type = opts.type ? opts.type : undefined;
+
+      //styleType确定使用webpack还是gulp来解析style的文件
+      if(type=='less' ||type==='stylus' ||type==='css')
+          styleType = true;
 
           //全局变量
           pagesDir=undefined;
@@ -406,84 +421,50 @@ module.exports = {
 
       if(entry){
         if(type==='less' || type==='sass'|| type==='stylus'|| type==='css'|| type==='scss'){
+            var ultimates = [],
+                ext = styleType ? 'js' : type;
             if(isPack){
-                var ultimates = [];
 
-                if(type=='less' ||type==='stylus' ||type==='css'){
-                    /* for webpack
-                    * but webpack sass-loader has problem,so maybe use it later
-                    */
-                    for(var item in entry){
-                        package_name = item;
-                        prepend = (opts.prepend && getObjType(opts.prepend)==='Array') ? opts.prepend : undefined,
-                        append = (opts.append && getObjType(opts.append)==='Array') ? opts.append : undefined;
-                        if(prepend){
-                            ultimates = prepend.concat(entry[item]);
-                        }
-                        else if(append){
-                            ultimates = entry[item].concat(append);
-                        }
-                        else{
-                            ultimates = entry[item];
-                        }
+                for(var item in entry){
+                    package_name = item;
+                    prepend = (opts.prepend && getObjType(opts.prepend)==='Array') ? opts.prepend : undefined,
+                    append = (opts.append && getObjType(opts.append)==='Array') ? opts.append : undefined;
+                    if(prepend){
+                        ultimates = prepend.concat(entry[item]);
+                    }
+                    else if(append){
+                        ultimates = entry[item].concat(append);
+                    }
+                    else{
+                        ultimates = entry[item];
+                    }
 
-                        for(var i=0; i<ultimates.length; i++)
+                    for(var i=0; i<ultimates.length; i++){
+                        if(styleType)
                             requireCssList += 'require("'+ultimates[i]+'");\n';
-                    }
-                    var tmpFile = guid(),
-                        tmpDir = config.dist + '/_tmp',
-                        tmpCss = config.dist + '/_tmp/'+tmpFile+'.js';
-
-                    if (!fs.existsSync(tmpDir)) {
-                        fs.mkdirSync(tmpDir);
-                    }
-                    fs.writeFileSync( tmpCss , requireCssList) ;
-
-                    package_name = rename ? rename : package_name;
-                    entry = {};
-                    entry[package_name] = tmpCss;
-                    // package_ary = tmpCss;
-                    entry['key'] = package_name;
-                    entry['value'] = tmpCss;
-                }
-                else{
-                    /* for gulp
-                    *  now gulp can parse it no error
-                    */
-                    for(var item in entry){
-                        package_name = item;
-                        prepend = (opts.prepend && getObjType(opts.prepend)==='Array') ? opts.prepend : undefined,
-                        append = (opts.append && getObjType(opts.append)==='Array') ? opts.append : undefined;
-                        if(prepend){
-                            ultimates = prepend.concat(entry[item]);
-                        }
-                        else if(append){
-                            ultimates = entry[item].concat(append);
-                        }
-                        else{
-                            ultimates = entry[item];
-                        }
-
-                        for(var i=0; i<ultimates.length; i++)
+                        else
                             requireCssList += '@import "'+ultimates[i]+'";\n';
                     }
-                    var tmpFile = guid(),
-                        tmpDir = config.dist + '/_tmp',
-                        tmpCss = config.dist + '/_tmp/'+tmpFile+'.'+type;
-
-                    if (!fs.existsSync(tmpDir)) {
-                        fs.mkdirSync(tmpDir);
-                    }
-                    fs.writeFileSync( tmpCss , requireCssList) ;
-
-                    package_name = rename ? rename : package_name;
-                    entry = {};
-                    entry[package_name] = tmpCss;
-                    // package_ary = tmpCss;
-                    entry['key'] = package_name;
-                    entry['value'] = tmpCss;
                 }
+
+                var tmpFile = guid(),
+                    tmpDir = config.dist + '/_tmp',
+                    tmpCss = config.dist + '/_tmp/'+tmpFile+'.'+ext;
+
+                if (!fs.existsSync(tmpDir)) {
+                    fs.mkdirSync(tmpDir);
+                }
+
+                fs.writeFileSync( tmpCss , requireCssList) ;
+
+                package_name = rename ? rename : package_name;
+                entry = {};
+                entry[package_name] = tmpCss;
+                // package_ary = tmpCss;
+                entry['key'] = package_name;
+                entry['value'] = tmpCss;
             }
+            //isPack===false
             else{
 
             }
