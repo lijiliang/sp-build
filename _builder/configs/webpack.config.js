@@ -1,6 +1,7 @@
 var fs = require('fs');
 var path = require('path');
 var gulp = require('gulp');
+var __ = require('lodash');
 var gutil = require('gulp-util');
 var $extend = require('extend');
 var webpack = require('webpack');
@@ -22,6 +23,21 @@ function clone(target){
 function guid(prefix) {
     prefix = prefix || "web-";
     return (prefix + Math.random() + Math.random()).replace(/0\./g, "");
+}
+
+function chkType(type){
+    var all = {
+        style: ['css', 'scss', 'sass', 'less', 'stylus', 'styl'],
+        templet: ['hbs', 'swig', 'html'],
+        script: ['js', 'jsx', 'coffee', 'cjsx']
+    }
+    for(var item in all){
+        var isType = item;
+        var arys = all[item];
+        if(__.indexOf(arys,type)>-1)
+            return isType;
+    }
+    return false;
 }
 
 /**
@@ -81,9 +97,7 @@ function readPageDir(subDir, isPack, depth) {
 
         else {
             var ext = path.extname(dirsPath + '/' + item);
-            if (ext == ".coffee" || ext == ".js" || ext == ".cjsx" ||
-                ext == ".jsx" || ext == ".scss" || ext == ".less" ||
-                ext == ".css" || ext == "stylus") {
+            if(chkType(ext.replace('.',''))){
                 // 如果存在同名js
                 if (!sameName) {
                     if (name == item.replace(ext, '')) {
@@ -264,7 +278,7 @@ module.exports = {
               idf_plugins = plugins(entry);
       } }
 
-      // console.log(entry);
+      console.log(entry);
 
       return {
           //cache: true,
@@ -310,8 +324,9 @@ module.exports = {
 
       var tmpKey, tmpValue,
           type = (options && options.type) ? options.type : undefined,
+          staticType = chkType(type),
           _webpackDevCompiler,
-          _webpackDevConfig = this.create(dirname,isPack,options);
+          _webpackDevConfig = staticType !== 'templet' ? this.create(dirname,isPack,options) : this.create(dirname,true,options);
 
       if(entry){
           if(entry.key){
@@ -321,38 +336,53 @@ module.exports = {
               delete entry.value;
           }
 
-          if(type && (type==='sass' || type==='scss')){
-              //gulp deal with style
-              if(isPack===true){
 
-                  gulp.src([tmpValue])
-                  .pipe($.newer(path.join(__dirname,'../../', config.dist + '/' + configs.version + '/dev/css/') + tmpKey +'.css'))
-                  .pipe($.plumber())
-                  // .pipe $.rimraf()
-                  .pipe($.sass())
-                  .pipe($.autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
-                  .pipe($.size())
-                  .pipe($.rename(tmpKey + ".css"))
-                  .pipe(gulp.dest(path.join(__dirname,'../../', config.dist + '/' + configs.version + '/dev/css/')))
-              }else{
-                  for(var file in entry){
-                      if(entry[file].length){
-                          (function(item){
-                              gulp.src(entry[item])
-                              .pipe($.newer(path.join(__dirname,'../../', config.dist + '/' + configs.version + '/dev/css/') + item +'.css'))
-                              .pipe($.plumber())
-                              // .pipe $.rimraf()
-                              .pipe($.sass())
-                              .pipe($.autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
-                              .pipe($.size())
-                              .pipe($.rename(item + ".css"))
-                              .pipe(gulp.dest(path.join(__dirname,'../../', config.dist + '/' + configs.version + '/dev/css/')))
-                          })(file);
-                  } }
+          function doStyle(){
+              if(type && (type==='sass' || type==='scss')){
+                  //gulp deal with style
+                  if(isPack===true){
+
+                      gulp.src([tmpValue])
+                      .pipe($.newer(path.join(__dirname,'../../', config.dist + '/' + configs.version + '/dev/css/') + tmpKey +'.css'))
+                      .pipe($.plumber())
+                      // .pipe $.rimraf()
+                      .pipe($.sass())
+                      .pipe($.autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
+                      .pipe($.size())
+                      .pipe($.rename(tmpKey + ".css"))
+                      .pipe(gulp.dest(path.join(__dirname,'../../', config.dist + '/' + configs.version + '/dev/css/')))
+                  }else{
+                      for(var file in entry){
+                          if(entry[file].length){
+                              (function(item){
+                                  gulp.src(entry[item])
+                                  .pipe($.newer(path.join(__dirname,'../../', config.dist + '/' + configs.version + '/dev/css/') + item +'.css'))
+                                  .pipe($.plumber())
+                                  // .pipe $.rimraf()
+                                  .pipe($.sass())
+                                  .pipe($.autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
+                                  .pipe($.size())
+                                  .pipe($.rename(item + ".css"))
+                                  .pipe(gulp.dest(path.join(__dirname,'../../', config.dist + '/' + configs.version + '/dev/css/')))
+                              })(file);
+                      } }
+              } }
+              else{
+                  //if webpack sass-loader has fixed , then can use this module,
+                  //node: edit fllow some code;
+                  _webpackDevCompiler = webpack(_webpackDevConfig);
+                  _webpackDevCompiler.run(function(err, stats){
+                      if(err){
+                          throw new gutil.PluginError('[webpack]', err) ;
+                      }
+                      gutil.log('[webpack]', stats.toString({ colors: true } )) ;
+                      if(cb) cb();
+                  });
               }
-          }else{
-              //if webpack sass-loader has fixed , then can use this module,
-              //node: edit fllow some code;
+          }
+
+          function doScript(){
+
               _webpackDevCompiler = webpack(_webpackDevConfig);
               _webpackDevCompiler.run(function(err, stats){
                   if(err){
@@ -360,8 +390,27 @@ module.exports = {
                   }
                   gutil.log('[webpack]', stats.toString({ colors: true } )) ;
                   if(cb) cb();
-                  return;
               });
+          }
+
+          function doTemplet(){
+              if(type==='hbs'){
+
+              }
+          }
+
+          switch(staticType){
+              case 'script':
+                  doScript();
+              break;
+              case 'style':
+                  doStyle();
+              break;
+              case 'templet':
+                  doTemplet();
+              break;
+              default:
+                  doScript();
           }
       }
 

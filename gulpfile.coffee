@@ -70,3 +70,5 @@ gulp.task 'buildCommon:dev',['webpack:dev'], getTask('concat-common-js')
 gulp.task 'build',['clean:dev','clean:build'], getTask('map')
 
 gulp.task 'testserver',['build'], getTask('server-pro')
+
+gulp.task 'hbs', getTask('hbs')
