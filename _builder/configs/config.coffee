@@ -20,7 +20,11 @@ devDirs =
     imagesDevPath : configs.dirs.dist + '/' + configs.version + '/dev/images/'
     fontsDevPath : configs.dirs.dist + '/' + configs.version + '/dev/fonts/'
 
+    # 临时文件夹
+    tmpPath :  configs.dirs.dist + '/_tmp/'
+
     # 合并common.css
+    modulesCssDir : configs.dirs.src + '/css/modules/'
     baseCssDir : configs.dirs.src + '/css/modules/base/'
     uiCssDir : configs.dirs.src + '/css/modules/ui/'
     utilCssDir : configs.dirs.src + '/css/modules/utils/'
