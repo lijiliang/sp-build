@@ -2,6 +2,7 @@ var fs = require('fs');
 var path = require('path');
 var gulp = require('gulp');
 var __ = require('lodash');
+var through = require('through2');
 var gutil = require('gulp-util');
 var $extend = require('extend');
 var webpack = require('webpack');
@@ -28,7 +29,7 @@ function guid(prefix) {
 function chkType(type){
     var all = {
         style: ['css', 'scss', 'sass', 'less', 'stylus', 'styl'],
-        templet: ['hbs', 'swig', 'html'],
+        templet: ['hbs', 'swig', 'htm', 'html', 'php', 'jsp'],
         script: ['js', 'jsx', 'coffee', 'cjsx']
     }
     for(var item in all){
@@ -92,7 +93,7 @@ function readPageDir(subDir, isPack, depth) {
                 fs: fs.readdirSync(dirsPath + '/' + item),
                 filename: (subDir && subDir.filename + "-" + item) || item
             };
-            readPageDir(data);
+            readPageDir(data, isPack, depth);
         }
 
         else {
@@ -263,13 +264,13 @@ module.exports = {
       var idf_plugins = plugins(dirname, isPack, options),
           idf_externals = custom_externals;
 
-      if(getObjType(dirname)==='String'){
+      if(dirname && getObjType(dirname)==='String'){
           entry = this.readDir(dirname,isPack,options);
       }
 
-      else if( getObjType(isPack)==='Object'){
-          entry = $extend(true,{},isPack);
-          if(entry.noCommon) {
+      else if( dirname && getObjType(dirname)==='Object'){
+          entry = $extend(true,{},dirname);
+          if(entry.noCommon || options.noCommon) {
               delete entry.noCommon;
               idf_plugins = plugins('noCommon');
           }
@@ -277,6 +278,11 @@ module.exports = {
               delete entry.noCommon;
               idf_plugins = plugins(entry);
       } }
+
+      else if( dirname && getObjType(dirname)==='Array'){
+          idf_plugins = plugins('noCommon');
+          entry = {'tmp': dirname};
+      }
 
       console.log(entry);
 
@@ -305,6 +311,11 @@ module.exports = {
 
       if(!isPack)
           isPack = false;
+
+      if(getObjType(isPack)==='Object'){
+          options = clone(isPack);
+          isPack = false;
+      }
 
       if(getObjType(isPack)==='Function'){
           cb = isPack;
@@ -394,27 +405,92 @@ module.exports = {
                   if(cb) cb();
               });
           }
+
+
           //parse html hbs swig ...
           function doTemplet(){
-              var list = {}
-              console.log(tmpValue);
-              // tmpValue.map(file){
+              var list = {};
+              tmpValue = entry[tmpKey];
+              // console.log(tmpValue);
+              // tmpValue.map(function(file){
               //     var content = fs.readFileSync(file,'utf8');
               //     var title = content.match(/<title>([\s\S]*?)<\/title>/ig);
               //     if(title!=null && title[0]){
               //         list['title'] = title[0].replace(/\<(\/?)title\>/g,'')
               //         list['des'] = 'ni mei! kuai gei wo dian hua!'
               //     }
-              // }
-              //
-              // if(type==='hbs'){
-              //     gulp.src(tmpValue)
-              //     .pipe ($.plumber())
-              //     .pipe ($.size())
-              //     .pipe ($.compileHandlebars(list))
-              //     .pipe ($.rename('index.html'))
-              //     .pipe (gulp.dest(config.hbsDevPath))
-              // }
+              // });
+
+              function getHtmlData(){
+
+                  function fileProfile(file, enc, cb){
+                      var _contents = file.contents.toString('utf-8'),
+                          _title = _contents.match(/<title>([\s\S]*?)<\/title>/ig);
+
+                      if (_title != null && _title[0]){
+                          list['title'] = _title[0].replace(/\<(\/?)title\>/g,'')
+                          list['des'] = 'ni mei! kuai gei wo dian hua!'
+                          // file.list = new Buffer(list);
+                      }
+                      this.push(file);
+                      cb();
+                  }
+
+                  return through.obj(fileProfile);
+              }
+
+
+              //parse hbs to html
+              function parseHbs(){
+                  gulp.src(tmpValue,{ base: path.join(process.cwd(),'src/hbs/') })
+                  .pipe ($.plumber())
+                  .pipe ($.size())
+                  .pipe (getHtmlData())
+                  .pipe ($.compileHandlebars(list))
+                  .pipe ($.rename({
+                      extname: ".html"
+                  }))
+                  .pipe (gulp.dest(configs.hbsDevPath))
+              }
+
+              //parse html
+              function parseHtml(){
+                  // console.log(entry);
+                  gulp.src (tmpValue,{ base: path.join(process.cwd(),'src/html/') })
+                    .pipe ($.newer(configs.htmlDevPath))
+                    .pipe ($.plumber())
+                    .pipe ($.fileInclude({
+                        prefix: '@@',
+                        basepath: '@file',
+                        context: {
+                            dev: !gutil.env.production
+                        }
+                    }))
+                    .pipe ($.size())
+                    .pipe (function(){
+                        function testfun(file,enc,cb){
+                            var ext_name = path.extname(file.path);
+                            if(ext_name!=='.html'){
+                                cb();
+                            }else{
+                                // console.log('-----------------------')
+                                this.push(file);
+                                cb();
+                            }
+                        }
+                        return through.obj(testfun)
+                    }())
+                    .pipe (gulp.dest( configs.htmlDevPath ))
+              }
+
+              switch(type){
+                  case 'hbs':
+                      parseHbs();
+                      break;
+                  case 'html':
+                      parseHtml();
+                      break;
+              }
           }
 
           switch(staticType){
@@ -511,7 +587,7 @@ module.exports = {
                     }
                 }
 
-                if(staticType){
+                if(staticType==='style'){
                     for(var i=0; i<ultimates.length; i++){
                         if(styleType)
                             requireCssList += 'require("'+ultimates[i]+'");\n';

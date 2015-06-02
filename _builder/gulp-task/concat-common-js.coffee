@@ -35,4 +35,4 @@ commonJs = {'common': commonFilsMap };
 
 module.exports = (gulp,$)->
     return () ->
-        require('../configs/webpack.config.js').build(null,commonJs);
+        require('../configs/webpack.config.js').build(commonJs);
