@@ -326,17 +326,18 @@ module.exports = {
           type = (options && options.type) ? options.type : undefined,
           staticType = chkType(type),
           _webpackDevCompiler,
-          _webpackDevConfig = staticType !== 'templet' ? this.create(dirname,isPack,options) : this.create(dirname,true,options);
+          _webpackDevConfig = staticType !== 'templet' ? this.create(dirname,isPack,options) : this.create(dirname,true,options),
+          entrys = clone(entry);
 
-      if(entry){
-          if(entry.key){
-              tmpKey = clone(entry.key);
-              tmpValue = clone(entry.value);
-              delete entry.key;
-              delete entry.value;
+      if (entrys){
+          if(entrys.key){
+              tmpKey = clone(entrys.key);
+              tmpValue = clone(entrys.value);
+              delete entrys.key;
+              delete entrys.value;
           }
 
-
+          //parse sass scss less css stylus
           function doStyle(){
               if(type && (type==='sass' || type==='scss')){
                   //gulp deal with style
@@ -352,10 +353,10 @@ module.exports = {
                       .pipe($.rename(tmpKey + ".css"))
                       .pipe(gulp.dest(path.join(__dirname,'../../', config.dist + '/' + configs.version + '/dev/css/')))
                   }else{
-                      for(var file in entry){
-                          if(entry[file].length){
+                      for(var file in entrys){
+                          if(entrys[file].length){
                               (function(item){
-                                  gulp.src(entry[item])
+                                  gulp.src(entrys[item])
                                   .pipe($.newer(path.join(__dirname,'../../', config.dist + '/' + configs.version + '/dev/css/') + item +'.css'))
                                   .pipe($.plumber())
                                   // .pipe $.rimraf()
@@ -381,6 +382,7 @@ module.exports = {
               }
           }
 
+          //parse js jsx cjsx coffee ...
           function doScript(){
 
               _webpackDevCompiler = webpack(_webpackDevConfig);
@@ -392,27 +394,43 @@ module.exports = {
                   if(cb) cb();
               });
           }
-
+          //parse html hbs swig ...
           function doTemplet(){
-              if(type==='hbs'){
-
-              }
+              var list = {}
+              console.log(tmpValue);
+              // tmpValue.map(file){
+              //     var content = fs.readFileSync(file,'utf8');
+              //     var title = content.match(/<title>([\s\S]*?)<\/title>/ig);
+              //     if(title!=null && title[0]){
+              //         list['title'] = title[0].replace(/\<(\/?)title\>/g,'')
+              //         list['des'] = 'ni mei! kuai gei wo dian hua!'
+              //     }
+              // }
+              //
+              // if(type==='hbs'){
+              //     gulp.src(tmpValue)
+              //     .pipe ($.plumber())
+              //     .pipe ($.size())
+              //     .pipe ($.compileHandlebars(list))
+              //     .pipe ($.rename('index.html'))
+              //     .pipe (gulp.dest(config.hbsDevPath))
+              // }
           }
 
           switch(staticType){
               case 'script':
                   doScript();
-              break;
+                  break;
               case 'style':
                   doStyle();
-              break;
+                  break;
               case 'templet':
                   doTemplet();
-              break;
+                  break;
               default:
                   doScript();
           }
-      }
+      }//end if entry
 
   },
 
@@ -435,11 +453,9 @@ module.exports = {
           styleType = false,
           requireCssList = '',
           rename = opts.rename ? opts.rename : undefined,
-          type = opts.type ? opts.type : undefined;
+          type = opts.type ? opts.type : undefined,
+          staticType = chkType(type);
 
-      //styleType确定使用webpack还是gulp来解析style的文件
-      if(type=='less' ||type==='stylus' ||type==='css')
-          styleType = true;
 
           //全局变量
           pagesDir=undefined;
@@ -469,11 +485,17 @@ module.exports = {
       readPageDir(null, isPack, opts.depth);
 
       if(entry){
-        if(type==='less' || type==='sass'|| type==='stylus'|| type==='css'|| type==='scss'){
+        // if(type==='less' || type==='sass'|| type==='stylus'|| type==='css'|| type==='scss'){
             var ultimates = [],
                 ext = styleType ? 'js' : type;
+
+            //sass使用gulp解析，其他使用webpack解析
+            if(type=='less' ||type==='stylus' ||type==='css')
+                styleType = true;
+
             if(isPack){
 
+                //merge prepend or append
                 for(var item in entry){
                     package_name = item;
                     prepend = (opts.prepend && getObjType(opts.prepend)==='Array') ? opts.prepend : undefined,
@@ -487,39 +509,44 @@ module.exports = {
                     else{
                         ultimates = entry[item];
                     }
+                }
 
+                if(staticType){
                     for(var i=0; i<ultimates.length; i++){
                         if(styleType)
                             requireCssList += 'require("'+ultimates[i]+'");\n';
                         else
                             requireCssList += '@import "'+ultimates[i]+'";\n';
                     }
+
+                    var tmpFile = guid(),
+                        tmpDir = config.dist + '/_tmp',
+                        tmpCss = config.dist + '/_tmp/'+tmpFile+'.'+ext;
+
+                    if (!fs.existsSync(tmpDir)) {
+                        fs.mkdirSync(tmpDir);
+                    }
+
+                    fs.writeFileSync( tmpCss , requireCssList) ;
+
+                    package_name = rename ? rename : package_name;
+                    entry = {};
+                    entry[package_name] = tmpCss;
+                    // package_ary = tmpCss;
+                    entry['key'] = package_name;
+                    entry['value'] = tmpCss;
                 }
-
-                var tmpFile = guid(),
-                    tmpDir = config.dist + '/_tmp',
-                    tmpCss = config.dist + '/_tmp/'+tmpFile+'.'+ext;
-
-                if (!fs.existsSync(tmpDir)) {
-                    fs.mkdirSync(tmpDir);
+                else{
+                  entry['key'] = package_name;
+                  entry['value'] = '';
                 }
-
-                fs.writeFileSync( tmpCss , requireCssList) ;
-
-                package_name = rename ? rename : package_name;
-                entry = {};
-                entry[package_name] = tmpCss;
-                // package_ary = tmpCss;
-                entry['key'] = package_name;
-                entry['value'] = tmpCss;
             }
+
             //isPack===false
-            else{
+            else{ }
 
-            }
-            // var tmpCss = config.dirs.src + '/css/_tmp.'+js;
-            // fs.writeFileSync( tmpCss , requireCssList) ;
-    } }
+        // }
+    }
 
     return entry;
   }

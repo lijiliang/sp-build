@@ -15,6 +15,7 @@ devDirs =
 
     # 开发
     htmlDevPath : configs.dirs.dist + '/' + configs.version + '/dev/html'
+    hbsDevPath : configs.dirs.dist + '/' + configs.version + '/dev/hbs'
     jsDevPath : configs.dirs.dist + '/' + configs.version + '/dev/js/'
     cssDevPath : configs.dirs.dist + '/' + configs.version + '/dev/css/'
     imagesDevPath : configs.dirs.dist + '/' + configs.version + '/dev/images/'
