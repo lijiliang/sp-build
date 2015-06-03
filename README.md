@@ -50,3 +50,6 @@ $ gem install sass
 ### config.hash
 
 js构建是否加入hash值
+
+# RUN
+安装完成后在该目录下运行`gulp`，及进入编译及服务模式，具体的其他命令，请查看gulpfile.js文件!
