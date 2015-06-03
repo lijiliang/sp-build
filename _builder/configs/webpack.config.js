@@ -284,7 +284,7 @@ module.exports = {
           entry = {'tmp': dirname};
       }
 
-      console.log(entry);
+      // console.log(entry);
 
       return {
           //cache: true,
@@ -424,18 +424,37 @@ module.exports = {
               function getHtmlData(){
 
                   function fileProfile(file, enc, cb){
-                      var _contents = file.contents.toString('utf-8'),
+                      var data, api,
+                          _filename = file.path.replace(file.base,'').replace('.'+type,'');
+
+                      if (typeof options.data !=='undefined'){
+                          data = clone(options.data);
+                      }
+
+                      if (typeof options.api !=='undefined'){
+                          api = clone(options.api);
+                      }
+
+                      if(data && (_filename in data)){
+                          file.data = data[_filename];
+                      }else{
+                          _contents = file.contents.toString('utf-8'),
                           _title = _contents.match(/<title>([\s\S]*?)<\/title>/ig);
 
-                      if (_title != null && _title[0]){
-                          list['title'] = _title[0].replace(/\<(\/?)title\>/g,'')
-                          list['des'] = 'ni mei! kuai gei wo dian hua!'
-                          // file.list = new Buffer(list);
+                          if (_title != null && _title[0]){
+                              list.title = _title[0].replace(/\<(\/?)title\>/g,'')
+                              list.des = 'ni mei! kuai gei wo dian hua!'
+                              file.data = list;
+                          }
                       }
+
+                      if(api && (_filename in api)){
+                          /*todo something*/
+                      }
+
                       this.push(file);
                       cb();
                   }
-
                   return through.obj(fileProfile);
               }
 
@@ -446,11 +465,11 @@ module.exports = {
                   .pipe ($.plumber())
                   .pipe ($.size())
                   .pipe (getHtmlData())
-                  .pipe ($.compileHandlebars(list))
+                  .pipe ($.compileHandlebars())
                   .pipe ($.rename({
                       extname: ".html"
                   }))
-                  .pipe (gulp.dest(configs.hbsDevPath))
+                  .pipe (gulp.dest(configs.htmlDevPath))
               }
 
               //parse html
