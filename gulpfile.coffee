@@ -41,9 +41,6 @@ gulp.task 'fonts:dev', getTask('fonts-dev')
 
 gulp.task 'fonts:build', getTask('fonts-build')
 
-gulp.task 'html:list', getTask('html-json')
-
-
 # 对静态页面进行编译
 gulp.task 'html', getTask('html')
 
@@ -52,7 +49,7 @@ gulp.task 'doc', getTask('doc')
 
 
 #本地资源静态DEMO服务器
-gulp.task "server", ['buildCommon:dev','html','html:list','ie:dev','fonts:dev','sprite:dev'] , getTask('server')
+gulp.task "server", ['buildCommon:dev','html','ie:dev','fonts:dev','sprite:dev'] , getTask('server')
 
 
 # 编译webpack未压缩的资源

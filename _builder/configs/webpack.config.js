@@ -410,16 +410,10 @@ module.exports = {
           //parse html hbs swig ...
           function doTemplet(){
               var list = {};
+              var indexList = {};
+              var tmpObj;
+
               tmpValue = entry[tmpKey];
-              // console.log(tmpValue);
-              // tmpValue.map(function(file){
-              //     var content = fs.readFileSync(file,'utf8');
-              //     var title = content.match(/<title>([\s\S]*?)<\/title>/ig);
-              //     if(title!=null && title[0]){
-              //         list['title'] = title[0].replace(/\<(\/?)title\>/g,'')
-              //         list['des'] = 'ni mei! kuai gei wo dian hua!'
-              //     }
-              // });
 
               function getHtmlData(){
 
@@ -459,10 +453,21 @@ module.exports = {
               }
 
 
-              //parse hbs to html
+              /*
+              * parse hbs to html
+              * make index list
+              */
               function parseHbs(){
                   gulp.src(tmpValue,{ base: path.join(process.cwd(),'src/hbs/') })
+                  .pipe ($.newer(configs.htmlDevPath))
                   .pipe ($.plumber())
+                  .pipe ($.fileInclude({
+                      prefix: '@@',
+                      basepath: '@file',
+                      context: {
+                          dev: !gutil.env.production
+                      }
+                  }))
                   .pipe ($.size())
                   .pipe (getHtmlData())
                   .pipe ($.compileHandlebars())
@@ -472,9 +477,12 @@ module.exports = {
                   .pipe (gulp.dest(configs.htmlDevPath))
               }
 
-              //parse html
+              /*
+              * parse html and build it
+              * make index list
+              */
               function parseHtml(){
-                  // console.log(entry);
+
                   gulp.src (tmpValue,{ base: path.join(process.cwd(),'src/html/') })
                     .pipe ($.newer(configs.htmlDevPath))
                     .pipe ($.plumber())
@@ -486,12 +494,24 @@ module.exports = {
                         }
                     }))
                     .pipe ($.size())
+                    .pipe ($.rename(function(obj){
+                        tmpObj = obj;
+                    }))
                     .pipe (function(){
                         function testfun(file,enc,cb){
                             var ext_name = path.extname(file.path);
                             if(ext_name!=='.html'){
                                 cb();
                             }else{
+                                // indexList[tmpObj.dirname] = indexList[tmpObj.dirname] || {};
+                                // indexList[tmpObj.dirname].group = indexList[tmpObj.dirname].group || tmpObj.dirname;
+                                // indexList[tmpObj.dirname].list = indexList[tmpObj.dirname].list || [];
+                                // indexList[tmpObj.dirname].list.push({
+                                //     group: tmpObj.dirname,
+                                //     title: (function(){  var tit = file.contents.toString().match(/<title>([\s\S]*?)<\/title>/ig); if(tit && tit[0]) return tit.toString().replace('<title>','').replace('</title>',''); })(),
+                                //     fileName: tmpObj.basename + '.html',
+                                //     fullpath: file.path
+                                // });
                                 // console.log('-----------------------')
                                 this.push(file);
                                 cb();
@@ -585,7 +605,7 @@ module.exports = {
                 ext = styleType ? 'js' : type;
 
             //sass使用gulp解析，其他使用webpack解析
-            if(type=='less' ||type==='stylus' ||type==='css')
+            if(type=='less' ||type==='stylus' ||type==='css' ||type==='styl')
                 styleType = true;
 
             if(isPack){
