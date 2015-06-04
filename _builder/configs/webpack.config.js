@@ -215,7 +215,7 @@ var custom_modules = function(){
           test: /\.jsx$/,
           loader: "jsx-loader"
       }, {
-          test: /[\/\\]src[\/\\]js[\/\\](vendor|global)[\/\\]/,   //http://stackoverflow.com/questions/28969861/managing-jquery-plugin-dependency-in-webpack
+          test: /[\/\\]js[\/\\](vendor|global)[\/\\]/,   //http://stackoverflow.com/questions/28969861/managing-jquery-plugin-dependency-in-webpack
           loader: "script-loader"   //不做任何处理
       }, {
           test: /\.css$/,
@@ -458,7 +458,7 @@ module.exports = {
               * make index list
               */
               function parseHbs(){
-                  gulp.src(tmpValue,{ base: path.join(process.cwd(),'src/hbs/') })
+                  gulp.src(tmpValue,{ base: path.join(config.src,'html/') })
                   .pipe ($.newer(configs.htmlDevPath))
                   .pipe ($.plumber())
                   .pipe ($.fileInclude({
@@ -483,7 +483,7 @@ module.exports = {
               */
               function parseHtml(){
 
-                  gulp.src (tmpValue,{ base: path.join(process.cwd(),'src/html/') })
+                  gulp.src (tmpValue,{ base: path.join(config.src,'html/') })
                     .pipe ($.newer(configs.htmlDevPath))
                     .pipe ($.plumber())
                     .pipe ($.fileInclude({

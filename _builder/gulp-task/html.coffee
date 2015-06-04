@@ -33,11 +33,12 @@ htmlDir.map (filename)->
 
 module.exports = (gulp,$)->
     return () ->
-        gulp.src config.dirs.src + '/html/index.hbs'
-            .pipe $.plumber()
-            .pipe $.size()
-            .pipe $.compileHandlebars(list)
-            .pipe $.rename('index.html')
-            .pipe gulp.dest(config.htmlDevPath)
+        if(fs.statSync(config.dirs.src + '/html/index.hbs').isFile() )
+            gulp.src config.dirs.src + '/html/index.hbs'
+                .pipe $.plumber()
+                .pipe $.size()
+                .pipe $.compileHandlebars(list)
+                .pipe $.rename('index.html')
+                .pipe gulp.dest(config.htmlDevPath)
 
         require('../configs/webpack.config.js').build(config.dirs.src + '/html/',{type: 'html'});
