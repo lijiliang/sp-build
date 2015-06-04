@@ -25,5 +25,7 @@ module.exports = (gulp,$)->
         #js
         gulp.watch config.dirs.src + '/js/?(modules|pages|widgets)/**/*.?(coffee|js|jsx|cjsx|hbs|scss|css)', ['buildCommon:dev']
         #html
-        gulp.watch config.dirs.src + '/html/**/*.html', ['html','html:list']
-        gulp.watch config.dirs.src + '/html/index.hbs', ['html:list']
+        # gulp.watch config.dirs.src + '/html/**/*.html', ['html','html:list']
+        # gulp.watch config.dirs.src + '/html/index.hbs', ['html:list']
+        gulp.watch config.dirs.src + '/html/**/*.html', ['html']
+        gulp.watch config.dirs.src + '/html/index.hbs', ['html']

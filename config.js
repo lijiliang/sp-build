@@ -1,5 +1,8 @@
-var src_dir = './src';
-var global_dir = './src/js/global';
+var src_dir = './src'
+var platform = '/pc'
+src_dir = src_dir + platform
+
+var global_dir = './src'+ platform +'/js/global';
 var path = require('path');
 module.exports = {
     name: "斯品家居",
@@ -26,12 +29,18 @@ module.exports = {
         path.join(__dirname, src_dir, '/js/global/core.js'),
         path.join(__dirname, src_dir, '/js/global/toolkits.js')
     ],
-    ieRequireList: [
-        path.join(__dirname, src_dir, '/js/vendor/console-shim/console-shim.js'),
-        path.join(__dirname, src_dir, '/js/vendor/html5shiv/dist/html5shiv.js'),
-        path.join(__dirname, src_dir, '/js/vendor/respond/dest/respond.src.js'),
-        path.join(__dirname, src_dir, '/js/vendor/es5-shim/es5-shim.js'),
-        path.join(__dirname, src_dir, '/js/vendor/es5-shim/es5-sham.js'),
-        path.join(__dirname, src_dir, '/js/vendor/json2/json2.js')
-    ]
+    ieRequireList: (function(){
+            if(platform === 'pc'){
+                return [
+                    path.join(__dirname, src_dir, '/js/vendor/html5shiv/dist/html5shiv.js'),
+                    path.join(__dirname, src_dir, '/js/vendor/respond/dest/respond.src.js'),
+                    path.join(__dirname, src_dir, '/js/vendor/es5-shim/es5-shim.js'),
+                    path.join(__dirname, src_dir, '/js/vendor/es5-shim/es5-sham.js'),
+                    path.join(__dirname, src_dir, '/js/vendor/json2/json2.js')
+                ]
+            }else{
+                return []
+            }
+        })()
+
 };

@@ -41,12 +41,13 @@ module.exports = (gulp,$)->
                 return;
 
 
-    gulp.task 'buildAdminCss',['images:build','buildMap:js'],->
-        gulp.src [config.cssDevPath + '/common.css',config.cssDevPath + '/article.css',config.cssDevPath + '/goods.css']
-            .pipe $.concat("style.css")
-            .pipe $.minifyCss()
-            .pipe $.size()
-            .pipe gulp.dest(config.cssBuildPath+'/admin-css')
+    # gulp.task 'buildAdminCss',['images:build','buildMap:js'],->
+    #     # gulp.src [config.cssDevPath + '/common.css',config.cssDevPath + '/article.css',config.cssDevPath + '/goods.css']
+    #     gulp.src [config.cssDevPath + '/common.css',config.cssDevPath + '/article.css',config.cssDevPath + '/goods.css']
+    #         .pipe $.concat("style.css")
+    #         .pipe $.minifyCss()
+    #         .pipe $.size()
+    #         .pipe gulp.dest(config.cssBuildPath+'/admin-css')
 
     gulp.task 'buildMap:css',['buildAdminCss'], ->
         gulp.src config.cssDevPath + '/**/*.css'
