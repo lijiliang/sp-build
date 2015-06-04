@@ -3,6 +3,7 @@ path = require('path')
 gulp = require('gulp')
 gutil = require('gulp-util')
 configs = require './config'
+pack = require('./_builder/configs/webpack.config.js')
 
 browserSync = require 'browser-sync'
 reload = browserSync.reload
@@ -11,7 +12,7 @@ reload = browserSync.reload
 $ = require('gulp-load-plugins')()
 
 getTask = (task)->
-    require('./_builder/gulp-task/'+task)(gulp,$)
+    require('./_builder/gulp-task/'+task)(gulp, $, pack)
 
 # 清理dist/目录
 gulp.task 'clean:build', getTask('clean-build')

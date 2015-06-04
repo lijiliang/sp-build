@@ -38,6 +38,6 @@ opts =
         'index':
               list
 
-module.exports = (gulp,$)->
+module.exports = (gulp,$,pack)->
     return () ->
-        require('../configs/webpack.config.js').build(config.dirs.src + '/hbs/',opts);
+        pack.build(config.dirs.src + '/hbs/',opts);

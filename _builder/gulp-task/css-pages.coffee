@@ -1,4 +1,4 @@
 config = require '../configs/config.coffee'
-module.exports = (gulp,$)->
+module.exports = (gulp,$,pack)->
     return () ->
-        require('../configs/webpack.config.js').build(config.pageCssDir,false,{type: 'sass'});
+        pack.build(config.pageCssDir,false,{type: 'sass'});

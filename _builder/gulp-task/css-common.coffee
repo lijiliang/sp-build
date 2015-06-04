@@ -14,9 +14,9 @@
 path = require 'path';
 config = require '../configs/config.coffee';
 
-module.exports = (gulp,$)->
+module.exports = (gulp,$,pack)->
     return () ->
-        require('../configs/webpack.config.js').build(config.modulesCssDir,true,{
+        pack.build(config.modulesCssDir,true,{
             type: 'sass',
             rename: 'common',
             prepend: [path.join(config.modulesCssDir+'/_settings/_setting.scss')]

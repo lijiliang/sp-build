@@ -31,7 +31,7 @@ htmlDir.map (filename)->
 
 
 
-module.exports = (gulp,$)->
+module.exports = (gulp,$,pack)->
     return () ->
         if(fs.statSync(config.dirs.src + '/html/index.hbs').isFile() )
             gulp.src config.dirs.src + '/html/index.hbs'
@@ -41,4 +41,4 @@ module.exports = (gulp,$)->
                 .pipe $.rename('index.html')
                 .pipe gulp.dest(config.htmlDevPath)
 
-        require('../configs/webpack.config.js').build(config.dirs.src + '/html/',{type: 'html'});
+        pack.build(config.dirs.src + '/html/',{type: 'html'});
