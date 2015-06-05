@@ -227,7 +227,6 @@ var custom_modules = function(){
       }, {
           test: /\.less$/,
           loader: ExtractTextPlugin.extract('style-loader',"raw!less")
-          // loader: ExtractTextPlugin.extract('style-loader',"css!less")
       }, {
           test: /\.rt$/,
           loader: "react-templates-loader"
@@ -281,7 +280,7 @@ module.exports = {
 
       else if( dirname && getObjType(dirname)==='Array'){
           idf_plugins = plugins('noCommon');
-          entry = {'tmp': dirname};
+          entry = {'_ary': dirname};
       }
 
       // console.log(entry);
@@ -339,6 +338,12 @@ module.exports = {
           _webpackDevCompiler,
           _webpackDevConfig = staticType !== 'templet' ? this.create(dirname,isPack,options) : this.create(dirname,true,options),
           entrys = clone(entry);
+
+      //传进来的是数组，强制不进行合并，分别生成，不管是css 还是 js
+      //如果需要合并，可以用json传进来
+      if(entrys._ary){
+          isPack = false;
+      }
 
       if (entrys){
           if(entrys.key){
@@ -418,11 +423,13 @@ module.exports = {
 
               tmpValue = entry[tmpKey];
 
+              //获取数据
               function getHtmlData(){
 
                   function fileProfile(file, enc, cb){
                       var data, api,
-                          _filename = file.path.replace(file.base,'').replace('.'+type,'');
+                          // _filename = file.path.replace(file.base,'').replace('.'+type,'');
+                          _filename = file.path.replace(path.dirname(file.path),'').replace('.'+type,'').replace(/[\/\\]/g,'');
 
                       if (typeof options.data !=='undefined'){
                           data = clone(options.data);
@@ -462,6 +469,18 @@ module.exports = {
               */
               function parseHbs(){
                   gulp.src(tmpValue,{ base: path.join(config.src,'html/') })
+                  .pipe (function(){
+                      function testfun(file,enc,cb){
+                          var ext_name = path.extname(file.path);
+                          if(ext_name!=='.hbs'){
+                              cb();
+                          }else{
+                              this.push(file);
+                              cb();
+                          }
+                      }
+                      return through.obj(testfun)
+                  }())
                   .pipe ($.newer(configs.htmlDevPath))
                   .pipe ($.plumber())
                   .pipe ($.fileInclude({
@@ -487,6 +506,18 @@ module.exports = {
               function parseHtml(){
 
                   gulp.src (tmpValue,{ base: path.join(config.src,'html/') })
+                    .pipe (function(){
+                        function testfun(file,enc,cb){
+                            var ext_name = path.extname(file.path);
+                            if(ext_name!=='.html'){
+                                cb();
+                            }else{
+                                this.push(file);
+                                cb();
+                            }
+                        }
+                        return through.obj(testfun)
+                    }())
                     .pipe ($.newer(configs.htmlDevPath))
                     .pipe ($.plumber())
                     .pipe ($.fileInclude({
@@ -497,31 +528,6 @@ module.exports = {
                         }
                     }))
                     .pipe ($.size())
-                    .pipe ($.rename(function(obj){
-                        tmpObj = obj;
-                    }))
-                    .pipe (function(){
-                        function testfun(file,enc,cb){
-                            var ext_name = path.extname(file.path);
-                            if(ext_name!=='.html'){
-                                cb();
-                            }else{
-                                // indexList[tmpObj.dirname] = indexList[tmpObj.dirname] || {};
-                                // indexList[tmpObj.dirname].group = indexList[tmpObj.dirname].group || tmpObj.dirname;
-                                // indexList[tmpObj.dirname].list = indexList[tmpObj.dirname].list || [];
-                                // indexList[tmpObj.dirname].list.push({
-                                //     group: tmpObj.dirname,
-                                //     title: (function(){  var tit = file.contents.toString().match(/<title>([\s\S]*?)<\/title>/ig); if(tit && tit[0]) return tit.toString().replace('<title>','').replace('</title>',''); })(),
-                                //     fileName: tmpObj.basename + '.html',
-                                //     fullpath: file.path
-                                // });
-                                // console.log('-----------------------')
-                                this.push(file);
-                                cb();
-                            }
-                        }
-                        return through.obj(testfun)
-                    }())
                     .pipe (gulp.dest( configs.htmlDevPath ))
               }
 
@@ -566,8 +572,8 @@ module.exports = {
           opts = $extend(true,opts,options);
       }
 
-      var prepend,
-          append,
+      var prepend=[],
+          append=[],
           styleType = false,
           requireCssList = '',
           rename = opts.rename ? opts.rename : undefined,
@@ -595,8 +601,12 @@ module.exports = {
               throw new Error("==============Error: you must identify a entry");
               return false;
           }else{
-              pagesDir = fs.readdirSync(dirname);
-              package_name = isPack === true ? path.basename(dirname) : '';
+              if(fs.statSync(dirname).isDirectory()){
+                  pagesDir = fs.readdirSync(dirname);
+                  package_name = isPack === true ? path.basename(dirname) : '';
+              }else if(fs.statSync(dirname).isFile()){
+                  //todoo something
+              }
       } }
 
       //生成entry 全局
@@ -616,18 +626,21 @@ module.exports = {
                 //merge prepend or append
                 for(var item in entry){
                     package_name = item;
-                    prepend = (opts.prepend && getObjType(opts.prepend)==='Array') ? opts.prepend : undefined,
-                    append = (opts.append && getObjType(opts.append)==='Array') ? opts.append : undefined;
-                    if(prepend){
-                        ultimates = prepend.concat(entry[item]);
-                    }
-                    else if(append){
-                        ultimates = entry[item].concat(append);
-                    }
-                    else{
-                        ultimates = entry[item];
-                    }
+                    prepend = (opts.prepend && getObjType(opts.prepend)==='Array') ? opts.prepend : [],
+                    append = (opts.append && getObjType(opts.append)==='Array') ? opts.append : [];
+                    // if(prepend){
+                    //     ultimates = prepend.concat(entry[item]);
+                    // }
+                    // else if(append){
+                    //     ultimates = entry[item].concat(append);
+                    // }
+                    // else{
+                    // }
+                    // ultimates = entry[item];
+                    ultimates = prepend.concat(entry[item]).concat(append);
                 }
+
+                package_name = rename ? rename : package_name;
 
                 if(staticType==='style'){
                     for(var i=0; i<ultimates.length; i++){
@@ -647,15 +660,18 @@ module.exports = {
 
                     fs.writeFileSync( tmpCss , requireCssList) ;
 
-                    package_name = rename ? rename : package_name;
                     entry = {};
                     entry[package_name] = tmpCss;
                     entry['key'] = package_name;
                     entry['value'] = tmpCss;
                 }
                 else{
-                  entry['key'] = package_name;
-                  entry['value'] = '';
+                    var tmpkey = Object.keys(entry)[0];
+                    var tmpobj = clone(entry[tmpkey]);
+                    entry = {};
+                    entry[tmpkey] = tmpobj;
+                    entry['key'] = package_name;
+                    entry['value'] = '';
                 }
             }
 
