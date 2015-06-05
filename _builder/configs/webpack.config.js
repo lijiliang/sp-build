@@ -367,7 +367,7 @@ module.exports = {
           //parse sass scss less css stylus
           function doStyle(){
               if(isPack===true){
-
+                  // combo css
                   gulp.src([tmpValue])
                   .pipe($.newer(configs.cssDevPath + tmpKey +'.css'))
                   .pipe($.plumber())
@@ -383,6 +383,7 @@ module.exports = {
                   // .pipe(gulp.dest(path.join(__dirname,'../../', config.dist + '/' + configs.version + '/dev/css/')))
                   .pipe(gulp.dest(configs.cssDevPath))
               }else{
+                  //splite css
                   for(var file in entrys){
                       if(entrys[file].length){
                           (function(item){
@@ -398,8 +399,37 @@ module.exports = {
                               .pipe($.autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
                               .pipe($.size())
                               .pipe($.rename(item + ".css"))
-                              // .pipe(gulp.dest(path.join(__dirname,'../../', config.dist + '/' + configs.version + '/dev/css/')))
                               .pipe(gulp.dest(configs.cssDevPath))
+
+
+                              //雪碧图
+                              //config 是 configs 的子集
+                              .pipe ($.newer(configs.imagesDevPath))
+                              .pipe ($.plumber())
+                              .pipe ($.cssSpritesmith({
+                                  // sprite背景图源文件夹，只有匹配此路径才会处理，默认 images/slice/
+                                  imagepath: configs.imagesDevPath + 'slice/',
+                                  // 映射CSS中背景路径，支持函数和数组，默认为 null
+                                  imagepath_map: null,
+                                  // 雪碧图输出目录，注意，会覆盖之前文件！默认 images/
+                                  spritedest: 'sprite/',
+                                  // 替换后的背景路径，默认 ../images/
+                                  spritepath: '../images/sprite/',
+                                  // 各图片间间距，如果设置为奇数，会强制+1以保证生成的2x图片为偶数宽高，默认 0
+                                  padding: 20,
+                                  // 是否使用 image-set 作为2x图片实现，默认不使用
+                                  useimageset: false,
+                                  // 是否以时间戳为文件名生成新的雪碧图文件，如果启用请注意清理之前生成的文件，默认不生成新文件
+                                  newsprite: false,
+                                  // 给雪碧图追加时间戳，默认不追加
+                                  spritestamp: false,
+                                  // 在CSS文件末尾追加时间戳，默认不追加
+                                  cssstamp: false
+                              } ))
+                              .pipe ($.debug({title: 'sprite:'} ))
+                              .pipe ($.if('*.png', gulp.dest(configs.imagesDevPath)))
+                              .pipe ($.if('*.css', gulp.dest('./')))
+
                           })(file);
                   } }
               }
@@ -422,6 +452,8 @@ module.exports = {
               // }
           }
 
+
+
           //parse js jsx cjsx coffee ...
           function doScript(){
 
@@ -434,6 +466,8 @@ module.exports = {
                   if(cb) cb();
               });
           }
+
+          
 
 
           //parse html hbs swig ...
@@ -448,6 +482,9 @@ module.exports = {
               function getHtmlData(){
 
                   function fileProfile(file, enc, cb){
+                      //json数据可以在这里导入
+                      //md文件扫描
+
                       var data, api,
                           // _filename = file.path.replace(file.base,'').replace('.'+type,'');
                           _filename = file.path.replace(path.dirname(file.path),'').replace('.'+type,'').replace(/[\/\\]/g,'');
@@ -464,17 +501,8 @@ module.exports = {
                           file.data = data[_filename];
                       }else{
                           if( _filename === 'index' || _filename==='list' ){
-
+                              //列表数据，还是应该放到外面生成
                           }
-
-                          // _contents = file.contents.toString('utf-8'),
-                          // _title = _contents.match(/<title>([\s\S]*?)<\/title>/ig);
-                          //
-                          // if (_title != null && _title[0]){
-                          //     list.title = _title[0].replace(/\<(\/?)title\>/g,'')
-                          //     list.des = 'ni mei! kuai gei wo dian hua!'
-                          //     file.data = list;
-                          // }
                       }
 
                       if(api && (_filename in api)){

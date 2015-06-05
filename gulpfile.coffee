@@ -26,17 +26,14 @@ gulp.task 'ie:dev', getTask('ie')
 # common.css
 gulp.task 'commoncss:dev', getTask('css-common')
 
-# page.css
-gulp.task 'pagecss:dev', getTask('css-pages')
-
-# 雪碧图
-gulp.task 'sprite:dev', ['commoncss:dev','pagecss:dev','images:dev'], getTask('sprite')
-# gulp.task 'sprite:dev', ['commoncss:dev','pagecss:dev','images:dev'], -> ()
+# page.css  合并雪碧图
+# gulp.task 'pagecss:dev', getTask('css-pages')
+gulp.task 'pagecss:dev',['commoncss:dev','images:dev'], getTask('css-pages')
 
 # 对图像资源复制至dist
 gulp.task 'images:dev', getTask('images-dev')
 
-gulp.task 'images:build', ['sprite:dev'], getTask('images-build')
+gulp.task 'images:build', ['pagecss:dev'], getTask('images-build')
 
 # 对字体图标资源复制至dist
 gulp.task 'fonts:dev', getTask('fonts-dev')
@@ -49,14 +46,11 @@ gulp.task 'html', getTask('html')
 # 生成API文档，有待改良
 gulp.task 'doc', getTask('doc')
 
-
 #本地资源静态DEMO服务器
-gulp.task "server", ['buildCommon:dev','html','ie:dev','fonts:dev','sprite:dev'] , getTask('server')
-
+gulp.task "server", ['buildCommon:dev','html','ie:dev','fonts:dev','pagecss:dev'] , getTask('server')
 
 # 编译webpack未压缩的资源
 gulp.task 'wp:dev', getTask('wp')
-
 
 # 默认启动本地DEMO服务器
 gulp.task 'default',['clean:dev'], ->
