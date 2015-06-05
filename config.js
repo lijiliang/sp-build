@@ -16,6 +16,9 @@ module.exports = {
         widgets: src_dir + "/js/widgets",
         global: src_dir + "/js/global",
         vendor: src_dir + "/js/vendor",
+        stores: src_dir + "/js/stores",
+        mixins: src_dir + "/js/mixins",
+        libs: src_dir + "/js/libs",
 
         css_common: src_dir + "css/modules/base"
     },

@@ -1,7 +1,7 @@
 var
 ListView = require('widgets/listView/listView'),
-PageScrollStartEndLazyLoadMixin = require('./PageScrollStartEndLazyLoadMixin'),
-libs = require('./libs');
+PageScrollStartEndLazyLoadMixin = require('mixins/PageScrollStartEndLazyLoadMixin'),
+libs = require('libs/libs');
 
 //react
 var

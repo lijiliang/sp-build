@@ -2,7 +2,7 @@
 
 var
 SimplePageScrollMixin = require('./SimplePageScrollMixin'),
-libs = require('./libs');
+libs = require('libs/libs');
 
 var
 PageScrollStartEndLazyLoadMixin = {

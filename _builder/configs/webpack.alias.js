@@ -11,6 +11,9 @@ module.exports = {
     'vendor': path.join(__dirname, '../../', configs.dirs.vendor),
     'modules': path.join(__dirname, '../../', configs.dirs.modules),
     'widgets': path.join(__dirname, '../../', configs.dirs.widgets),
+    'stores': path.join(__dirname, '../../', configs.dirs.stores),
+    'mixins': path.join(__dirname, '../../', configs.dirs.mixins),
+    'libs': path.join(__dirname, '../../', configs.dirs.libs),
 
     'cookie': 'modules/cookie/jquery.cookie',
     'WebUploader': 'modules/uploader/webuploader.min',

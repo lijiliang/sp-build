@@ -346,6 +346,9 @@ module.exports = {
               tmpValue = clone(entrys.value);
               delete entrys.key;
               delete entrys.value;
+
+              delete entry.key;
+              delete entry.value;
           }
 
           //parse sass scss less css stylus
@@ -647,7 +650,6 @@ module.exports = {
                     package_name = rename ? rename : package_name;
                     entry = {};
                     entry[package_name] = tmpCss;
-                    // package_ary = tmpCss;
                     entry['key'] = package_name;
                     entry['value'] = tmpCss;
                 }

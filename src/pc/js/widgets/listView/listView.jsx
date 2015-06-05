@@ -1,6 +1,6 @@
 var
 ViewBase = require("widgets/itemView/itemView"),
-libs = require('modules/list/libs');
+libs = require('libs/libs');
 
 var
 ListClass = React.createClass({
