@@ -31,6 +31,7 @@ gulp.task 'pagecss:dev', getTask('css-pages')
 
 # 雪碧图
 gulp.task 'sprite:dev', ['commoncss:dev','pagecss:dev','images:dev'], getTask('sprite')
+# gulp.task 'sprite:dev', ['commoncss:dev','pagecss:dev','images:dev'], -> ()
 
 # 对图像资源复制至dist
 gulp.task 'images:dev', getTask('images-dev')
@@ -54,7 +55,7 @@ gulp.task "server", ['buildCommon:dev','html','ie:dev','fonts:dev','sprite:dev']
 
 
 # 编译webpack未压缩的资源
-gulp.task 'webpack:dev', getTask('webpack')
+gulp.task 'wp:dev', getTask('wp')
 
 
 # 默认启动本地DEMO服务器
@@ -62,7 +63,7 @@ gulp.task 'default',['clean:dev'], ->
     gulp.start 'server'
 
 # 构建任务，生成未压缩版
-gulp.task 'buildCommon:dev',['webpack:dev'], getTask('concat-common-js')
+gulp.task 'buildCommon:dev',['wp:dev'], getTask('concat-common-js')
 
 # 构建任务，生成压缩版与未压缩版
 gulp.task 'build',['clean:dev','clean:build'], getTask('map')

@@ -333,17 +333,25 @@ module.exports = {
           cb = undefined;
 
       var tmpKey, tmpValue,
-          type = (options && options.type) ? options.type : undefined,
+          type = (options && options.type) ? options.type : 'js',
           staticType = chkType(type),
           _webpackDevCompiler,
           _webpackDevConfig = staticType !== 'templet' ? this.create(dirname,isPack,options) : this.create(dirname,true,options),
           entrys = clone(entry);
 
-      //传进来的是数组，强制不进行合并，分别生成，不管是css 还是 js
-      //如果需要合并，可以用json传进来
-      if(entrys._ary){
+
+
+      //数组或单文件，强制不进行合并，分别生成
+      //如果需要合并，用json传进来
+      // js css
+      if(entrys._ary || entrys._src)
           isPack = false;
-      }
+
+
+      //html hbs php
+      if( staticType === 'templet')
+          isPack = true;
+
 
       if (entrys){
           if(entrys.key){
@@ -358,47 +366,60 @@ module.exports = {
 
           //parse sass scss less css stylus
           function doStyle(){
-              if(type && (type==='sass' || type==='scss')){
-                  //gulp deal with style
-                  if(isPack===true){
+              if(isPack===true){
 
-                      gulp.src([tmpValue])
-                      .pipe($.newer(path.join(__dirname,'../../', config.dist + '/' + configs.version + '/dev/css/') + tmpKey +'.css'))
-                      .pipe($.plumber())
-                      // .pipe $.rimraf()
-                      .pipe($.sass())
-                      .pipe($.autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
-                      .pipe($.size())
-                      .pipe($.rename(tmpKey + ".css"))
-                      .pipe(gulp.dest(path.join(__dirname,'../../', config.dist + '/' + configs.version + '/dev/css/')))
-                  }else{
-                      for(var file in entrys){
-                          if(entrys[file].length){
-                              (function(item){
-                                  gulp.src(entrys[item])
-                                  .pipe($.newer(path.join(__dirname,'../../', config.dist + '/' + configs.version + '/dev/css/') + item +'.css'))
-                                  .pipe($.plumber())
-                                  // .pipe $.rimraf()
-                                  .pipe($.sass())
-                                  .pipe($.autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
-                                  .pipe($.size())
-                                  .pipe($.rename(item + ".css"))
-                                  .pipe(gulp.dest(path.join(__dirname,'../../', config.dist + '/' + configs.version + '/dev/css/')))
-                              })(file);
-                      } }
-              } }
-              else{
-                  //if webpack sass-loader has fixed , then can use this module,
-                  //node: edit fllow some code;
-                  _webpackDevCompiler = webpack(_webpackDevConfig);
-                  _webpackDevCompiler.run(function(err, stats){
-                      if(err){
-                          throw new gutil.PluginError('[webpack]', err) ;
-                      }
-                      gutil.log('[webpack]', stats.toString({ colors: true } )) ;
-                      if(cb) cb();
-                  });
+                  gulp.src([tmpValue])
+                  .pipe($.newer(configs.cssDevPath + tmpKey +'.css'))
+                  .pipe($.plumber())
+                  // .pipe $.rimraf()
+                  .pipe ($.if('*.sass', $.sass() ))
+                  .pipe ($.if('*.scss', $.sass() ))
+                  .pipe ($.if('*.less', $.less() ))
+                  .pipe ($.if('*.styl', $.stylus() ))
+                  .pipe ($.if('*.stylus', $.stylus() ))
+                  .pipe($.autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
+                  .pipe($.size())
+                  .pipe($.rename(tmpKey + ".css"))
+                  // .pipe(gulp.dest(path.join(__dirname,'../../', config.dist + '/' + configs.version + '/dev/css/')))
+                  .pipe(gulp.dest(configs.cssDevPath))
+              }else{
+                  for(var file in entrys){
+                      if(entrys[file].length){
+                          (function(item){
+                              gulp.src(entrys[item])
+                              .pipe($.newer(configs.cssDevPath + item +'.css'))
+                              .pipe($.plumber())
+                              // .pipe $.rimraf()
+                              .pipe ($.if('*.sass', $.sass() ))
+                              .pipe ($.if('*.scss', $.sass() ))
+                              .pipe ($.if('*.less', $.less() ))
+                              .pipe ($.if('*.styl', $.stylus() ))
+                              .pipe ($.if('*.stylus', $.stylus() ))
+                              .pipe($.autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
+                              .pipe($.size())
+                              .pipe($.rename(item + ".css"))
+                              // .pipe(gulp.dest(path.join(__dirname,'../../', config.dist + '/' + configs.version + '/dev/css/')))
+                              .pipe(gulp.dest(configs.cssDevPath))
+                          })(file);
+                  } }
               }
+
+              // if(type && (type==='sass' || type==='scss')){
+              //     //gulp deal with style
+              //     //something on up
+              // }
+              // else{
+              //     //if webpack sass-loader has fixed , then can use this module,
+              //     //node: edit fllow some code;
+              //     _webpackDevCompiler = webpack(_webpackDevConfig);
+              //     _webpackDevCompiler.run(function(err, stats){
+              //         if(err){
+              //             throw new gutil.PluginError('[webpack]', err) ;
+              //         }
+              //         gutil.log('[webpack]', stats.toString({ colors: true } )) ;
+              //         if(cb) cb();
+              //     });
+              // }
           }
 
           //parse js jsx cjsx coffee ...
@@ -442,14 +463,18 @@ module.exports = {
                       if(data && (_filename in data)){
                           file.data = data[_filename];
                       }else{
-                          _contents = file.contents.toString('utf-8'),
-                          _title = _contents.match(/<title>([\s\S]*?)<\/title>/ig);
+                          if( _filename === 'index' || _filename==='list' ){
 
-                          if (_title != null && _title[0]){
-                              list.title = _title[0].replace(/\<(\/?)title\>/g,'')
-                              list.des = 'ni mei! kuai gei wo dian hua!'
-                              file.data = list;
                           }
+
+                          // _contents = file.contents.toString('utf-8'),
+                          // _title = _contents.match(/<title>([\s\S]*?)<\/title>/ig);
+                          //
+                          // if (_title != null && _title[0]){
+                          //     list.title = _title[0].replace(/\<(\/?)title\>/g,'')
+                          //     list.des = 'ni mei! kuai gei wo dian hua!'
+                          //     file.data = list;
+                          // }
                       }
 
                       if(api && (_filename in api)){
@@ -472,7 +497,7 @@ module.exports = {
                   .pipe (function(){
                       function testfun(file,enc,cb){
                           var ext_name = path.extname(file.path);
-                          if(ext_name!=='.hbs'){
+                          if(ext_name==='.md'||ext_name==='.markdown'||ext_name==='.json'){
                               cb();
                           }else{
                               this.push(file);
@@ -491,10 +516,12 @@ module.exports = {
                       }
                   }))
                   .pipe ($.size())
-                  .pipe (getHtmlData())
+                  .pipe ( getHtmlData())
                   .pipe ($.compileHandlebars())
-                  .pipe ($.rename({
-                      extname: ".html"
+                  .pipe ($.rename(function(path){
+                      if(path.extname!=='.php' || path.extname!=='.jsp'){
+                          path.extname = '.html'
+                      }
                   }))
                   .pipe (gulp.dest(configs.htmlDevPath))
               }
@@ -503,40 +530,40 @@ module.exports = {
               * parse html and build it
               * make index list
               */
-              function parseHtml(){
-
-                  gulp.src (tmpValue,{ base: path.join(config.src,'html/') })
-                    .pipe (function(){
-                        function testfun(file,enc,cb){
-                            var ext_name = path.extname(file.path);
-                            if(ext_name!=='.html'){
-                                cb();
-                            }else{
-                                this.push(file);
-                                cb();
-                            }
-                        }
-                        return through.obj(testfun)
-                    }())
-                    .pipe ($.newer(configs.htmlDevPath))
-                    .pipe ($.plumber())
-                    .pipe ($.fileInclude({
-                        prefix: '@@',
-                        basepath: '@file',
-                        context: {
-                            dev: !gutil.env.production
-                        }
-                    }))
-                    .pipe ($.size())
-                    .pipe (gulp.dest( configs.htmlDevPath ))
-              }
+              // function parseHtml(){
+              //
+              //     gulp.src (tmpValue,{ base: path.join(config.src,'html/') })
+              //       .pipe (function(){
+              //           function testfun(file,enc,cb){
+              //               var ext_name = path.extname(file.path);
+              //               if(ext_name!=='.html'){
+              //                   cb();
+              //               }else{
+              //                   this.push(file);
+              //                   cb();
+              //               }
+              //           }
+              //           return through.obj(testfun)
+              //       }())
+              //       .pipe ($.newer(configs.htmlDevPath))
+              //       .pipe ($.plumber())
+              //       .pipe ($.fileInclude({
+              //           prefix: '@@',
+              //           basepath: '@file',
+              //           context: {
+              //               dev: !gutil.env.production
+              //           }
+              //       }))
+              //       .pipe ($.size())
+              //       .pipe (gulp.dest( configs.htmlDevPath ))
+              // }
 
               switch(type){
                   case 'hbs':
                       parseHbs();
                       break;
                   case 'html':
-                      parseHtml();
+                      parseHbs();
                       break;
               }
           }
@@ -606,6 +633,11 @@ module.exports = {
                   package_name = isPack === true ? path.basename(dirname) : '';
               }else if(fs.statSync(dirname).isFile()){
                   //todoo something
+                  return {
+                      '_src': dirname,
+                      'key': '_src',
+                      'value': dirname
+                  }
               }
       } }
 
@@ -628,15 +660,6 @@ module.exports = {
                     package_name = item;
                     prepend = (opts.prepend && getObjType(opts.prepend)==='Array') ? opts.prepend : [],
                     append = (opts.append && getObjType(opts.append)==='Array') ? opts.append : [];
-                    // if(prepend){
-                    //     ultimates = prepend.concat(entry[item]);
-                    // }
-                    // else if(append){
-                    //     ultimates = entry[item].concat(append);
-                    // }
-                    // else{
-                    // }
-                    // ultimates = entry[item];
                     ultimates = prepend.concat(entry[item]).concat(append);
                 }
 

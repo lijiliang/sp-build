@@ -5,7 +5,7 @@ gutil = require 'gulp-util'
 config = require '../configs/config.coffee'
 
 
-# 生成数据
+# 首页列表数据
 list = {}
 htmlDirPath = config.dirs.src + '/html'
 htmlDir = fs.readdirSync( htmlDirPath );
@@ -18,7 +18,7 @@ htmlDir.map (filename)->
         includeDir = fs.readdirSync(firstPath)
         includeDir.map (_filename)->
             ext = path.extname(_filename)
-            if ( ext == '.hbs' )
+            if ( ext == '.hbs' || ext == '.html')
                 secondPath = firstPath + '/' + _filename
                 if ( !fs.statSync(secondPath).isDirectory() )
                     content = fs.readFileSync(secondPath,'utf8')
@@ -41,3 +41,4 @@ module.exports = (gulp,$,pack)->
             index: list
         }
         pack.build(config.dirs.src + '/html/',{type: 'hbs',data: datas});
+        # pack.build(config.dirs.src + '/html/index.hbs',{type: 'hbs',data: datas});
