@@ -6,25 +6,30 @@
 突然想到了怪物史莱姆，丑陋，肮脏，但可爱，这与前端的产出一样，但希望在生产过程中足够可爱与简单。
 SLIME PACK是一个 简单的前端编译系统，支持 `script / style / templet` 的打包与分包。
 
-## 支持模块化
+ -  
+#### 支持模块化
 多人协作开发需要模块化，前端现在都不是一个人在战斗，各种模式混杂，AMD，CMD，~~TMD~~（你懂的）
  都是比较常用的模式， SLIME PACK全部都支持，包括~~TMD~~模式，因为SLIME PACK是对`webpack`的封装, 什么是webpack你可以看一下这里 [链接地址](http://webpack.github.io)
 
-## 支持的style
+ -  
+#### 支持的style
 还在敲css，太low了吧（我很low），这一部分在弄它的时候踩了些坑，我本来是想全部用`webpack`来封 装的，
 但后来发现， webpack这个坑货对于sass的打包会出错，而且`sass-loader`这玩意作者也不是很给力，
 啃了几天英文还是果断放弃算了 所以这一部分基于gulp（靠谱）来实现的。那么现在终于可
 以支持`sass / less / stylus / css`这几个坑货了  
 
-## 支持的script
+ -  
+#### 支持的script
 有的同学喜欢coffee，有的喜欢原生javascript，我本人后者，不想在踩坑。原生js也不是那么难看，
 而且ES6不是也 快来了吗？yield yeah!
 
-## 支持react
+ -  
+#### 支持react
 facebook好像也出了些好东东，这个是其一，人家官方排名都很靠前的一个项目，SLIME PACK支持`jsx / cjsx `的编译输出
 [传送门](http://https://facebook.github.io/)
 
-## 支持的templet
+ -  
+#### 支持的templet
 目前支持`handlesbar / html`，暂时还不支持'swig'，在gulp-task任务中可以通过nodejs获取数据并传送给模板render
 
 ## 依赖
