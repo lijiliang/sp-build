@@ -5,9 +5,9 @@ src_dir = src_dir + platform
 var global_dir = './src'+ platform +'/js/global';
 var path = require('path');
 module.exports = {
-    name: "斯品家居",
+    name: "SOMEPACK",
     version: "1.0.0",
-    description: "斯品家居的前端项目",
+    description: "SOMEPACK",
     dirs: {
         src: src_dir,
         dist: "./dist",

@@ -467,7 +467,7 @@ module.exports = {
               });
           }
 
-          
+
 
 
           //parse html hbs swig ...
@@ -695,10 +695,12 @@ module.exports = {
 
                 if(staticType==='style'){
                     for(var i=0; i<ultimates.length; i++){
-                        if(styleType)
-                            requireCssList += 'require("'+ultimates[i]+'");\n';
-                        else
-                            requireCssList += '@import "'+ultimates[i]+'";\n';
+                        //放弃webpack打包
+                        requireCssList += '@import "'+ultimates[i]+'";\n';
+                        // if(styleType)
+                        //     requireCssList += 'require("'+ultimates[i]+'");\n';
+                        // else
+                        //     requireCssList += '@import "'+ultimates[i]+'";\n';
                     }
 
                     var tmpFile = guid(),
