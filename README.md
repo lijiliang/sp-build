@@ -30,7 +30,12 @@ facebook好像也出了些好东东，这个是其一，人家官方排名都很
 
  -  
 #### 支持的templet
-目前支持`handlesbar / html`，暂时还不支持'swig'，在gulp-task任务中可以通过nodejs获取数据并传送给模板render
+目前支持`handlesbar / html / php / jsp`，PHP/JSP在解析后会生成保留扩展名，其他的模板的扩展名会转变为`.html`
+暂时还不支持'swig'，在gulp-task任务中可以通过nodejs获取数据并传送给模板render
+
+ -  
+#### 支持实时生成DEMO和WATCH
+实时WATCH `雪碧图、JS、CSS`并生成最新的DEMO，可以实时看到模板CSS输出效果及js交互效果
 
 ## 依赖
 node 0.12.1 ruby 2.2.2 [下载地址](http://rubyinstaller.org/downloads/)
