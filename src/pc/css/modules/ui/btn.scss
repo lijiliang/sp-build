@@ -24,7 +24,7 @@ $btnBgGradientSwitch:    false !default;//是否启用渐变背景
 // btn common style
 // 按钮基本样式，联合申明
 %btn-basic{
-  @include inline-block;
+  // @include inline-block;
   cursor: pointer;
   text-align:center;
   border:0 none;

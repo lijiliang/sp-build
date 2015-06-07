@@ -82,6 +82,9 @@ function readPageDir(subDir, isPack, depth) {
         var _filename = (subDir && subDir.filename) || item;
         var name = (subDir && subDir.name) || item;
 
+        // if(fs.statSync(dirsPath + '/' + _filename) && fs.statSync(dirsPath + '/' + _filename).isFile()){
+        //     _filename = path.parse(_filename).name;
+        // }
 
         //如果是目录
         // 忽略下划线目录，如_test, _xxx
@@ -264,23 +267,28 @@ module.exports = {
           idf_externals = custom_externals;
 
       if(dirname && getObjType(dirname)==='String'){
-          entry = this.readDir(dirname,isPack,options);
+              entry = this.readDir(dirname,isPack,options);
+          if  (entry._src){
+              idf_plugins = plugins('noCommon');
+          }
       }
 
       else if( dirname && getObjType(dirname)==='Object'){
-          entry = $extend(true,{},dirname);
-          if(entry.noCommon || options.noCommon) {
-              delete entry.noCommon;
+              entry = $extend(true,{},dirname);
               idf_plugins = plugins('noCommon');
+          if  (entry.noCommon || options.noCommon) {
+              delete entry.noCommon;
           }
           else {
               delete entry.noCommon;
-              idf_plugins = plugins(entry);
+              // idf_plugins = plugins(entry);
       } }
 
       else if( dirname && getObjType(dirname)==='Array'){
           idf_plugins = plugins('noCommon');
           entry = {'_ary': dirname};
+          entry.key = '_ary';
+          entry.value = dirname;
       }
 
       // console.log(entry);
@@ -340,18 +348,29 @@ module.exports = {
           entrys = clone(entry);
 
 
-
       //数组或单文件，强制不进行合并，分别生成
       //如果需要合并，用json传进来
       // js css
-      if(entrys._ary || entrys._src)
+      if(entrys._ary || entrys._src){
           isPack = false;
+          if(options.rename &&
+            getObjType(options.rename) === 'String' &&
+            options.rename !== ''){
+              isPack = true;
+              entrys = {};
+              entrys[options.rename] = entry._ary || entry._src;
+              entrys.key = options.rename;
+              entrys.value = entry._ary;
+              if(staticType === 'script'){
+                  _webpackDevConfig.entry = entrys
+              }
+          }
+      }
 
 
       //html hbs php
       if( staticType === 'templet')
           isPack = true;
-
 
       if (entrys){
           if(entrys.key){
@@ -368,7 +387,7 @@ module.exports = {
           function doStyle(){
               if(isPack===true){
                   // combo css
-                  gulp.src([tmpValue])
+                  gulp.src(tmpValue)
                   .pipe($.newer(configs.cssDevPath + tmpKey +'.css'))
                   .pipe($.plumber())
                   // .pipe $.rimraf()
@@ -377,9 +396,10 @@ module.exports = {
                   .pipe ($.if('*.less', $.less() ))
                   .pipe ($.if('*.styl', $.stylus() ))
                   .pipe ($.if('*.stylus', $.stylus() ))
-                  .pipe($.autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
-                  .pipe($.size())
-                  .pipe($.rename(tmpKey + ".css"))
+                  .pipe ($.autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
+                  .pipe ($.size())
+                  .pipe ($.concat(tmpKey + ".css"))
+                  // .pipe($.rename(tmpKey + ".css"))
                   // .pipe(gulp.dest(path.join(__dirname,'../../', config.dist + '/' + configs.version + '/dev/css/')))
                   .pipe(gulp.dest(configs.cssDevPath))
               }else{
@@ -388,7 +408,7 @@ module.exports = {
                       if(entrys[file].length){
                           (function(item){
                               gulp.src(entrys[item])
-                              .pipe($.newer(configs.cssDevPath + item +'.css'))
+                              .pipe( $.newer(configs.cssDevPath ))
                               .pipe($.plumber())
                               // .pipe $.rimraf()
                               .pipe ($.if('*.sass', $.sass() ))
@@ -398,7 +418,8 @@ module.exports = {
                               .pipe ($.if('*.stylus', $.stylus() ))
                               .pipe($.autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
                               .pipe($.size())
-                              .pipe($.rename(item + ".css"))
+                              // .pipe($.sass())
+                              .pipe( (entry._src||entry._ary) ? $.rename({'extname': '.css'}) : $.concat(item + ".css"))
                               .pipe(gulp.dest(configs.cssDevPath))
 
 
@@ -456,14 +477,30 @@ module.exports = {
 
           //parse js jsx cjsx coffee ...
           function doScript(){
+              var nEntry = {};
+              var tary;
+              var tkey;
+              if  (entrys._src||entrys._ary){
+                  tary = entrys._src||entrys._ary;
+                  tary.map(function(item){
+                      tkey = path.parse(item).name;
+                      nEntry[tkey] = item;
+                  });
+              }
+              else{
+                  nEntry = entry;
+              }
+              _webpackDevConfig.entry = nEntry;
 
               _webpackDevCompiler = webpack(_webpackDevConfig);
               _webpackDevCompiler.run(function(err, stats){
-                  if(err){
+                  if  (err){
                       throw new gutil.PluginError('[webpack]', err) ;
                   }
-                  gutil.log('[webpack]', stats.toString({ colors: true } )) ;
-                  if(cb) cb();
+                      gutil.log('[webpack]', stats.toString({ colors: true } )) ;
+
+                  if  (cb)
+                      cb();
               });
           }
 
@@ -497,15 +534,15 @@ module.exports = {
                           api = clone(options.api);
                       }
 
-                      if(data && (_filename in data)){
+                      if  (data && (_filename in data)){
                           file.data = data[_filename];
                       }else{
-                          if( _filename === 'index' || _filename==='list' ){
+                          if  ( _filename === 'index' || _filename==='list' ){
                               //列表数据，还是应该放到外面生成
                           }
                       }
 
-                      if(api && (_filename in api)){
+                      if  (api && (_filename in api)){
                           /*todo something*/
                       }
 
@@ -521,7 +558,7 @@ module.exports = {
               * make index list
               */
               function parseHbs(){
-                  gulp.src(tmpValue,{ base: path.join(config.src,'html/') })
+                  gulp. src(tmpValue,{ base: path.join(config.src,'html/') })
                   .pipe (function(){
                       function testfun(file,enc,cb){
                           var ext_name = path.extname(file.path);
@@ -547,53 +584,28 @@ module.exports = {
                   .pipe ( getHtmlData())
                   .pipe ($.compileHandlebars())
                   .pipe ($.rename(function(path){
-                      if(path.extname!=='.php' || path.extname!=='.jsp'){
+                      if  (path.extname!=='.php' || path.extname!=='.jsp'){
                           path.extname = '.html'
                       }
                   }))
                   .pipe (gulp.dest(configs.htmlDevPath))
               }
 
-              /*
-              * parse html and build it
-              * make index list
-              */
-              // function parseHtml(){
-              //
-              //     gulp.src (tmpValue,{ base: path.join(config.src,'html/') })
-              //       .pipe (function(){
-              //           function testfun(file,enc,cb){
-              //               var ext_name = path.extname(file.path);
-              //               if(ext_name!=='.html'){
-              //                   cb();
-              //               }else{
-              //                   this.push(file);
-              //                   cb();
-              //               }
-              //           }
-              //           return through.obj(testfun)
-              //       }())
-              //       .pipe ($.newer(configs.htmlDevPath))
-              //       .pipe ($.plumber())
-              //       .pipe ($.fileInclude({
-              //           prefix: '@@',
-              //           basepath: '@file',
-              //           context: {
-              //               dev: !gutil.env.production
-              //           }
-              //       }))
-              //       .pipe ($.size())
-              //       .pipe (gulp.dest( configs.htmlDevPath ))
+              parseHbs();
+              // switch(type){
+              //     case 'hbs':
+              //         parseHbs();
+              //         break;
+              //     case 'php':
+              //         parseHbs();
+              //         break;
+              //     case 'jsb':
+              //         parseHbs();
+              //         break;
+              //     case 'html':
+              //         parseHbs();
+              //         break;
               // }
-
-              switch(type){
-                  case 'hbs':
-                      parseHbs();
-                      break;
-                  case 'html':
-                      parseHbs();
-                      break;
-              }
           }
 
           switch(staticType){
@@ -623,7 +635,7 @@ module.exports = {
           depth: true
       };
 
-      if(options && getObjType(options) === 'Object'){
+      if (options && getObjType(options) === 'Object'){
           opts = $extend(true,opts,options);
       }
 
@@ -643,95 +655,92 @@ module.exports = {
           default_dir = dirname;
 
       //匹配configs.dirs
-      for(var item in config){
+      for (var item in config){
           if(item === dirname){
               pagesDir = fs.readdirSync(config[item]);
               default_dir = config[item];
               package_name = isPack === true ? dirname : '';
       } }
 
-      if(!pagesDir){
+      if  (!pagesDir){
           //直接匹配目录
-          if (!fs.existsSync(dirname)) {
+          if  (!fs.existsSync(dirname)) {
               throw new Error("==============Error: you must identify a entry");
               return false;
-          }else{
-              if(fs.statSync(dirname).isDirectory()){
+          }
+          else{
+              if  (fs.statSync(dirname).isDirectory()){
                   pagesDir = fs.readdirSync(dirname);
                   package_name = isPack === true ? path.basename(dirname) : '';
-              }else if(fs.statSync(dirname).isFile()){
-                  //todoo something
-                  return {
-                      '_src': dirname,
-                      'key': '_src',
-                      'value': dirname
-                  }
+              }
+
+              else if(fs.statSync(dirname).isFile()){
+                   return {
+                       '_src' : [dirname],
+                       'key'  : '_src',
+                       'value': [dirname]
+                   }
               }
       } }
 
       //生成entry 全局
       readPageDir(null, isPack, opts.depth);
 
-      if(entry){
-        // if(type==='less' || type==='sass'|| type==='stylus'|| type==='css'|| type==='scss'){
-            var ultimates = [],
-                ext = styleType ? 'js' : type;
+      if  (entry){
+          var ultimates = [],
+              ext = staticType==='script' ? 'js' : type;
 
-            //sass使用gulp解析，其他使用webpack解析
-            if(type=='less' ||type==='stylus' ||type==='css' ||type==='styl')
-                styleType = true;
+          //sass使用gulp解析，其他使用webpack解析
+          if  (type=='less' ||type==='stylus' ||type==='css' ||type==='styl')
+              styleType = true;
 
-            if(isPack){
+          if  (isPack){
+              //merge prepend or append
+              for (var item in entry){
+                  package_name = item;
+                  prepend = (opts.prepend && getObjType(opts.prepend)==='Array') ? opts.prepend : [],
+                  append = (opts.append && getObjType(opts.append)==='Array') ? opts.append : [];
+                  ultimates = prepend.concat(entry[item]).concat(append);
+              }
 
-                //merge prepend or append
-                for(var item in entry){
-                    package_name = item;
-                    prepend = (opts.prepend && getObjType(opts.prepend)==='Array') ? opts.prepend : [],
-                    append = (opts.append && getObjType(opts.append)==='Array') ? opts.append : [];
-                    ultimates = prepend.concat(entry[item]).concat(append);
-                }
+                  package_name = rename ? rename : package_name;
 
-                package_name = rename ? rename : package_name;
+              if  (staticType==='style'|| staticType==='script'){
+                  for (var i=0; i<ultimates.length; i++){
+                      //放弃webpack打包
+                      staticType === 'style'
+                      ?
+                      requireCssList += '@import "'+ultimates[i]+'";\n'
+                      :
+                      requireCssList += 'require("'+ultimates[i]+'");\n';
+                  }
 
-                if(staticType==='style'){
-                    for(var i=0; i<ultimates.length; i++){
-                        //放弃webpack打包
-                        requireCssList += '@import "'+ultimates[i]+'";\n';
-                        // if(styleType)
-                        //     requireCssList += 'require("'+ultimates[i]+'");\n';
-                        // else
-                        //     requireCssList += '@import "'+ultimates[i]+'";\n';
-                    }
+                  var tmpFile = guid(),
+                      tmpDir = config.dist + '/_tmp',
+                      tmpFile = config.dist + '/_tmp/'+tmpFile+'.'+ext;
 
-                    var tmpFile = guid(),
-                        tmpDir = config.dist + '/_tmp',
-                        tmpCss = config.dist + '/_tmp/'+tmpFile+'.'+ext;
+                  if  (!fs.existsSync(tmpDir)) {
+                      fs.mkdirSync(tmpDir);
+                  }
 
-                    if (!fs.existsSync(tmpDir)) {
-                        fs.mkdirSync(tmpDir);
-                    }
+                      fs.writeFileSync( tmpFile , requireCssList) ;
 
-                    fs.writeFileSync( tmpCss , requireCssList) ;
+                      entry = {};
+                      entry[package_name] = [tmpFile];
+                      entry['key'] = package_name;
+                      entry['value'] = [tmpFile];
+              }
+              else{
+                  entry = {};
+                  entry[package_name] = ultimates;
+                  entry['key'] = package_name;
+                  entry['value'] = ultimates;
+              }
+          }
 
-                    entry = {};
-                    entry[package_name] = tmpCss;
-                    entry['key'] = package_name;
-                    entry['value'] = tmpCss;
-                }
-                else{
-                    var tmpkey = Object.keys(entry)[0];
-                    var tmpobj = clone(entry[tmpkey]);
-                    entry = {};
-                    entry[tmpkey] = tmpobj;
-                    entry['key'] = package_name;
-                    entry['value'] = '';
-                }
-            }
+          //isPack===false
+          else{ }
 
-            //isPack===false
-            else{ }
-
-        // }
     }
 
     return entry;

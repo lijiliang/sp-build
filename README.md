@@ -3,12 +3,12 @@
 --------------------------------------------------------------------------------
 
 ## 概述
-突然想到了怪物史莱姆，丑陋，肮脏，但可爱，这与前端的产出一样，但希望在生产过程中足够可爱与简单。
+>突然想到了怪物史莱姆，丑陋，肮脏，但可爱，这与前端的产出一样，但希望在生产过程中足够可爱与简单。
 SLIME PACK是一个简单的前端编译系统，支持 `script / style / templet` 的打包与分包。
 
  -  
 #### 支持模块化
-多人协作开发需要模块化，前端现在都不是一个人在战斗，各种模式混杂，AMD，CMD，~~TMD~~（你懂的）
+多人协作开发需要模块化，前端现在都不是一个人在战斗，各种模式混杂，AMD，CMD，~~TMD~~（你懂的，原生无模式）
  都是比较常用的模式， SLIME PACK全部都支持，包括~~TMD~~模式，因为SLIME PACK是对`webpack`的封装, 什么是webpack你可以看一下这里 [链接地址](http://webpack.github.io)
 
  -  
@@ -35,6 +35,52 @@ facebook好像也出了些好东东，这个是其一，人家官方排名都很
  -  
 #### 支持实时生成DEMO和WATCH
 实时WATCH `雪碧图、JS、CSS`并生成最新的DEMO，可以实时看到模板CSS输出效果及js交互效果
+
+
+## 生成规则
+打包：把目录下所有`css / js`合并成一个文件，文件名为目录名  
+分包：按子目录名打包
+
+ -  
+### 支持生成入口
+String: 文件名，完整的文件名称，如绝对路径 d:\xxx\yyy.js  
+_参考_  
+String: 配置名，config中默认的名称，如 config -> pages  
+_参考: `gulp-task/css-pages.coffee or gulp-task/css-common.coffee`_  
+String: 目录名，如存在的目录 d:\xxx  
+_参考: `gulp-task/html.coffee`_  
+Array:  组合数组，数组元素为绝对路径 如 ['d:\xxx\yyy.js','d:\xxx\aaa.js']  
+_参考_  
+Json:   组合JSON  
+_参考: `gulp-task/concat-common-js.coffee`_  
+
+
+ -  
+### 目录结构
+
+```html
+├── js
+    ├── global   // 【TMD】    --- 主动打包common.js --- 自定义框架 --- 支持window全局
+    ├── libs     // 【CMD/AMD】--- 被动产出 --- 自定义类库
+    ├── mixins   // 【CMD/AMD】--- 被动产出 --- 自定义mixins --- 适用于react
+    ├── modules  // 【CMD/AMD】--- 被动产出 --- 自定义组合模块  ---由widgets组件合并
+    ├── pages    // 【CMD/AMD】--- 主动分包 --- 业务 ---与php/jsp同步
+    ├── vendor   // 【TMD】    --- 主动打包common.js --- 第三方库，如JQ --- 支持window全局
+    ├── widgets  // 【CMD/AMD】--- 被动产出 --- 细粒化组件 ---适用于react与原生
+```
+
+
+
+
+
+
+
+
+
+ -  
+#### 分包
+>把子目录分别打包，按子目录名命名
+
 
 ## 依赖
 node 0.12.1 ruby 2.2.2 [下载地址](http://rubyinstaller.org/downloads/)
