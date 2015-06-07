@@ -44,14 +44,6 @@ function chkType(type){
 /**
  * 获取目录结构
  */
-// var config = configs.dirs;
-// var pagesDir = fs.readdirSync(config.pages);
-
-// var entry = {};
-
-/**
- * 获取目录结构
- */
 var
 config = configs.dirs,
 default_dir,
