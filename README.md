@@ -4,7 +4,7 @@
 
 ## 概述
 >突然想到了怪物史莱姆，丑陋，肮脏，但可爱，这与前端的产出一样，但希望在生产过程中足够可爱与简单。
-SLIME PACK是一个简单的前端编译系统，支持 `script / style / templet` 的打包与分包。
+SLIME PACK是一个简单的前端编译系统，基于nodejs，支持 `script / style / templet` 的打包与分包。
 
  -  
 #### 支持模块化
@@ -14,7 +14,7 @@ SLIME PACK是一个简单的前端编译系统，支持 `script / style / temple
  -  
 #### 支持的style
 这一部分在弄它的时候踩了些坑，我本来是想全部用`webpack`来封 装的，但后来发现， webpack这个坑货对于sass的打包会出错，
-而且`sass-loader`这玩意作者也不是很给力，啃了几天英文还是果断放弃算了 所以这一部分基于gulp（靠谱）来实现的。
+而且`sass-loader`这玩意作者也不是很给力，啃了几天英文还是果断放弃算了，所以这一部分基于gulp（靠谱）来实现的。
 那么现在终于可以支持`sass / less / stylus / css`这几个坑货了  
 
  -  
@@ -36,70 +36,178 @@ facebook好像也出了些好东东，这个是其一，人家官方排名都很
 #### 支持实时生成DEMO和WATCH
 实时WATCH `雪碧图、JS、CSS`并生成最新的DEMO，可以实时看到模板CSS输出效果及js交互效果
 
+## 依赖/安装/运行
+>非常简单  
 
-## 生成规则
-打包：把目录下所有`css / js`合并成一个文件，文件名为目录名  
-分包：按子目录名打包
-
- -  
-### 支持生成入口
-String: 文件名，完整的文件名称，如绝对路径 d:\xxx\yyy.js  
-_参考_  
-String: 配置名，config中默认的名称，如 config -> pages  
-_参考: `gulp-task/css-pages.coffee or gulp-task/css-common.coffee`_  
-String: 目录名，如存在的目录 d:\xxx  
-_参考: `gulp-task/html.coffee`_  
-Array:  组合数组，数组元素为绝对路径 如 ['d:\xxx\yyy.js','d:\xxx\aaa.js']  
-_参考_  
-Json:   组合JSON  
-_参考: `gulp-task/concat-common-js.coffee`_  
-
-
- -  
-### 目录结构
-
-```html
-├── js
-    ├── global   // 【TMD】    --- 主动打包common.js --- 自定义框架 --- 支持window全局
-    ├── libs     // 【CMD/AMD】--- 被动产出 --- 自定义类库
-    ├── mixins   // 【CMD/AMD】--- 被动产出 --- 自定义mixins --- 适用于react
-    ├── modules  // 【CMD/AMD】--- 被动产出 --- 自定义组合模块  ---由widgets组件合并
-    ├── pages    // 【CMD/AMD】--- 主动分包 --- 业务 ---与php/jsp同步
-    ├── vendor   // 【TMD】    --- 主动打包common.js --- 第三方库，如JQ --- 支持window全局
-    ├── widgets  // 【CMD/AMD】--- 被动产出 --- 细粒化组件 ---适用于react与原生
-```
-
-
-
-
-
-
-
-
-
- -  
-#### 分包
->把子目录分别打包，按子目录名命名
-
-
-## 依赖
-node 0.12.1 ruby 2.2.2 [下载地址](http://rubyinstaller.org/downloads/)
+node 0.12.1  
+ruby 2.2.2 [下载地址](http://rubyinstaller.org/downloads/)
 
 ```
 $ npm install -g gulp
 $ npm install -g bower
 $ gem install sass
+
+//安装
+$ cd git
+$ git clone https://github.com/webkixi/sp-build.git
+$ cd sp-build
+$ npm install
+$ bower install
+
+//运行
+$ gulp
+
+你的任何修改会实时响应到浏览器(css/js/html)
 ```
 
+## 生成规则
+> 打包：把目录下所有`css / js`合并成一个文件，文件名为目录名  
+分包：按子目录名打包  
+子分包：即子目录的子目录，会以'-'来分割  
+忽略目录：下划线开头的目录会被忽略打包，是目录：如`_xxx/`，但里面的模块可以被外部使用  
+
+```html
+打包示例
+
+├── aaa
+    ├── bbb.js
+    ├── ccc/
+    ├── ├── ddd.js
+    ├── _abc/
+    ├── ├── yyy.js
+    ├── ├── zzz.js
+
+打包会产出
+aaa.js = (bbb.js + ddd.js)
+_abc被自动忽略，你可以把测试文件放心的放在忽略目录中
+
+```  
+
+```html
+分包示例
+
+├── aaa
+    ├── bbb/
+    ├── ├── eee.js
+    ├── ccc/
+    ├── ├── ddd.js
+
+分包会产出
+bbb.js = (eee.js)
+ccc.js = (ddd.js)
+```
+
+```html
+子分包示例
+
+├── aaa/
+    ├── bbb/
+    ├── ├── eee.js
+    ├── ├── fff.js
+    ├── ├── xxx/
+    ├── ├── ├── yyy.js
+    ├── ├── ├── zzz.js
+    ├── ccc/
+    ├── ├── ddd.js  
+
+子分包会产出
+bbb.js = (eee.js + fff.js)  
+bbb-xxx.js = (yyy.js + zzz.js)
+ccc.js = (ddd.js)
+
+```
+
+ -  
+### 目录结构
+> 下面是目录结构表格
+
+```html
+├── 主结构
+    ├── _builder        //【目录】--- 配置文件目录
+    ├────├───configs    //【目录】--- 配置文件，自动化核心脚本
+    ├────├───gulp-task  //【目录】--- gulp任务分解模块
+    ├── src             //【目录】--- 源文件目录
+    ├── dist            //【目录】--- 产出目录，基本上不要管
+    ├── bower.json      //【文件】--- bower配置文件
+    ├── config.js       //【文件】--- 初始化目录配置文件
+    ├── gulpfile.coffee //【文件】--- gulp task结构
+    ├── package.json    //【文件】--- npm配置文件
+
+
+```  
+
+```html
+你应该关注产出目录pages（分包），其他目录是辅助性质，有助于提升代码的良好结构  
+对应 gulp-task 任务模块:
+ * concat-common-js.coffee
+ * wp.coffee
+
+├── js
+    ├── global   // 【TMD】  -- 主动打包common.js -- 自定义框架 -- 支持window全局
+    ├── libs     // 【CMD/AMD】--- 被动产出 --- 自定义类库
+    ├── mixins   // 【CMD/AMD】--- 被动产出 --- 自定义mixins--- 适用于react
+    ├── modules  // 【CMD/AMD】--- 被动产出 --- 自定义组合模块---由widgets组件合并
+    ├── pages    // 【CMD/AMD】--- 主动分包 --- 业务 ---与php/jsp同步
+    ├── vendor   // 【TMD】  -- 主动打包common.js -- 第三方库，如JQ
+    ├── widgets  // 【CMD/AMD】--- 被动产出 --- 细粒化组件 ---适用于react与原生  
+
+
+```  
+
+```html
+你应该关注产出目录pages（分包），modules是公共部分，除非你要换一个css库  
+对应 gulp-task 任务模块:
+ * css-common.coffee
+ * css-pages.coffee  
+
+├── css
+    ├── modules  // 【目录】--- 被动产出 --- 自定义组合模块  ---由widgets组件合并  
+    ├── pages    // 【目录】--- 主动分包 --- 业务 ---与php/jsp同步  
+
+
+```  
+-  
+### 入口函数(entry)
+具体参考gulp-task目录下的模块文件
+
+```
+  var slime = require('./_builder/configs/slime.config.js');
+
+/*
+* 静态文件生成core
+* {parm1} {string} // 文件名，完整的文件名称，如绝对路径 d:\xxx\yyy.js
+*         {string} // 配置名，config中默认的名称，如 config -> pages  
+*         {string} // 目录名，如存在的目录 d:\xxx  
+*         {array}  // 组合数组，数组元素为string路径 如 ['d:\xxx\yyy.js','d:\xxx\aaa.js']  
+*         {json}   // 组合JSON*
+* {parm2} {boolean}
+* {parm3} {json object}
+* return stream 不要理会
+*/
+
+slime.build(entry, [pack], [options])
+```
+
+-  
+### 支持生成入口说明(entry)
+String: 文件名，完整的文件名称，如绝对路径 d:\xxx\yyy.js  
+String: 配置名，config中默认的名称，如 config -> pages  
+String: 目录名，如存在的目录 d:\xxx  
+Array:  组合数组，数组元素为绝对路径 如 ['d:\xxx\yyy.js','d:\xxx\aaa.js']  
+Json:   组合JSON  
+
+
+
+
+
+
 ## 构建命令
+>常用构建命令
 ### gulp
 开启本地DEMO调试服务器
 
 ### gulp build
 编译静态资源至`./dist`目录
-
-### gulp doc
-基于jsdoc规范生成开发文档至`./doc`目录
 
 ## Bower包管理工具
 由Bower管理第三方类库
