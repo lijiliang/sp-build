@@ -4,7 +4,7 @@
 
 ## 概述
 突然想到了怪物史莱姆，丑陋，肮脏，但可爱，这与前端的产出一样，但希望在生产过程中足够可爱与简单。
-SLIME PACK是一个 简单的前端编译系统，支持 `script / style / templet` 的打包与分包。
+SLIME PACK是一个简单的前端编译系统，支持 `script / style / templet` 的打包与分包。
 
  -  
 #### 支持模块化
@@ -13,15 +13,14 @@ SLIME PACK是一个 简单的前端编译系统，支持 `script / style / templ
 
  -  
 #### 支持的style
-还在敲css，太low了吧（我很low），这一部分在弄它的时候踩了些坑，我本来是想全部用`webpack`来封 装的，
-但后来发现， webpack这个坑货对于sass的打包会出错，而且`sass-loader`这玩意作者也不是很给力，
-啃了几天英文还是果断放弃算了 所以这一部分基于gulp（靠谱）来实现的。那么现在终于可
-以支持`sass / less / stylus / css`这几个坑货了  
+这一部分在弄它的时候踩了些坑，我本来是想全部用`webpack`来封 装的，但后来发现， webpack这个坑货对于sass的打包会出错，
+而且`sass-loader`这玩意作者也不是很给力，啃了几天英文还是果断放弃算了 所以这一部分基于gulp（靠谱）来实现的。
+那么现在终于可以支持`sass / less / stylus / css`这几个坑货了  
 
  -  
 #### 支持的script
 有的同学喜欢coffee，有的喜欢原生javascript，我本人后者，不想在踩坑。原生js也不是那么难看，
-而且ES6不是也 快来了吗？yield yeah!
+而且ES6不是也快来了吗？yield yeah!
 
  -  
 #### 支持react
