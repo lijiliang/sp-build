@@ -116,9 +116,8 @@ bbb-xxx.js = (yyy.js + zzz.js)
 ccc.js = (ddd.js)
 
 ```
-
  -  
-### 目录结构
+### 目录结构  
 > 下面是目录结构表格
 
 ```html
