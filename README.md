@@ -6,6 +6,10 @@
 SLIME PACK是一个简单的前端编译系统，基于nodejs，支持 `script / style / templet` 的打包与分包。
 
  -  
+#### 支持生产(produce)和开发(develop)模式
+运行`gulp`，启动开发者模式，支持WATCH，运行`gulp build`，开启生产模式，一般需要的后端（PHP/JSP）对应的MAP文件，CDN需要的hash可以在配置中修改，默认开启
+
+ -  
 #### 支持模块化
 多人协作开发需要模块化，前端现在都不是一个人在战斗，各种模式混杂，AMD，CMD，~~TMD~~（你懂的，原生无模式）
  都是比较常用的模式， SLIME PACK全部都支持，包括~~TMD~~模式，因为SLIME PACK是对`webpack`的封装, 什么是webpack你可以看一下这里 [链接地址](http://webpack.github.io)
@@ -16,10 +20,11 @@ SLIME PACK是一个简单的前端编译系统，基于nodejs，支持 `script /
 而且`sass-loader`这玩意作者也不是很给力，啃了几天英文还是果断放弃算了，所以这一部分基于gulp（靠谱）来实现的。
 那么现在终于可以支持`sass / less / stylus / css`这几个坑货了  
 
+
  -  
 #### 支持的script
 有的同学喜欢coffee，有的喜欢原生javascript，我本人后者，不想在踩坑。原生js也不是那么难看，
-而且ES6不是也快来了吗？yield yeah!
+而且ES6不是也快来了吗？yield yeah! 支持`coffee / javascript`
 
  -  
 #### 支持react
@@ -32,7 +37,7 @@ facebook好像也出了些好东东，这个是其一，人家官方排名都很
 暂时还不支持'swig'，在gulp-task任务中可以通过nodejs获取数据并传送给模板render
 
  -  
-#### 支持实时生成DEMO和WATCH
+#### 支持实时生成雪碧图，支持实时DEMO和WATCH
 实时WATCH `雪碧图、JS、CSS`并生成最新的DEMO，可以实时看到模板CSS输出效果及js交互效果
 
 ## 依赖/安装/运行
@@ -42,18 +47,19 @@ node 0.12.1
 ~~ruby 2.2.2 [下载地址](http://rubyinstaller.org/downloads/)~~
 
 ```
-$ npm install -g gulp
-$ npm install -g bower
-$ gem install sass
-
-//安装
+// 安装
 $ cd git
 $ git clone https://github.com/webkixi/sp-build.git
 $ cd sp-build
 $ npm install
 $ bower install
 
-//运行
+// 依赖
+$ npm install -g gulp
+$ npm install -g bower
+$ gem install sass
+
+// 运行
 $ gulp
 
 你的任何修改会实时响应到浏览器(css/js/html)
@@ -68,7 +74,7 @@ $ gulp
 ```html
 打包示例
 
-├── aaa
+├── aaa/
     ├── bbb.js
     ├── ccc/
     ├── ├── ddd.js
@@ -78,14 +84,17 @@ $ gulp
 
 打包会产出
 aaa.js = (bbb.js + ddd.js)
-_abc被自动忽略，你可以把测试文件放心的放在忽略目录中
+_abc被自动忽略，你可以把测试文件放心的放在忽略目录中  
+
+//函数示例[函数说明](#function)
+slime.build('./aaa',true)
 
 ```  
 
 ```html
 分包示例
 
-├── aaa
+├── aaa/
     ├── bbb/
     ├── ├── eee.js
     ├── ccc/
@@ -93,7 +102,11 @@ _abc被自动忽略，你可以把测试文件放心的放在忽略目录中
 
 分包会产出
 bbb.js = (eee.js)
-ccc.js = (ddd.js)
+ccc.js = (ddd.js)  
+
+
+//函数示例[函数说明](#function)
+slime.build('./aaa',false)
 ```
 
 ```html
@@ -112,10 +125,15 @@ ccc.js = (ddd.js)
 子分包会产出
 bbb.js = (eee.js + fff.js)  
 bbb-xxx.js = (yyy.js + zzz.js)
-ccc.js = (ddd.js)
+ccc.js = (ddd.js)  
 
+
+//函数示例[函数说明](#function)
+slime.build('./aaa',false)
 ```
+
  -  
+
 ### 目录结构  
 > 下面是目录结构表格
 
@@ -159,13 +177,27 @@ ccc.js = (ddd.js)
  * css-pages.coffee  
 
 ├── css
-    ├── modules  // 【目录】--- 被动产出 --- 自定义组合模块  ---由widgets组件合并  
-    ├── pages    // 【目录】--- 主动分包 --- 业务 ---与php/jsp同步  
+    ├── modules  // 【目录】--- 被动产出 --- css库  
+    ├── pages    // 【目录】--- 主动分包 --- 业务
+
+```  
+
+```html
+你应该关注产出目录pages（分包），modules是公共部分，除非你要换一个css库  
+对应 gulp-task 任务模块:
+ * html.coffee
+
+├── html
+    ├── _common  // 【目录】--- 被动产出 --- 公共头尾部  
+    ├── pages    // 【目录】--- 主动分包 --- demo
 
 
 ```  
+
 -  
+
 ### 入口函数(entry)
+<a id='function'>
 具体参考gulp-task目录下的模块文件
 
 ```
@@ -186,14 +218,41 @@ ccc.js = (ddd.js)
 slime.build(entry, [pack], [options])
 ```
 
--  
-### 支持生成入口说明(entry)
-String: 文件名，完整的文件名称，如绝对路径 d:\xxx\yyy.js  
-String: 配置名，config中默认的名称，如 config -> pages  
-String: 目录名，如存在的目录 d:\xxx  
-Array:  组合数组，数组元素为绝对路径 如 ['d:\xxx\yyy.js','d:\xxx\aaa.js']  
-Json:   组合JSON  
+```
+# css 示例(coffee)
 
+config = require '../configs/config.coffee'
+test = config.dirs.src + '/css/pages/website/index.scss'     #string
+ary = [                                                      #array
+    config.dirs.src + '/css/pages/website/index.scss',
+    config.dirs.src + '/css/pages/website/error-404.scss',
+    config.dirs.src + '/css/pages/website/error-500.scss'
+]
+testcommon1 =  {ggggg: ary}                                  #json
+testcommon2 =  {ggggg: ary,kkkkk: test}
+
+module.exports = (gulp,$,pack)->
+    return () ->
+        pack.build(test,false,{type: 'sass'});
+        # pack.build(testcommon1,false,{type: 'sass'});
+        # pack.build(testcommon2,{type: 'sass'});
+```
+
+```
+# js 示例(coffee)
+
+config = require '../configs/config.coffee'
+test = config.dirs.src + '/js/pages/h5/lazypage/lazypage.jsx'
+ary = [
+    config.dirs.src + '/js/pages/h5/loadpage/loadpage.jsx'
+]
+testcommon1 =  {ggggg: ary}
+testcommon2 =  {ggggg: ary,kkkkk: test}
+module.exports = (gulp,$,pack)->
+    return (cb) ->
+        pack.build(testcommon2,cb);
+
+```
 
 
 
@@ -201,6 +260,7 @@ Json:   组合JSON
 
 ## 构建命令
 >常用构建命令
+
 ### gulp
 开启本地DEMO调试服务器
 
