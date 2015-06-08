@@ -231,11 +231,11 @@ ary = [                                                      #array
 testcommon1 =  {ggggg: ary}                                  #json
 testcommon2 =  {ggggg: ary,kkkkk: test}
 
-module.exports = (gulp,$,pack)->
+module.exports = (gulp,$,slime)->
     return () ->
-        pack.build(test,false,{type: 'sass'});
-        # pack.build(testcommon1,false,{type: 'sass'});
-        # pack.build(testcommon2,{type: 'sass'});
+        slime.build(test,false,{type: 'sass'});
+        # slime.build(testcommon1,false,{type: 'sass'});
+        # slime.build(testcommon2,{type: 'sass'});
 ```
 
 ```
@@ -248,9 +248,9 @@ ary = [
 ]
 testcommon1 =  {ggggg: ary}
 testcommon2 =  {ggggg: ary,kkkkk: test}
-module.exports = (gulp,$,pack)->
+module.exports = (gulp,$,slime)->
     return (cb) ->
-        pack.build(testcommon2,cb);
+        slime.build(testcommon2,cb);
 
 ```
 
