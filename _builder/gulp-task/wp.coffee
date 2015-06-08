@@ -1,3 +1,3 @@
-module.exports = (gulp,$,pack)->
+module.exports = (gulp,$,slime)->
     return (cb) ->
-        pack.build('pages',cb);
+        slime.build('pages',cb);

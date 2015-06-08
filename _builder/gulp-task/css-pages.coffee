@@ -1,4 +1,4 @@
 config = require '../configs/config.coffee'
-module.exports = (gulp,$,pack)->
+module.exports = (gulp,$,slime)->
     return () ->
-        pack.build(config.pageCssDir,false,{type: 'sass'});
+        slime.build(config.pageCssDir,false,{type: 'sass'});

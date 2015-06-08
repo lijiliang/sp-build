@@ -8,6 +8,6 @@ commonFilsMap = config.vendorList.concat(config.globalList) ;
 commonFilsMap.push( config.jsDevPath + '_common.js' ) ;
 commonJs = {'common': commonFilsMap };
 
-module.exports = (gulp,$,pack)->
+module.exports = (gulp,$,slime)->
     return () ->
-        pack.build(commonJs);
+        slime.build(commonJs);

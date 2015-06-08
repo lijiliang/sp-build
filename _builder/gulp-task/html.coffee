@@ -34,11 +34,11 @@ htmlDir.map (filename)->
 
 
 
-module.exports = (gulp,$,pack)->
+module.exports = (gulp,$,slime)->
     return () ->
         # 生成分页并生成列表页
         datas = {
             index: list
         }
-        pack.build(config.dirs.src + '/html/',{type: 'hbs',data: datas});
-        # pack.build(config.dirs.src + '/html/index.hbs',{type: 'hbs',data: datas});
+        slime.build(config.dirs.src + '/html/',{type: 'hbs',data: datas});
+        # slime.build(config.dirs.src + '/html/index.hbs',{type: 'hbs',data: datas});
