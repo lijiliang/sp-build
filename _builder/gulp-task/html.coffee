@@ -4,6 +4,27 @@ gulp = require 'gulp'
 gutil = require 'gulp-util'
 config = require '../configs/config.coffee'
 
+_subString = (str, len, hasDot) ->
+    newLength = 0
+    newStr = ""
+    chineseRegex = /[^\x00-\xff]/g
+    singleChar = ""
+    strLength = str.replace(chineseRegex,"**").length;
+    for i in [1..strLength]
+        singleChar = str.charAt(i).toString()
+        if singleChar.match(chineseRegex)
+            newLength++
+        else
+            newLength += 2
+        if newLength > len
+            break
+        newStr += singleChar
+    newStr = newStr.replace(/(\r|\n|#|\-)/ig,'')
+    if(hasDot && strLength > len)
+        newStr += "...";
+    return newStr;
+
+
 
 # 首页列表数据
 list = {}
@@ -17,20 +38,28 @@ htmlDir.map (filename)->
         list[filename].list = list[filename].list || []
         includeDir = fs.readdirSync(firstPath)
         includeDir.map (_filename)->
-            ext = path.extname(_filename)
-            if ( ext == '.hbs' || ext == '.html')
-                secondPath = firstPath + '/' + _filename
-                if ( !fs.statSync(secondPath).isDirectory() )
+            secondPath = firstPath + '/' + _filename
+            if ( !fs.statSync(secondPath).isDirectory() )
+                ext = path.extname(_filename)
+                if ( ext == '.hbs' || ext == '.html')
                     content = fs.readFileSync(secondPath,'utf8')
                     title = content.match(/<title>([\s\S]*?)<\/title>/ig)
                     if(title!=null && title[0])
                         title = title[0].replace(/\<(\/?)title\>/g,'')
-                        list[filename].list.push({
+                        fileprofile = {
                             group: filename,
                             title: title,
                             fileName: _filename.replace(ext,'.html')
                             fullpath: secondPath
-                        })
+                            des: ''
+                        }
+                        secondMd = secondPath.replace(ext,'.md')
+                        if(fs.existsSync(secondMd))
+                            desContent = fs.readFileSync(secondMd,'utf8')
+                            des = _subString(desContent,20,true)
+                            fileprofile.des = des
+
+                        list[filename].list.push(fileprofile)
 
 
 
