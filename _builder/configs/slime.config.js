@@ -254,17 +254,32 @@ custom_externals = {
 */
 module.exports = {
   create: function(dirname,isPack,options){
+      //init options
+      var opts = {
+          reanme: undefined,
+          type: undefined,
+          prepend: [],
+          append: [],
+          depth: true
+      };
 
+      if (options && getObjType(options) === 'Object'){
+          opts = $extend(true,opts,options);
+      }
+
+
+      //deal with
       var idf_plugins = plugins(dirname, isPack, options),
           idf_externals = custom_externals;
 
+      //string
       if(dirname && getObjType(dirname)==='String'){
               entry = this.readDir(dirname,isPack,options);
           if  (entry._src){
               idf_plugins = plugins('noCommon');
           }
       }
-
+      //json
       else if( dirname && getObjType(dirname)==='Object'){
               entry = $extend(true,{},dirname);
               idf_plugins = plugins('noCommon');
@@ -273,11 +288,11 @@ module.exports = {
           }
           else {
               delete entry.noCommon;
-              // idf_plugins = plugins(entry);
       } }
-
+      //array
       else if( dirname && getObjType(dirname)==='Array'){
           idf_plugins = plugins('noCommon');
+          dirname = opts.prepend.concat(dirname).concat(opts.append);
           entry = {'_ary': dirname};
           entry.key = '_ary';
           entry.value = dirname;
@@ -621,9 +636,8 @@ module.exports = {
       opts = {
           reanme: undefined,
           type: undefined,
-          prepend: undefined,
-          prepend: undefined,
-          append: undefined,
+          prepend: [],
+          append: [],
           depth: true
       };
 
@@ -667,11 +681,13 @@ module.exports = {
               }
 
               else if(fs.statSync(dirname).isFile()){
-                   return {
-                       '_src' : [dirname],
-                       'key'  : '_src',
-                       'value': [dirname]
-                   }
+                  var ultimates = [dirname];
+                  ultimates = prepend.concat(ultimates).concat(append);
+                  return {
+                     '_src' : ultimates,
+                     'key'  : '_src',
+                     'value': ultimates
+                  }
               }
       } }
 
