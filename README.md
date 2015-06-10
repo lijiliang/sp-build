@@ -57,7 +57,7 @@ $ bower install
 // 依赖
 $ npm install -g gulp
 $ npm install -g bower
-$ gem install sass
+$ //gem install sass
 
 // 运行
 $ gulp
@@ -66,6 +66,7 @@ $ gulp
 ```
 
 ## 生成规则
+一般SLIME PACK直接处理目录，如下例所示，但也支持JSON对象和数组形式，请参考函数部分  
 > 打包：把目录下所有`css / js`合并成一个文件，文件名为目录名  
 分包：按子目录名打包  
 子分包：即子目录的子目录，会以'-'来分割  
@@ -137,6 +138,7 @@ slime.build('./aaa',false)
 ### 目录结构  
 > 下面是目录结构表格
 
+主结构  
 ```html
 ├── 主结构
     ├── _builder        //【目录】--- 配置文件目录
@@ -152,6 +154,7 @@ slime.build('./aaa',false)
 
 ```  
 
+JS结构  
 ```html
 你应该关注产出目录pages（分包），其他目录是辅助性质，有助于提升代码的良好结构  
 对应 gulp-task 任务模块:
@@ -170,6 +173,7 @@ slime.build('./aaa',false)
 
 ```  
 
+CSS结构  
 ```html
 你应该关注产出目录pages（分包），modules是公共部分，除非你要换一个css库  
 对应 gulp-task 任务模块:
@@ -182,14 +186,15 @@ slime.build('./aaa',false)
 
 ```  
 
+HTML结构
 ```html
-你应该关注产出目录pages（分包），modules是公共部分，除非你要换一个css库  
+_common是公共部分， xxx为任意文件夹，业务DEMO文件夹，具体以目录为准  
 对应 gulp-task 任务模块:
  * html.coffee
 
 ├── html
     ├── _common  // 【目录】--- 被动产出 --- 公共头尾部  
-    ├── pages    // 【目录】--- 主动分包 --- demo
+    ├── xxx    // 【目录】--- 主动分包 --- demo
 
 
 ```  
@@ -197,10 +202,15 @@ slime.build('./aaa',false)
 -  
 
 ### 入口函数(entry)
-<a id='function'>
+<a id='function' />
 具体参考gulp-task目录下的模块文件
 
 ```
+//style: ['css', 'scss', 'sass', 'less', 'stylus', 'styl']  
+//templet: ['hbs', 'swig', 'htm', 'html', 'php', 'jsp']  
+//script: ['js', 'jsx', 'coffee', 'cjsx']  
+
+
   var slime = require('./_builder/configs/slime.config.js');
 
 /*
@@ -210,12 +220,23 @@ slime.build('./aaa',false)
 *         {string} // 目录名，如存在的目录 d:\xxx  
 *         {array}  // 组合数组，数组元素为string路径 如 ['d:\xxx\yyy.js','d:\xxx\aaa.js']  
 *         {json}   // 组合JSON*
-* {parm2} {boolean}
+* {parm2} {boolean}// 打包/分包，true=打包、false=分包
 * {parm3} {json object}
 * return stream 不要理会
 */
 
-slime.build(entry, [pack], [options])
+slime.build(entry, [pack], [options])  
+
+options:
+ * [rename] 针对entry是数组、JSON（只有一个元素）的情况如  
+   0、slime.build（'./a', true, {rename: 'xxx'})
+   1、slime.build(['a.js','b.js'],{rename: 'xxx'})
+   2、slime.build({aaa: ['a.jsx','b.js']},{rename: 'xxx'})  
+
+ * [type] 除script不用指定，style/templet，都需要明确指定，如
+   1、slime.build('./a',{type: 'sass'})
+   2、slime.build('./a',{type: 'hbs'})
+
 ```
 
 ```
