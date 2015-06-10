@@ -201,20 +201,19 @@ _common是公共部分， xxx为任意文件夹，业务DEMO文件夹，具体�
 
 -  
 
-### 入口函数(entry)
+### 入口(entry)
 <a id='function' />
-具体参考gulp-task目录下的模块文件
+通过slime.build生成，具体参考gulp-task目录下的模块文件
 
 ```
+默认类型说明
 //style: ['css', 'scss', 'sass', 'less', 'stylus', 'styl']  
 //templet: ['hbs', 'swig', 'htm', 'html', 'php', 'jsp']  
 //script: ['js', 'jsx', 'coffee', 'cjsx']  
 
 
-  var slime = require('./_builder/configs/slime.config.js');
-
 /*
-* 静态文件生成core
+* 静态文件生成函数
 * {parm1} {string} // 文件名，完整的文件名称，如绝对路径 d:\xxx\yyy.js
 *         {string} // 配置名，config中默认的名称，如 config -> pages  
 *         {string} // 目录名，如存在的目录 d:\xxx  
@@ -225,17 +224,31 @@ _common是公共部分， xxx为任意文件夹，业务DEMO文件夹，具体�
 * return stream 不要理会
 */
 
+var slime = require('./_builder/configs/slime.config.js');
 slime.build(entry, [pack], [options])  
 
-options:
- * [rename] 针对entry是数组、JSON（只有一个元素）的情况如  
-   0、slime.build（'./a', true, {rename: 'xxx'})
-   1、slime.build(['a.js','b.js'],{rename: 'xxx'})
-   2、slime.build({aaa: ['a.jsx','b.js']},{rename: 'xxx'})  
 
- * [type] 除script不用指定，style/templet，都需要明确指定，如
+//打包、分包都会产出`{key: value}`对象，vlaue为数组，分包是多元素json
+options:
+ * [rename] 类型：String --- 分包不支持
+   //重命名key值
+   0、slime.build（'./a', true, {rename: 'xxx',type: 'sass'})    //产出 xxx.css
+   1、slime.build(['a.js','b.js'],{rename: 'xxx'})  //产出 xxx.js
+   2、slime.build({aaa: ['a.jsx','b.js']},{rename: 'xxx'})  //产出 xxx.js
+   3、slime.build('./abc.js',{rename: 'xxx'})  //产出 xxx.js
+
+ * [type] 类型：String --- script不用指定，style/templet，都需要明确指定，如
+   //指定文件类型
    1、slime.build('./a',{type: 'sass'})
    2、slime.build('./a',{type: 'hbs'})
+
+ * [prepend] 类型：Array --- 分包不支持
+   //value前插文件
+   1、slime.build('./a',{prepend: ['./xxx.js']})
+
+ * [apend] 类型：Array --- 分包不支持
+   //value后插文件
+   1、slime.build('./a',{apend: ['./xxx.js']})
 
 ```
 
@@ -243,14 +256,14 @@ options:
 # css 示例(coffee)
 
 config = require '../configs/config.coffee'
-test = config.dirs.src + '/css/pages/website/index.scss'     #string
-ary = [                                                      #array
+test = config.dirs.src + '/css/pages/website/index.scss'     #string //产出index.css
+ary = [                                                      #array  //分别产出文件名css
     config.dirs.src + '/css/pages/website/index.scss',
     config.dirs.src + '/css/pages/website/error-404.scss',
     config.dirs.src + '/css/pages/website/error-500.scss'
 ]
-testcommon1 =  {ggggg: ary}                                  #json
-testcommon2 =  {ggggg: ary,kkkkk: test}
+testcommon1 =  {ggggg: ary}                                  #json  //产出ggggg.css
+testcommon2 =  {ggggg: ary,kkkkk: test}                      #json  //产出ggggg.css、kkkkk.css
 
 module.exports = (gulp,$,slime)->
     return () ->
