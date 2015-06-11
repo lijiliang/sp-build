@@ -14,7 +14,7 @@ module.exports = (gulp,$)->
                 port: 9001
             server:
                 baseDir: [ config.htmlDevPath, config.staticPath + '/dev']
-            files: [ config.htmlDevPath + '/*.html', config.staticPath+ '/dev/**']
+            files: [ config.htmlDevPath + '/**/*.html', config.staticPath+ '/dev/**']
             logFileChanges: false
         )
 
@@ -27,5 +27,7 @@ module.exports = (gulp,$)->
         #html
         # gulp.watch config.dirs.src + '/html/**/*.html', ['html','html:list']
         # gulp.watch config.dirs.src + '/html/index.hbs', ['html:list']
-        gulp.watch config.dirs.src + '/html/**/*.html', ['html']
-        gulp.watch config.dirs.src + '/html/index.hbs', ['html']
+        gulp.watch config.dirs.src + '/html/**/*.*', ['html']
+        # gulp.watch config.dirs.src + '/html/**/*.html', ['html']
+        # gulp.watch config.dirs.src + '/html/**/*.md', ['html']
+        # gulp.watch config.dirs.src + '/html/index.hbs', ['html']

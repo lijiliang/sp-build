@@ -49,15 +49,18 @@ htmlDir.map (filename)->
                         fileprofile = {
                             group: filename,
                             title: title,
-                            fileName: _filename.replace(ext,'.html')
-                            fullpath: secondPath
-                            des: ''
+                            fileName: _filename.replace(ext,'.html'),
+                            fullpath: secondPath,
+                            des: '',
+                            mdname: ''
                         }
                         secondMd = secondPath.replace(ext,'.md')
                         if(fs.existsSync(secondMd))
                             desContent = fs.readFileSync(secondMd,'utf8')
+                            mdname = gutil.replaceExtension(_filename,'_md.html')
                             des = _subString(desContent,20,true)
                             fileprofile.des = des
+                            fileprofile.mdname = mdname
 
                         list[filename].list.push(fileprofile)
 

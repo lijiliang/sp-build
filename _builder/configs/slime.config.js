@@ -2,6 +2,7 @@ var fs = require('fs');
 var path = require('path');
 var gulp = require('gulp');
 var __ = require('lodash');
+var marked = require('marked');
 var through = require('through2');
 var gutil = require('gulp-util');
 var $extend = require('extend');
@@ -95,7 +96,7 @@ function initDir(aryDir, fatherDirName, isPack, depth){
 
             else if(fs.statSync(dirsPath + '/' + item).isFile()){
                 var ext = path.extname(dirsPath + '/' + item);
-                if(chkType(ext.replace('.',''))){
+                if(chkType(ext.replace('.',''))||ext==='.md'){
                     // 如果存在同名js
                     if (!sameName) {
                         if (name == item.replace(ext, '')) {
@@ -126,7 +127,6 @@ function initDir(aryDir, fatherDirName, isPack, depth){
         entrys = {};
         entrys[package_name] = package_ary;
     }
-
     return entrys
 }
 //make webpack plugins
@@ -565,10 +565,36 @@ module.exports = {
                           /*todo something*/
                       }
 
-                      this.push(file);
-                      cb();
+                      // this.push(file);
+                      cb(null,file);
                   }
                   return through.obj(fileProfile);
+              }
+
+              function getMd(){
+                  return through.obj(function (file, enc, cb) {
+                      if (file.isNull()) {
+                          cb(null, file);
+                          return;
+                      }
+
+                      if (file.isStream()) {
+                          cb(new gutil.PluginError('gulp-markdown', 'Streaming not supported'));
+                          return;
+                      }
+
+                      var mdtemp = fs.readFileSync(path.join(config.src,'html/_common/templet/md.hbs'),'utf-8');
+                      marked(file.contents.toString(), options, function (err, data) {
+                          if (err) {
+                              cb(new gutil.PluginError('gulp-markdown', err, {fileName: file.path}));
+                              return;
+                          }
+                          data = mdtemp.replace('~~md~~',data);
+                          file.contents = new Buffer(data);
+                          file.path = gutil.replaceExtension(file.path, '_md.html');
+                          cb(null, file);
+                      });
+                  });
               }
 
 
@@ -592,6 +618,7 @@ module.exports = {
                   }())
                   .pipe ($.newer(configs.htmlDevPath))
                   .pipe ($.plumber())
+                  .pipe ($.if('*.md',getMd()))
                   .pipe ($.fileInclude({
                       prefix: '@@',
                       basepath: '@file',
@@ -600,7 +627,6 @@ module.exports = {
                       }
                   }))
                   .pipe ($.size())
-                  .pipe ($.if('*.md',$.markdown()))
                   .pipe ( getHtmlData())
                   .pipe ($.compileHandlebars())
                   .pipe ($.rename(function(path){
