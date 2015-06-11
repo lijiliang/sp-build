@@ -41,88 +41,94 @@ function chkType(type){
     return false;
 }
 
+function clog(msg){
+    console.log('-----------------------');
+    console.log('-----------------------');
+    console.log('-----------------------');
+    console.log(msg);
+}
+
 /**
  * 获取目录结构
  */
-var
-config = configs.dirs,
-default_dir,
-pagesDir;
+var config = configs.dirs;
 
 /*
  * author: ralf
  * 将目录打包成一个文件准备
 */
-var
-package_name,
-package_ary = [];
+var package_name;
 
+function initDir(aryDir, fatherDirName, isPack, depth){
+    var entrys={},
+        package_ary = [];
+    // make directory json
+    function readPageDir(subDir, isPack, depth) {
+        package_ary = [];
 
-var entry = {};
+        var dirs = (subDir && subDir.fs) || aryDir;
+        // var dirsPath = (subDir && subDir.path) || config.pages;
+        var dirsPath = (subDir && subDir.path) || fatherDirName;
 
-// make directory json
-function readPageDir(subDir, isPack, depth) {
-    package_ary = [];
+        var sameName = false;
+        dirs.forEach(function(item) {
 
-    var dirs = (subDir && subDir.fs) || pagesDir;
-    // var dirsPath = (subDir && subDir.path) || config.pages;
-    var dirsPath = (subDir && subDir.path) || default_dir;
+            var _filename = (subDir && subDir.filename) || item;
+            var name = (subDir && subDir.name) || item;
 
-    var sameName = false;
-    dirs.forEach(function(item) {
+            // if(fs.statSync(dirsPath + '/' + _filename) && fs.statSync(dirsPath + '/' + _filename).isFile()){
+            //     _filename = path.parse(_filename).name;
+            // }
 
-        var _filename = (subDir && subDir.filename) || item;
-        var name = (subDir && subDir.name) || item;
+            //如果是目录
+            // 忽略下划线目录，如_test, _xxx
+            if ( depth && fs.statSync(dirsPath + '/' + item).isDirectory() && item.indexOf('_')!=0) {
+                //获取目录里的脚本合并
+                var data = {
+                    name: item,
+                    path: dirsPath + '/' + item,
+                    fs: fs.readdirSync(dirsPath + '/' + item),
+                    filename: (subDir && subDir.filename + "-" + item) || item
+                };
+                readPageDir(data, isPack, depth);
+            }
 
-        // if(fs.statSync(dirsPath + '/' + _filename) && fs.statSync(dirsPath + '/' + _filename).isFile()){
-        //     _filename = path.parse(_filename).name;
-        // }
+            else if(fs.statSync(dirsPath + '/' + item).isFile()){
+                var ext = path.extname(dirsPath + '/' + item);
+                if(chkType(ext.replace('.',''))){
+                    // 如果存在同名js
+                    if (!sameName) {
+                        if (name == item.replace(ext, '')) {
+                            entrys[_filename] = [dirsPath + '/' + item];
+                            sameName = true;
+                        }
+                        else {
+                            entrys[_filename] = entrys[_filename] || [];
+                            entrys[_filename].push(dirsPath + '/' + item);
+                    } }
 
-        //如果是目录
-        // 忽略下划线目录，如_test, _xxx
-        if ( depth && fs.statSync(dirsPath + '/' + item).isDirectory() && item.indexOf('_')!=0) {
-            //获取目录里的脚本合并
-            var data = {
-                name: item,
-                path: dirsPath + '/' + item,
-                fs: fs.readdirSync(dirsPath + '/' + item),
-                filename: (subDir && subDir.filename + "-" + item) || item
-            };
-            readPageDir(data, isPack, depth);
-        }
+            } }
 
-        else {
-            var ext = path.extname(dirsPath + '/' + item);
-            if(chkType(ext.replace('.',''))){
-                // 如果存在同名js
-                if (!sameName) {
-                    if (name == item.replace(ext, '')) {
-                        entry[_filename] = [dirsPath + '/' + item];
-                        sameName = true;
-                    }
-                    else {
-                        entry[_filename] = entry[_filename] || [];
-                        entry[_filename].push(dirsPath + '/' + item);
-                } }
+        });
+    }
 
-        } }
-
-    });
-
+    readPageDir(null, isPack, opts.depth);
 
     if(isPack){
-        for(var name in entry){
-           if(entry[name].length){
-                entry[name].map(function(item,i){
+        for(var name in entrys){
+            // package_ary.concat(clone(entrys[name]));
+           if(entrys[name].length){
+                entrys[name].map(function(item,i){
                    package_ary.push(item);
                 });
            }
         }
-        entry = {};
-        entry[package_name] = package_ary;
+        entrys = {};
+        entrys[package_name] = package_ary;
     }
-}
 
+    return entrys
+}
 //make webpack plugins
 var plugins = function(dirname, isPack, options){
 
@@ -254,6 +260,8 @@ custom_externals = {
 */
 module.exports = {
   create: function(dirname,isPack,options){
+      var entry = {};
+
       //init options
       var opts = {
           reanme: undefined,
@@ -347,12 +355,14 @@ module.exports = {
       if(getObjType(cb)!=='Function')
           cb = undefined;
 
-      var tmpKey, tmpValue,
+      var tmpKey, tmpValue, entry={},
           type = (options && options.type) ? options.type : 'js',
           staticType = chkType(type),
           _webpackDevCompiler,
-          _webpackDevConfig = staticType !== 'templet' ? this.create(dirname,isPack,options) : this.create(dirname,true,options),
-          entrys = clone(entry);
+          _webpackDevConfig = staticType !== 'templet' ? this.create(dirname,isPack,options) : this.create(dirname,true,options);
+
+          entry = _webpackDevConfig.entry;
+      var entrys = clone(entry);
 
 
       //数组或单文件，强制不进行合并，分别生成
@@ -495,7 +505,7 @@ module.exports = {
                   });
               }
               else{
-                  nEntry = entry;
+                  nEntry = entrys;
               }
               _webpackDevConfig.entry = nEntry;
 
@@ -520,7 +530,7 @@ module.exports = {
               var indexList = {};
               var tmpObj;
 
-              tmpValue = entry[tmpKey];
+              tmpValue = entrys[tmpKey];
 
               //获取数据
               function getHtmlData(){
@@ -531,7 +541,9 @@ module.exports = {
 
                       var data, api,
                           // _filename = file.path.replace(file.base,'').replace('.'+type,'');
-                          _filename = file.path.replace(path.dirname(file.path),'').replace('.'+type,'').replace(/[\/\\]/g,'');
+                          _fileParse = path.parse(file.path),
+                          _filename = _fileParse.name;
+                          // _filename = file.path.replace(path.dirname(file.path),'').replace('.'+type,'').replace(/[\/\\]/g,'');
 
                       if (typeof options.data !=='undefined'){
                           data = clone(options.data);
@@ -568,11 +580,11 @@ module.exports = {
                   gulp. src(tmpValue,{ base: path.join(config.src,'html/') })
                   .pipe (function(){
                       function testfun(file,enc,cb){
-                          var ext_name = path.extname(file.path);
-                          if(ext_name==='.md'||ext_name==='.markdown'||ext_name==='.json'){
+                          var ext_name = path.parse(file.path).ext.replace('.','');
+                          if(chkType(ext_name)|| ext_name === 'md'){
+                              this.push(file);
                               cb();
                           }else{
-                              this.push(file);
                               cb();
                           }
                       }
@@ -588,31 +600,21 @@ module.exports = {
                       }
                   }))
                   .pipe ($.size())
+                  .pipe ($.if('*.md',$.markdown()))
                   .pipe ( getHtmlData())
                   .pipe ($.compileHandlebars())
                   .pipe ($.rename(function(path){
                       if  (path.extname!=='.php' || path.extname!=='.jsp'){
-                          path.extname = '.html'
+                          if(path.extname === '.md'){
+                              path.extname = '.md.html';
+                          }else
+                              path.extname = '.html'
                       }
                   }))
                   .pipe (gulp.dest(configs.htmlDevPath))
               }
 
               parseHbs();
-              // switch(type){
-              //     case 'hbs':
-              //         parseHbs();
-              //         break;
-              //     case 'php':
-              //         parseHbs();
-              //         break;
-              //     case 'jsb':
-              //         parseHbs();
-              //         break;
-              //     case 'html':
-              //         parseHbs();
-              //         break;
-              // }
           }
 
           switch(staticType){
@@ -645,6 +647,9 @@ module.exports = {
           opts = $extend(true,opts,options);
       }
 
+      var entry = {};
+      var pagesDir=undefined;
+      var default_dir = dirname;
       var prepend=[],
           append=[],
           styleType = false,
@@ -655,10 +660,7 @@ module.exports = {
 
 
           //全局变量
-          pagesDir=undefined;
           package_name='';
-          entry = {};
-          default_dir = dirname;
 
       //匹配configs.dirs
       for (var item in config){
@@ -691,10 +693,13 @@ module.exports = {
               }
       } }
 
-      //生成entry 全局
-      readPageDir(null, isPack, opts.depth);
 
-      if  (entry){
+      // if  (entry){
+      if  (pagesDir){
+          //生成entry 全局
+          // readPageDir(null, isPack, opts.depth);
+          entry = initDir(pagesDir, default_dir, isPack, opts.depth);
+
           var ultimates = [],
               ext = staticType==='script' ? 'js' : type;
 
