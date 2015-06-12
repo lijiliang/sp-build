@@ -53,7 +53,7 @@ htmlDir.map (filename)->
                             fullpath: secondPath,
                             des: '',
                             mdname: ''
-                        }
+                        } 
                         secondMd = secondPath.replace(ext,'.md')
                         if(fs.existsSync(secondMd))
                             desContent = fs.readFileSync(secondMd,'utf8')
